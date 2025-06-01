@@ -30,10 +30,10 @@
         {
             panel1 = new Panel();
             buttonCancel = new Button();
-            Вход = new Button();
+            buttonLogin = new Button();
             pictureBox1 = new PictureBox();
             panel2 = new Panel();
-            progressBar1 = new ProgressBar();
+            progressBar = new ProgressBar();
             radioEmployee = new RadioButton();
             radioClient = new RadioButton();
             groupBox1 = new GroupBox();
@@ -56,7 +56,7 @@
             // 
             panel1.BackColor = Color.White;
             panel1.Controls.Add(buttonCancel);
-            panel1.Controls.Add(Вход);
+            panel1.Controls.Add(buttonLogin);
             panel1.Controls.Add(pictureBox1);
             panel1.Dock = DockStyle.Left;
             panel1.Location = new Point(0, 0);
@@ -70,25 +70,28 @@
             buttonCancel.Cursor = Cursors.Hand;
             buttonCancel.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 204);
             buttonCancel.ForeColor = SystemColors.ControlLightLight;
-            buttonCancel.Location = new Point(12, 240);
+            buttonCancel.Location = new Point(12, 239);
             buttonCancel.Name = "buttonCancel";
             buttonCancel.Size = new Size(204, 33);
             buttonCancel.TabIndex = 5;
             buttonCancel.Text = "Отмена";
             buttonCancel.UseVisualStyleBackColor = false;
+            buttonCancel.Visible = false;
+            buttonCancel.Click += buttonCancel_Click;
             // 
-            // Вход
+            // buttonLogin
             // 
-            Вход.BackColor = Color.FromArgb(99, 58, 52);
-            Вход.Cursor = Cursors.Hand;
-            Вход.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            Вход.ForeColor = SystemColors.ControlLightLight;
-            Вход.Location = new Point(12, 201);
-            Вход.Name = "Вход";
-            Вход.Size = new Size(204, 33);
-            Вход.TabIndex = 4;
-            Вход.Text = "Вход";
-            Вход.UseVisualStyleBackColor = false;
+            buttonLogin.BackColor = Color.FromArgb(99, 58, 52);
+            buttonLogin.Cursor = Cursors.Hand;
+            buttonLogin.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            buttonLogin.ForeColor = SystemColors.ControlLightLight;
+            buttonLogin.Location = new Point(12, 201);
+            buttonLogin.Name = "buttonLogin";
+            buttonLogin.Size = new Size(204, 33);
+            buttonLogin.TabIndex = 4;
+            buttonLogin.Text = "Вход";
+            buttonLogin.UseVisualStyleBackColor = false;
+            buttonLogin.Click += buttonLogin_Click;
             // 
             // pictureBox1
             // 
@@ -103,19 +106,20 @@
             // panel2
             // 
             panel2.BackColor = Color.White;
-            panel2.Controls.Add(progressBar1);
+            panel2.Controls.Add(progressBar);
             panel2.Dock = DockStyle.Bottom;
             panel2.Location = new Point(224, 256);
             panel2.Name = "panel2";
             panel2.Size = new Size(376, 20);
             panel2.TabIndex = 1;
             // 
-            // progressBar1
+            // progressBar
             // 
-            progressBar1.Location = new Point(0, 3);
-            progressBar1.Name = "progressBar1";
-            progressBar1.Size = new Size(373, 13);
-            progressBar1.TabIndex = 5;
+            progressBar.Location = new Point(0, 3);
+            progressBar.Name = "progressBar";
+            progressBar.Size = new Size(373, 13);
+            progressBar.TabIndex = 5;
+            progressBar.Visible = false;
             // 
             // radioEmployee
             // 
@@ -174,6 +178,7 @@
             buttonSendCode.TabIndex = 5;
             buttonSendCode.Text = "Отправить код";
             buttonSendCode.UseVisualStyleBackColor = false;
+            buttonSendCode.Click += ButtonSendCode_Click;
             // 
             // maskedTextBoxCode
             // 
@@ -182,6 +187,7 @@
             maskedTextBoxCode.Name = "maskedTextBoxCode";
             maskedTextBoxCode.Size = new Size(106, 27);
             maskedTextBoxCode.TabIndex = 8;
+            maskedTextBoxCode.TextAlign = HorizontalAlignment.Center;
             maskedTextBoxCode.ValidatingType = typeof(int);
             // 
             // maskedTextBoxPhone
@@ -275,7 +281,7 @@
         private PictureBox pictureBox1;
         private Panel panel2;
         private RadioButton radioEmployee;
-        private Button Вход;
+        private Button buttonLogin;
         private RadioButton radioClient;
         private GroupBox groupBox1;
         private Label labelPhone;
@@ -288,6 +294,6 @@
         private MaskedTextBox maskedTextBoxCode;
         private MaskedTextBox maskedTextBoxPhone;
         private Button buttonCancel;
-        private ProgressBar progressBar1;
+        private ProgressBar progressBar;
     }
 }
