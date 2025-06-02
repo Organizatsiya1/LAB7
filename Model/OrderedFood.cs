@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    internal class OrderedFood:IDomainObject
+    public class OrderedFood:IDomainObject
     {
         public int Id { get; set; }
         public Food Food { get; set; }

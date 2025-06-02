@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using BusinessLogic;
+using Model;
 
 namespace Lab_7
 {
@@ -15,11 +17,11 @@ namespace Lab_7
     {
         private string verificationCode;
         private bool loadingCanceled;
-
+        private BusinessLogic.BusinessLogic Logic = new BusinessLogic.BusinessLogic();
         public LoginForm()
         {
             InitializeComponent();
-
+            
             // По умолчанию выбран сотрудник
             radioEmployee.Checked = true;
             ToggleUserTypeFields();
@@ -99,11 +101,10 @@ namespace Lab_7
         // Генерация кода и открытие уведомления
         private void GenerateAndShowCode()
         {
-            Random random = new Random();
-            verificationCode = random.Next(1000, 9999).ToString();
+            
 
             // Показываем форму с кодом
-            using (CodeNotification codeForm = new CodeNotification(verificationCode))
+            using (CodeNotification codeForm = new CodeNotification(Logic.GenerateNumber()))
             {
                 codeForm.ShowDialog();
             }

@@ -13,6 +13,7 @@ namespace Model
         AlmostCoocked,
         Coocked,
         IsGiven,
+        IsGotten,
         IsDone
     }
 }

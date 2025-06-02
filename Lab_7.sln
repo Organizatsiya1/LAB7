@@ -4,10 +4,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lab_7", "Lab_7\Lab_7.csproj", "{71D84B51-9542-4B63-8C1B-6464F0348F36}"
+	ProjectSection(ProjectDependencies) = postProject
+		{020E8832-1564-47A3-8B4D-46AD581D681E} = {020E8832-1564-47A3-8B4D-46AD581D681E}
+		{49DF010E-F25A-4909-95BF-035501BCA74D} = {49DF010E-F25A-4909-95BF-035501BCA74D}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{020E8832-1564-47A3-8B4D-46AD581D681E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model", "Model\Model.csproj", "{020E8832-1564-47A3-8B4D-46AD581D681E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogic", "BusinessLogic\BusinessLogic.csproj", "{49DF010E-F25A-4909-95BF-035501BCA74D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogic", "BusinessLogic\BusinessLogic.csproj", "{49DF010E-F25A-4909-95BF-035501BCA74D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{020E8832-1564-47A3-8B4D-46AD581D681E} = {020E8832-1564-47A3-8B4D-46AD581D681E}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

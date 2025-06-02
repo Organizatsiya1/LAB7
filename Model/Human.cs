@@ -1,4 +1,6 @@
-﻿namespace Model
+﻿using BusinessLogic;
+
+namespace Model
 {
     public class Human:IDomainObject
     {
@@ -6,5 +8,6 @@
         private string Name { get; set; }
         public long PhoneNumber { get; set; }
         public List<int> Orders { get; set; }
+        public Permissions Permissions { get; set; }
     }
 }

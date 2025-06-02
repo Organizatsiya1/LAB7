@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessLogic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    internal class Courier:Human, IWorker
+    public class Courier: Waiter
     {
-        public string Password {  get; set; }
-        public string Login { get; set; }
-        public int Efficiency { get; set; }
+        
         public TransportType TransportType { get; set; }
+        public Permissions Permissions = Permissions.MarkGiven|Permissions.MarkDelivered|Permissions.MarkPayed;
     }
 }

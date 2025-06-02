@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    internal class Adress:IDomainObject
+    public class Adress:IDomainObject
     {
         public int Id {  get; set; }
         public double X { get; set; }

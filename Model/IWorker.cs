@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    internal interface IWorker
+    public interface IWorker
     {
         public string Password { get; set; }
         public string Login { get; set; }

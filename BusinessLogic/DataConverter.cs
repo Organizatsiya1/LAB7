@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Model
+namespace BusinessLogic
 {
-    public interface IDomainObject
+    public class DataConverter
     {
-        public int Id { get; set; }
     }
 }

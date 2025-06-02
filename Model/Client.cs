@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessLogic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    internal class Client:Human
+    public class Client:Human
     {
         public Adress Adress { get; set; }
+        public Permissions Permissions = Permissions.BookTable|Permissions.MakeOrder;
     }
 }
