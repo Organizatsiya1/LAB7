@@ -1,7 +1,8 @@
 ﻿using Model;
 using System;
 using System.Security.Cryptography.X509Certificates;
-namespace BusinessLogic
+
+namespace Logic
 {
     public class BusinessLogic
     {
@@ -9,12 +10,21 @@ namespace BusinessLogic
         PersonStatus Status { get; set; }
         int OrdersID = 1;
         int WorkersID = 1;
-        List<Human> Workers { get; set; } = new List<Human>();
+        public static List<Human> Workers = new List<Human>() // тока нужна БД? 
+        {
+            new Waiter { Name = "Анна", Login = "anna", Password = "1234" },
+            new Chef { Name = "Борис", Login = "boris", Password = "chefpass" },
+            new Admin { Name = "Админ", Login = "admin", Password = "adminpass" },
+            new Courier { Name = "Пётр", Login = "petya", Password = "cour123" }
+        };
+
+
         public string GenerateNumber()
         {
             Random random = new Random();
             return random.Next(1000, 9999).ToString();
         }
+
         public Order MakeOrder(List<Food> foods, int tableID, int waiterID, PayementType payementType)//вроде с этим ок
         {
             if (FixedUser.Permissions.HasFlag(Permissions.MakeOrder))
@@ -28,6 +38,7 @@ namespace BusinessLogic
                 return null;
             }
         }
+
         public void FixateUser(Human user)//хз зачем это
         {
             if (user is Admin)
@@ -56,6 +67,7 @@ namespace BusinessLogic
                 Status = PersonStatus.Courier;
             }
         }
+
         public void MarkPayed(Order order)
         {
             if (FixedUser.Permissions.HasFlag(Permissions.MarkPayed))

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using BusinessLogic;
+using Logic;
 using Model;
 
 namespace Lab_7
@@ -17,7 +17,7 @@ namespace Lab_7
     {
         private string verificationCode;
         private bool loadingCanceled;
-        public BusinessLogic.BusinessLogic Logic = new BusinessLogic.BusinessLogic();
+        public Logic.BusinessLogic Logic = new Logic.BusinessLogic();
         public LoginForm()
         {
             InitializeComponent();
@@ -101,10 +101,10 @@ namespace Lab_7
         // Генерация кода и открытие уведомления
         private void GenerateAndShowCode()
         {
-
+            verificationCode = Logic.GenerateNumber();
 
             // Показываем форму с кодом
-            using (CodeNotification codeForm = new CodeNotification(Logic.GenerateNumber()))
+            using (CodeNotification codeForm = new CodeNotification(verificationCode))
             {
                 codeForm.ShowDialog();
             }
@@ -167,53 +167,64 @@ namespace Lab_7
             loadingCanceled = true;
         }
 
-        private void ShowMainForm()
+        private void ShowMainForm(UserStatus role)
         {
-            // Создаем и переходим в главное окно
-            MainForm mainForm = new MainForm();
+            MainForm mainForm = new MainForm(role);
             mainForm.Show();
-
-            // Закрываем текущее окно входа
             this.Hide();
         }
 
-        private async void buttonLogin_Click(object sender, EventArgs e)
+
+        private void buttonLogin_Click(object sender, EventArgs e)
         {
-            if (!ValidateInput()) return;
-
-            // Блокируем кнопку входа
-            buttonLogin.Enabled = false;
-            progressBar.Visible = true;
-            buttonCancel.Visible = true;
-            loadingCanceled = false;
-
-            try
+            if (radioEmployee.Checked)
             {
-                // Имитация загрузки данных
-                await LoadDataAsync();
+                string login = textBoxLogin.Text.Trim();
+                string password = textBoxPassword.Text.Trim();
 
-                if (!loadingCanceled)
+                if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(password))
                 {
-                    // Переход в главное окно
-                    ShowMainForm();
+                    MessageBox.Show("Введите логин и пароль.");
+                    return;
+                }
+
+                // Поиск среди сотрудников, реализующих IWorker
+                var worker = BusinessLogic.Workers
+                    .OfType<IWorker>()
+                    .FirstOrDefault(w => w.Login == login && w.Password == password);
+
+                if (worker != null)
+                {
+                    // Находим оригинальный объект Human (чтобы знать, кто он — Waiter, Chef и т.д.)
+                    var human = BusinessLogic.Workers.First(h => (h as IWorker)?.Login == login);
+
+                    string roleName = human.GetType().Name;
+                    MessageBox.Show($"Вход выполнен как {roleName}!");
+
+                    UserStatus role = roleName switch
+                    {
+                        nameof(Admin) => UserStatus.Admin,
+                        nameof(Chef) => UserStatus.Chef,
+                        nameof(Waiter) => UserStatus.Waiter,
+                        nameof(Courier) => UserStatus.Courier,
+                        _ => UserStatus.Client                  // если не совпало ни с кем — значит клиент
+                    };
+
+                    MainForm mainForm = new MainForm(role);
+                    mainForm.Show();
+                    this.Hide();
+                }
+                else
+                {
+                    MessageBox.Show("Неверный логин или пароль.");
                 }
             }
-            catch (Exception ex)
+            else if (radioClient.Checked)
             {
-                MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка входа",
-                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Проверка (код) уже пройдена в ValidateInput
+                MessageBox.Show("Вход выполнен как клиент!");
+                ShowMainForm(UserStatus.Client);
             }
-            finally
-            {
-                buttonLogin.Enabled = true;
-                progressBar.Visible = false;
-                buttonCancel.Visible = false;
-            }
-        }
-
-        private void maskedTextBoxPhone_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
-        {
-
         }
     }
 }

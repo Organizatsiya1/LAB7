@@ -8,7 +8,7 @@ namespace Model
 {
     public enum UserStatus
     {
-        
+        Client,
         Courier,
         Waiter,
         Admin,

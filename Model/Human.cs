@@ -1,4 +1,4 @@
-﻿using BusinessLogic;
+﻿using Logic;
 
 namespace Model
 {

@@ -48,7 +48,7 @@ namespace Lab_7
             // 
             NameBox.Location = new Point(98, 69);
             NameBox.Name = "NameBox";
-            NameBox.Size = new Size(149, 23);
+            NameBox.Size = new Size(149, 27);
             NameBox.TabIndex = 1;
             // 
             // PhoneBox
@@ -56,7 +56,7 @@ namespace Lab_7
             PhoneBox.Location = new Point(98, 117);
             PhoneBox.Mask = "(999) 000-0000";
             PhoneBox.Name = "PhoneBox";
-            PhoneBox.Size = new Size(149, 23);
+            PhoneBox.Size = new Size(149, 27);
             PhoneBox.TabIndex = 2;
             // 
             // StatusBox
@@ -64,7 +64,7 @@ namespace Lab_7
             StatusBox.FormattingEnabled = true;
             StatusBox.Location = new Point(98, 21);
             StatusBox.Name = "StatusBox";
-            StatusBox.Size = new Size(149, 23);
+            StatusBox.Size = new Size(149, 28);
             StatusBox.TabIndex = 3;
             // 
             // label1
@@ -72,7 +72,7 @@ namespace Lab_7
             label1.AutoSize = true;
             label1.Location = new Point(23, 24);
             label1.Name = "label1";
-            label1.Size = new Size(69, 15);
+            label1.Size = new Size(86, 20);
             label1.TabIndex = 4;
             label1.Text = "Должность";
             // 
@@ -81,7 +81,7 @@ namespace Lab_7
             label2.AutoSize = true;
             label2.Location = new Point(48, 72);
             label2.Name = "label2";
-            label2.Size = new Size(31, 15);
+            label2.Size = new Size(39, 20);
             label2.TabIndex = 5;
             label2.Text = "Имя";
             // 
@@ -90,7 +90,7 @@ namespace Lab_7
             label3.AutoSize = true;
             label3.Location = new Point(37, 120);
             label3.Name = "label3";
-            label3.Size = new Size(55, 15);
+            label3.Size = new Size(69, 20);
             label3.TabIndex = 6;
             label3.Text = "Телефон";
             // 
@@ -99,7 +99,7 @@ namespace Lab_7
             label4.AutoSize = true;
             label4.Location = new Point(25, 204);
             label4.Name = "label4";
-            label4.Size = new Size(67, 15);
+            label4.Size = new Size(83, 20);
             label4.TabIndex = 7;
             label4.Text = "Ваш логин";
             // 
@@ -108,7 +108,7 @@ namespace Lab_7
             label5.AutoSize = true;
             label5.Location = new Point(18, 253);
             label5.Name = "label5";
-            label5.Size = new Size(74, 15);
+            label5.Size = new Size(93, 20);
             label5.TabIndex = 8;
             label5.Text = "Ваш пароль";
             // 
@@ -117,7 +117,7 @@ namespace Lab_7
             LoginLabel.AutoSize = true;
             LoginLabel.Location = new Point(98, 204);
             LoginLabel.Name = "LoginLabel";
-            LoginLabel.Size = new Size(0, 15);
+            LoginLabel.Size = new Size(0, 20);
             LoginLabel.TabIndex = 9;
             // 
             // PasswordLabel
@@ -125,12 +125,12 @@ namespace Lab_7
             PasswordLabel.AutoSize = true;
             PasswordLabel.Location = new Point(98, 253);
             PasswordLabel.Name = "PasswordLabel";
-            PasswordLabel.Size = new Size(0, 15);
+            PasswordLabel.Size = new Size(0, 20);
             PasswordLabel.TabIndex = 10;
             // 
             // Registration
             // 
-            ClientSize = new Size(291, 323);
+            ClientSize = new Size(407, 323);
             Controls.Add(PasswordLabel);
             Controls.Add(LoginLabel);
             Controls.Add(label5);
@@ -163,7 +163,7 @@ namespace Lab_7
         {
             string name = NameBox.Text;
             string phnumber = PhoneBox.Text;
-            UserStatus status = (UserStatus)StatusBox.SelectedValue;
+            Model.UserStatus status = (Model.UserStatus)StatusBox.SelectedValue;
             
         }
     }
