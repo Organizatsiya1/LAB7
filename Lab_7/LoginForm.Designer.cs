@@ -60,8 +60,9 @@
             panel1.Controls.Add(pictureBox1);
             panel1.Dock = DockStyle.Left;
             panel1.Location = new Point(0, 0);
+            panel1.Margin = new Padding(3, 2, 3, 2);
             panel1.Name = "panel1";
-            panel1.Size = new Size(224, 276);
+            panel1.Size = new Size(196, 207);
             panel1.TabIndex = 0;
             // 
             // buttonCancel
@@ -70,9 +71,10 @@
             buttonCancel.Cursor = Cursors.Hand;
             buttonCancel.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 204);
             buttonCancel.ForeColor = SystemColors.ControlLightLight;
-            buttonCancel.Location = new Point(12, 239);
+            buttonCancel.Location = new Point(10, 179);
+            buttonCancel.Margin = new Padding(3, 2, 3, 2);
             buttonCancel.Name = "buttonCancel";
-            buttonCancel.Size = new Size(204, 33);
+            buttonCancel.Size = new Size(178, 25);
             buttonCancel.TabIndex = 5;
             buttonCancel.Text = "Отмена";
             buttonCancel.UseVisualStyleBackColor = false;
@@ -85,9 +87,10 @@
             buttonLogin.Cursor = Cursors.Hand;
             buttonLogin.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 204);
             buttonLogin.ForeColor = SystemColors.ControlLightLight;
-            buttonLogin.Location = new Point(12, 201);
+            buttonLogin.Location = new Point(10, 151);
+            buttonLogin.Margin = new Padding(3, 2, 3, 2);
             buttonLogin.Name = "buttonLogin";
-            buttonLogin.Size = new Size(204, 33);
+            buttonLogin.Size = new Size(178, 25);
             buttonLogin.TabIndex = 4;
             buttonLogin.Text = "Вход";
             buttonLogin.UseVisualStyleBackColor = false;
@@ -96,9 +99,10 @@
             // pictureBox1
             // 
             pictureBox1.Image = Properties.Resources.menu_restaurant_coffee_icon_210208;
-            pictureBox1.Location = new Point(12, 12);
+            pictureBox1.Location = new Point(10, 9);
+            pictureBox1.Margin = new Padding(3, 2, 3, 2);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(204, 182);
+            pictureBox1.Size = new Size(178, 136);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
@@ -108,16 +112,18 @@
             panel2.BackColor = Color.White;
             panel2.Controls.Add(progressBar);
             panel2.Dock = DockStyle.Bottom;
-            panel2.Location = new Point(224, 256);
+            panel2.Location = new Point(196, 192);
+            panel2.Margin = new Padding(3, 2, 3, 2);
             panel2.Name = "panel2";
-            panel2.Size = new Size(376, 20);
+            panel2.Size = new Size(329, 15);
             panel2.TabIndex = 1;
             // 
             // progressBar
             // 
-            progressBar.Location = new Point(0, 3);
+            progressBar.Location = new Point(0, 2);
+            progressBar.Margin = new Padding(3, 2, 3, 2);
             progressBar.Name = "progressBar";
-            progressBar.Size = new Size(373, 13);
+            progressBar.Size = new Size(326, 10);
             progressBar.TabIndex = 5;
             progressBar.Visible = false;
             // 
@@ -126,9 +132,10 @@
             radioEmployee.AutoSize = true;
             radioEmployee.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 204);
             radioEmployee.ForeColor = SystemColors.ControlLightLight;
-            radioEmployee.Location = new Point(254, 49);
+            radioEmployee.Location = new Point(222, 37);
+            radioEmployee.Margin = new Padding(3, 2, 3, 2);
             radioEmployee.Name = "radioEmployee";
-            radioEmployee.Size = new Size(126, 29);
+            radioEmployee.Size = new Size(103, 24);
             radioEmployee.TabIndex = 2;
             radioEmployee.TabStop = true;
             radioEmployee.Text = "Сотрудник";
@@ -139,9 +146,10 @@
             radioClient.AutoSize = true;
             radioClient.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 204);
             radioClient.ForeColor = SystemColors.ControlLightLight;
-            radioClient.Location = new Point(254, 84);
+            radioClient.Location = new Point(222, 63);
+            radioClient.Margin = new Padding(3, 2, 3, 2);
             radioClient.Name = "radioClient";
-            radioClient.Size = new Size(97, 29);
+            radioClient.Size = new Size(80, 24);
             radioClient.TabIndex = 3;
             radioClient.TabStop = true;
             radioClient.Text = "Клиент";
@@ -159,9 +167,11 @@
             groupBox1.Controls.Add(textBoxLogin);
             groupBox1.Controls.Add(textBoxPassword);
             groupBox1.ForeColor = SystemColors.ControlLightLight;
-            groupBox1.Location = new Point(230, 12);
+            groupBox1.Location = new Point(201, 9);
+            groupBox1.Margin = new Padding(3, 2, 3, 2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(358, 241);
+            groupBox1.Padding = new Padding(3, 2, 3, 2);
+            groupBox1.Size = new Size(313, 181);
             groupBox1.TabIndex = 4;
             groupBox1.TabStop = false;
             groupBox1.Text = "Добро пожаловать!";
@@ -172,9 +182,10 @@
             buttonSendCode.Cursor = Cursors.Hand;
             buttonSendCode.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 204);
             buttonSendCode.ForeColor = SystemColors.ControlLightLight;
-            buttonSendCode.Location = new Point(208, 150);
+            buttonSendCode.Location = new Point(182, 112);
+            buttonSendCode.Margin = new Padding(3, 2, 3, 2);
             buttonSendCode.Name = "buttonSendCode";
-            buttonSendCode.Size = new Size(125, 33);
+            buttonSendCode.Size = new Size(109, 25);
             buttonSendCode.TabIndex = 5;
             buttonSendCode.Text = "Отправить код";
             buttonSendCode.UseVisualStyleBackColor = false;
@@ -182,29 +193,32 @@
             // 
             // maskedTextBoxCode
             // 
-            maskedTextBoxCode.Location = new Point(227, 189);
+            maskedTextBoxCode.Location = new Point(199, 142);
+            maskedTextBoxCode.Margin = new Padding(3, 2, 3, 2);
             maskedTextBoxCode.Mask = "0000";
             maskedTextBoxCode.Name = "maskedTextBoxCode";
-            maskedTextBoxCode.Size = new Size(106, 27);
+            maskedTextBoxCode.Size = new Size(93, 23);
             maskedTextBoxCode.TabIndex = 8;
             maskedTextBoxCode.TextAlign = HorizontalAlignment.Center;
             maskedTextBoxCode.ValidatingType = typeof(int);
             // 
             // maskedTextBoxPhone
             // 
-            maskedTextBoxPhone.Location = new Point(208, 117);
+            maskedTextBoxPhone.Location = new Point(182, 88);
+            maskedTextBoxPhone.Margin = new Padding(3, 2, 3, 2);
             maskedTextBoxPhone.Mask = "(999) 000-0000";
             maskedTextBoxPhone.Name = "maskedTextBoxPhone";
-            maskedTextBoxPhone.Size = new Size(125, 27);
+            maskedTextBoxPhone.Size = new Size(110, 23);
             maskedTextBoxPhone.TabIndex = 7;
+            maskedTextBoxPhone.MaskInputRejected += maskedTextBoxPhone_MaskInputRejected;
             // 
             // labelCode
             // 
             labelCode.AutoSize = true;
             labelCode.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            labelCode.Location = new Point(21, 188);
+            labelCode.Location = new Point(18, 141);
             labelCode.Name = "labelCode";
-            labelCode.Size = new Size(200, 25);
+            labelCode.Size = new Size(164, 20);
             labelCode.TabIndex = 5;
             labelCode.Text = "Код из уведомления:";
             // 
@@ -212,9 +226,9 @@
             // 
             labelPhone.AutoSize = true;
             labelPhone.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            labelPhone.Location = new Point(24, 117);
+            labelPhone.Location = new Point(21, 88);
             labelPhone.Name = "labelPhone";
-            labelPhone.Size = new Size(167, 25);
+            labelPhone.Size = new Size(136, 20);
             labelPhone.TabIndex = 4;
             labelPhone.Text = "Номер телефона:";
             // 
@@ -222,9 +236,9 @@
             // 
             labelLogin.AutoSize = true;
             labelLogin.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            labelLogin.Location = new Point(51, 121);
+            labelLogin.Location = new Point(45, 91);
             labelLogin.Name = "labelLogin";
-            labelLogin.Size = new Size(70, 25);
+            labelLogin.Size = new Size(57, 20);
             labelLogin.TabIndex = 1;
             labelLogin.Text = "Логин:";
             // 
@@ -232,38 +246,41 @@
             // 
             labelPassword.AutoSize = true;
             labelPassword.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            labelPassword.Location = new Point(37, 161);
+            labelPassword.Location = new Point(32, 121);
             labelPassword.Name = "labelPassword";
-            labelPassword.Size = new Size(84, 25);
+            labelPassword.Size = new Size(67, 20);
             labelPassword.TabIndex = 0;
             labelPassword.Text = "Пароль:";
             // 
             // textBoxLogin
             // 
-            textBoxLogin.Location = new Point(137, 125);
+            textBoxLogin.Location = new Point(120, 94);
+            textBoxLogin.Margin = new Padding(3, 2, 3, 2);
             textBoxLogin.Name = "textBoxLogin";
-            textBoxLogin.Size = new Size(196, 27);
+            textBoxLogin.Size = new Size(172, 23);
             textBoxLogin.TabIndex = 2;
             // 
             // textBoxPassword
             // 
-            textBoxPassword.Location = new Point(137, 162);
+            textBoxPassword.Location = new Point(120, 122);
+            textBoxPassword.Margin = new Padding(3, 2, 3, 2);
             textBoxPassword.Name = "textBoxPassword";
-            textBoxPassword.Size = new Size(196, 27);
+            textBoxPassword.Size = new Size(172, 23);
             textBoxPassword.TabIndex = 3;
             // 
             // LoginForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(99, 58, 52);
-            ClientSize = new Size(600, 276);
+            ClientSize = new Size(525, 207);
             Controls.Add(radioClient);
             Controls.Add(radioEmployee);
             Controls.Add(panel2);
             Controls.Add(panel1);
             Controls.Add(groupBox1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            Margin = new Padding(3, 2, 3, 2);
             Name = "LoginForm";
             Text = "Restaurant Management System";
             panel1.ResumeLayout(false);

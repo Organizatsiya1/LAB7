@@ -17,11 +17,11 @@ namespace Lab_7
     {
         private string verificationCode;
         private bool loadingCanceled;
-        private BusinessLogic.BusinessLogic Logic = new BusinessLogic.BusinessLogic();
+        public BusinessLogic.BusinessLogic Logic = new BusinessLogic.BusinessLogic();
         public LoginForm()
         {
             InitializeComponent();
-            
+
             // По умолчанию выбран сотрудник
             radioEmployee.Checked = true;
             ToggleUserTypeFields();
@@ -101,7 +101,7 @@ namespace Lab_7
         // Генерация кода и открытие уведомления
         private void GenerateAndShowCode()
         {
-            
+
 
             // Показываем форму с кодом
             using (CodeNotification codeForm = new CodeNotification(Logic.GenerateNumber()))
@@ -209,6 +209,11 @@ namespace Lab_7
                 progressBar.Visible = false;
                 buttonCancel.Visible = false;
             }
+        }
+
+        private void maskedTextBoxPhone_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+
         }
     }
 }
