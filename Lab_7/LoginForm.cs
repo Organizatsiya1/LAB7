@@ -149,16 +149,22 @@ namespace Lab_7
             return true;
         }
 
-        private async Task LoadDataAsync()
+        private async Task LoadDataAsync()  // загрузка имитация работы
         {
-            // Имитация загрузки данных
+            progressBar.Value = 0;
+            progressBar.ForeColor = Color.LimeGreen;
+
             for (int i = 0; i <= 10; i++)
             {
                 if (loadingCanceled)
+                {
+                    progressBar.ForeColor = Color.Red;
+                    MessageBox.Show("Загрузка отменена", "Прерывание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
+                }
 
                 progressBar.Value = i * 10;
-                await Task.Delay(300); // Задержка для имитации работы
+                await Task.Delay(200);
             }
         }
 
@@ -175,31 +181,23 @@ namespace Lab_7
         }
 
 
-        private void buttonLogin_Click(object sender, EventArgs e)
+        private async void buttonLogin_Click(object sender, EventArgs e)
         {
+            if (!ValidateInput()) return;
+
             if (radioEmployee.Checked)
             {
                 string login = textBoxLogin.Text.Trim();
                 string password = textBoxPassword.Text.Trim();
 
-                if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(password))
-                {
-                    MessageBox.Show("Введите логин и пароль.");
-                    return;
-                }
-
-                // Поиск среди сотрудников, реализующих IWorker
                 var worker = BusinessLogic.Workers
                     .OfType<IWorker>()
                     .FirstOrDefault(w => w.Login == login && w.Password == password);
 
                 if (worker != null)
                 {
-                    // Находим оригинальный объект Human (чтобы знать, кто он — Waiter, Chef и т.д.)
                     var human = BusinessLogic.Workers.First(h => (h as IWorker)?.Login == login);
-
                     string roleName = human.GetType().Name;
-                    MessageBox.Show($"Вход выполнен как {roleName}!");
 
                     UserStatus role = roleName switch
                     {
@@ -207,12 +205,21 @@ namespace Lab_7
                         nameof(Chef) => UserStatus.Chef,
                         nameof(Waiter) => UserStatus.Waiter,
                         nameof(Courier) => UserStatus.Courier,
-                        _ => UserStatus.Client                  // если не совпало ни с кем — значит клиент
+                        _ => UserStatus.Client
                     };
 
-                    MainForm mainForm = new MainForm(role);
-                    mainForm.Show();
-                    this.Hide();
+                    // здесь вызывается загрузка
+                    progressBar.Visible = true;
+                    buttonCancel.Visible = true;
+                    loadingCanceled = false;
+
+                    await LoadDataAsync();
+
+                    if (!loadingCanceled)
+                    {
+                        MessageBox.Show($"Вход выполнен как {roleName}!");
+                        ShowMainForm(role);
+                    }
                 }
                 else
                 {
@@ -221,9 +228,18 @@ namespace Lab_7
             }
             else if (radioClient.Checked)
             {
-                // Проверка (код) уже пройдена в ValidateInput
-                MessageBox.Show("Вход выполнен как клиент!");
-                ShowMainForm(UserStatus.Client);
+                // Аналогичная логика — только если проверка пройдена
+                progressBar.Visible = true;
+                buttonCancel.Visible = true;
+                loadingCanceled = false;
+
+                await LoadDataAsync();
+
+                if (!loadingCanceled)
+                {
+                    MessageBox.Show("Вход выполнен как клиент!");
+                    ShowMainForm(UserStatus.Client);
+                }
             }
         }
     }
