@@ -17,7 +17,7 @@ namespace Lab_7
         {
             InitializeComponent();
             CurrentOrder = order;
-           //приписать привязки по данным
+           //приписать привязки по данным на надписи
         }
         
 
