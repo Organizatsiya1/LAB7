@@ -16,5 +16,10 @@ namespace Lab_7
         {
             InitializeComponent();
         }
+
+        private void buttonCourierTakeOrder_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

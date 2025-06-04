@@ -149,6 +149,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.AutoSize = true;
             groupBox1.BackColor = Color.FromArgb(99, 58, 52);
             groupBox1.Controls.Add(buttonSendCode);
             groupBox1.Controls.Add(maskedTextBoxCode);
@@ -162,7 +163,7 @@
             groupBox1.ForeColor = SystemColors.ControlLightLight;
             groupBox1.Location = new Point(230, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(358, 241);
+            groupBox1.Size = new Size(358, 242);
             groupBox1.TabIndex = 4;
             groupBox1.TabStop = false;
             groupBox1.Text = "Добро пожаловать!";

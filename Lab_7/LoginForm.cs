@@ -217,7 +217,6 @@ namespace Lab_7
 
                     if (!loadingCanceled)
                     {
-                        MessageBox.Show($"Вход выполнен как {roleName}!");
                         ShowMainForm(role);
                     }
                 }
@@ -237,7 +236,6 @@ namespace Lab_7
 
                 if (!loadingCanceled)
                 {
-                    MessageBox.Show("Вход выполнен как клиент!");
                     ShowMainForm(UserStatus.Client);
                 }
             }
