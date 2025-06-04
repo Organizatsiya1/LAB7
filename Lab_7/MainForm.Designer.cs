@@ -34,10 +34,13 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoSize = true;
             BackColor = Color.FromArgb(99, 58, 52);
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1082, 653);
+            ForeColor = SystemColors.ControlLightLight;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Name = "MainForm";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "MainForm";
             ResumeLayout(false);
         }
