@@ -9,7 +9,8 @@ namespace BusinessLogic
         PersonStatus Status { get; set; }
         int OrdersID = 1;
         int WorkersID = 1;
-        List<Human> Workers { get; set; } = new List<Human>();
+        public List<IWorker> Workers { get; set; } = new List<IWorker>();
+        public List<Client> Clients { get; set; } = new List<Client> { };
         public string GenerateNumber()
         {
             Random random = new Random();

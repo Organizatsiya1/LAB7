@@ -13,18 +13,24 @@ namespace Lab_7
 {
     public partial class Registration : Form
     {
-        public Registration()
+        public BusinessLogic.BusinessLogic Logic { set; get; }
+
+        public Registration(BusinessLogic.BusinessLogic logic)
         {
             InitializeComponent();
+            Logic = logic;
+            StatusBox.DataSource = Enum.GetValues(typeof(UserStatus));
         }
-        //public BusinessLogic.BusinessLogic Logic = LoginForm.Logic КАК ПРИВЯЗАТЬ ЛОГИКУ
+
 
         private void InitializeComponent()
         {
+            components = new Container();
             RegistrationButton = new Button();
             NameBox = new TextBox();
             PhoneBox = new MaskedTextBox();
             StatusBox = new ComboBox();
+            adminBindingSource = new BindingSource(components);
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
@@ -32,6 +38,9 @@ namespace Lab_7
             label5 = new Label();
             LoginLabel = new Label();
             PasswordLabel = new Label();
+            LoginLabe = new Label();
+            PasswordLabe = new Label();
+            ((ISupportInitialize)adminBindingSource).BeginInit();
             SuspendLayout();
             // 
             // RegistrationButton
@@ -66,6 +75,10 @@ namespace Lab_7
             StatusBox.Name = "StatusBox";
             StatusBox.Size = new Size(149, 23);
             StatusBox.TabIndex = 3;
+            // 
+            // adminBindingSource
+            // 
+            adminBindingSource.DataSource = typeof(Admin);
             // 
             // label1
             // 
@@ -114,23 +127,41 @@ namespace Lab_7
             // 
             // LoginLabel
             // 
-            LoginLabel.AutoSize = true;
-            LoginLabel.Location = new Point(98, 204);
+            LoginLabel.Location = new Point(0, 0);
             LoginLabel.Name = "LoginLabel";
-            LoginLabel.Size = new Size(0, 15);
-            LoginLabel.TabIndex = 9;
+            LoginLabel.Size = new Size(100, 23);
+            LoginLabel.TabIndex = 14;
             // 
             // PasswordLabel
             // 
-            PasswordLabel.AutoSize = true;
-            PasswordLabel.Location = new Point(98, 253);
+            PasswordLabel.Location = new Point(0, 0);
             PasswordLabel.Name = "PasswordLabel";
-            PasswordLabel.Size = new Size(0, 15);
-            PasswordLabel.TabIndex = 10;
+            PasswordLabel.Size = new Size(100, 23);
+            PasswordLabel.TabIndex = 13;
+            // 
+            // LoginLabe
+            // 
+            LoginLabe.AutoSize = true;
+            LoginLabe.Location = new Point(104, 204);
+            LoginLabe.Name = "LoginLabe";
+            LoginLabe.Size = new Size(38, 15);
+            LoginLabe.TabIndex = 11;
+            LoginLabe.Text = "label6";
+            // 
+            // PasswordLabe
+            // 
+            PasswordLabe.AutoSize = true;
+            PasswordLabe.Location = new Point(104, 253);
+            PasswordLabe.Name = "PasswordLabe";
+            PasswordLabe.Size = new Size(38, 15);
+            PasswordLabe.TabIndex = 12;
+            PasswordLabe.Text = "label6";
             // 
             // Registration
             // 
             ClientSize = new Size(291, 323);
+            Controls.Add(PasswordLabe);
+            Controls.Add(LoginLabe);
             Controls.Add(PasswordLabel);
             Controls.Add(LoginLabel);
             Controls.Add(label5);
@@ -143,6 +174,7 @@ namespace Lab_7
             Controls.Add(NameBox);
             Controls.Add(RegistrationButton);
             Name = "Registration";
+            ((ISupportInitialize)adminBindingSource).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -157,6 +189,10 @@ namespace Lab_7
         private Label label5;
         private Label LoginLabel;
         private Label PasswordLabel;
+        private Label LoginLabe;
+        private Label PasswordLabe;
+        private BindingSource adminBindingSource;
+        private IContainer components;
         private TextBox NameBox;
 
         private void RegistrationButton_Click(object sender, EventArgs e)
@@ -164,7 +200,9 @@ namespace Lab_7
             string name = NameBox.Text;
             string phnumber = PhoneBox.Text;
             UserStatus status = (UserStatus)StatusBox.SelectedValue;
-            
+            Logic.RegistrateWorker(name, status, phnumber);
+                PasswordLabe.Text = Logic.Workers[Logic.Workers.Count - 1].Password;
+                LoginLabe.Text = Logic.Workers[Logic.Workers.Count - 1].Login;
         }
     }
 }
