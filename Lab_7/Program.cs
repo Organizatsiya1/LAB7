@@ -12,7 +12,7 @@ namespace Lab_7
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             //Application.Run(new LoginForm());
-            Application.Run(new Profile(new Model.Client()));
+            Application.Run(new LoginForm());
         }
     }
 }

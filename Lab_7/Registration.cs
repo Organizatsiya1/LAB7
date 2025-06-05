@@ -15,15 +15,7 @@ namespace Lab_7
     public partial class Registration : Form
     {
 
-        public BusinessLogic.BusinessLogic Logic { set; get; }
-
-        public Registration(BusinessLogic.BusinessLogic logic)
-        {
-            InitializeComponent();
-            Logic = logic;
-            StatusBox.DataSource = Enum.GetValues(typeof(UserStatus));
-        }
-
+        public BusinessLogic Logic { set; get; }
 
 
         public Registration(BusinessLogic logic)

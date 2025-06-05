@@ -103,39 +103,7 @@ namespace Logic
                 .ToList();
         }
 
-        /// <summary>
-        /// Формирует и возвращает объект Order на основе списка блюд (cartFoods).
-        /// </summary>
-        public Order PlaceOrder(Client client, List<Food> cartFoods, PayementType payType, bool isDelivery)
-        {
-            if (client == null || cartFoods == null || cartFoods.Count == 0)
-                return null;
-
-            if (!client.Permissions.HasFlag(Permissions.MakeOrder))
-                return null;
-
-            var order = new Order
-            {
-                Id = OrdersID++,
-                PayementType = payType,
-                Behavior = OrderBehavior.IsCoocking,
-                Foods = cartFoods.ToList(), // копируем список, чтобы не модифицировать «живые» данные
-                TableID = isDelivery ? 0 : -1,
-                WaiterID = 0,
-                IsDelivered = isDelivery,
-                IsPayed = false
-            };
-
-            if (Clients.Contains(client))
-                client.Orders.Add(order.Id);
-            else
-            {
-                client.Orders = new List<int> { order.Id };
-                Clients.Add(client);
-            }
-
-            return order;
-        }
+        
 
         public Order GetCurrentOrderForClient(Client client)
         {
