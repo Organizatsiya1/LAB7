@@ -41,10 +41,11 @@
             label9 = new Label();
             IDBox = new TextBox();
             NameBox = new TextBox();
-            PhoneBox = new TextBox();
             StreetBox = new TextBox();
             HouseBox = new TextBox();
             FlatBox = new TextBox();
+            PhoneBox = new MaskedTextBox();
+            SaveProfile = new Button();
             ((System.ComponentModel.ISupportInitialize)OrdersGrid).BeginInit();
             SuspendLayout();
             // 
@@ -96,7 +97,7 @@
             OrdersGrid.Name = "OrdersGrid";
             OrdersGrid.Size = new Size(145, 272);
             OrdersGrid.TabIndex = 4;
-            
+            OrdersGrid.CellDoubleClick += OrdersGrid_CellDoubleClick;
             // 
             // ID
             // 
@@ -167,13 +168,6 @@
             NameBox.Size = new Size(100, 23);
             NameBox.TabIndex = 11;
             // 
-            // PhoneBox
-            // 
-            PhoneBox.Location = new Point(142, 211);
-            PhoneBox.Name = "PhoneBox";
-            PhoneBox.Size = new Size(100, 23);
-            PhoneBox.TabIndex = 12;
-            // 
             // StreetBox
             // 
             StreetBox.Location = new Point(95, 310);
@@ -195,15 +189,34 @@
             FlatBox.Size = new Size(100, 23);
             FlatBox.TabIndex = 15;
             // 
+            // PhoneBox
+            // 
+            PhoneBox.Location = new Point(142, 211);
+            PhoneBox.Mask = "(999) 000-0000";
+            PhoneBox.Name = "PhoneBox";
+            PhoneBox.Size = new Size(100, 23);
+            PhoneBox.TabIndex = 16;
+            // 
+            // SaveProfile
+            // 
+            SaveProfile.Location = new Point(222, 415);
+            SaveProfile.Name = "SaveProfile";
+            SaveProfile.Size = new Size(75, 23);
+            SaveProfile.TabIndex = 17;
+            SaveProfile.Text = "Сохранить";
+            SaveProfile.UseVisualStyleBackColor = true;
+            SaveProfile.Click += SaveProfile_Click;
+            // 
             // Profile
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(507, 450);
+            Controls.Add(SaveProfile);
+            Controls.Add(PhoneBox);
             Controls.Add(FlatBox);
             Controls.Add(HouseBox);
             Controls.Add(StreetBox);
-            Controls.Add(PhoneBox);
             Controls.Add(NameBox);
             Controls.Add(IDBox);
             Controls.Add(label9);
@@ -223,6 +236,8 @@
             PerformLayout();
         }
 
+
+
         #endregion
 
         private Label label1;
@@ -238,9 +253,10 @@
         private Label label9;
         private TextBox IDBox;
         private TextBox NameBox;
-        private TextBox PhoneBox;
         private TextBox StreetBox;
         private TextBox HouseBox;
         private TextBox FlatBox;
+        private MaskedTextBox PhoneBox;
+        private Button SaveProfile;
     }
 }

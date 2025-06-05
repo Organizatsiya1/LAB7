@@ -13,5 +13,6 @@ namespace Model
         public double Y { get; set; }
         public string Street { get; set; }
         public int HouseNumb { get; set; }
+        public int FlatNumb { get; set; }
     }
 }

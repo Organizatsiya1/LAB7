@@ -11,5 +11,10 @@ namespace Model
     {
         public Adress Adress { get; set; }
         public Permissions Permissions = Permissions.BookTable|Permissions.MakeOrder;
+        public Client()
+        {
+            Adress = new Adress();
+            Orders = new List<Order>();
+        }
     }
 }

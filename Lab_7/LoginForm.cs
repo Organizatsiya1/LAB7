@@ -211,9 +211,6 @@ namespace Lab_7
             }
         }
 
-        private void maskedTextBoxPhone_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
-        {
-
-        }
+        
     }
 }

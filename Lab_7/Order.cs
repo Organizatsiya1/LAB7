@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,12 +13,23 @@ namespace Lab_7
 {
     public partial class Order : Form
     {
-        public Order CurrentOrder { get; set; }
-        public Order(Order order)
+        public Model.Order CurrentOrder { get; set; }
+        public Order(Model.Order order)
         {
             InitializeComponent();
             CurrentOrder = order;
-            
+            OrderIDLabe.Text = $"ID: {CurrentOrder.Id}";
+            if (CurrentOrder is DeliveredOrder)
+            {
+                TypeLabe.Text = "Доставка";
+            }
+            CostLabe.Text = CurrentOrder.Cost.ToString();
+            BehaviourLabe.Text = CurrentOrder.Behavior.ToString();
+            PayementLabe.Text = "Не оплачено";
+            if(CurrentOrder.IsPayed == true)
+            {
+                PayementLabe.Text = "Оплачено";
+            }
         }
         
 

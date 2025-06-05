@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            dataGridView1 = new DataGridView();
-            Food = new DataGridViewTextBoxColumn();
+            FoodsGrid = new DataGridView();
             label1 = new Label();
             OrderIDLabe = new Label();
+            orderBindingSource = new BindingSource(components);
             label2 = new Label();
             label3 = new Label();
             label4 = new Label();
@@ -43,25 +43,20 @@
             CostLabe = new Label();
             BehaviourLabe = new Label();
             PayementLabe = new Label();
-            orderBindingSource = new BindingSource(components);
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            Food = new DataGridViewTextBoxColumn();
+            Numb = new DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)FoodsGrid).BeginInit();
             ((System.ComponentModel.ISupportInitialize)orderBindingSource).BeginInit();
             SuspendLayout();
             // 
-            // dataGridView1
+            // FoodsGrid
             // 
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Food });
-            dataGridView1.Location = new Point(278, 94);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(343, 307);
-            dataGridView1.TabIndex = 0;
-            // 
-            // Food
-            // 
-            Food.HeaderText = "Блюда";
-            Food.Name = "Food";
-            Food.Width = 300;
+            FoodsGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            FoodsGrid.Columns.AddRange(new DataGridViewColumn[] { Food, Numb });
+            FoodsGrid.Location = new Point(294, 92);
+            FoodsGrid.Name = "FoodsGrid";
+            FoodsGrid.Size = new Size(293, 307);
+            FoodsGrid.TabIndex = 0;
             // 
             // label1
             // 
@@ -83,6 +78,10 @@
             OrderIDLabe.Size = new Size(49, 37);
             OrderIDLabe.TabIndex = 2;
             OrderIDLabe.Text = "ID:";
+            // 
+            // orderBindingSource
+            // 
+            orderBindingSource.DataSource = typeof(Model.Order);
             // 
             // label2
             // 
@@ -150,9 +149,9 @@
             TypeLabe.Font = new Font("Segoe UI", 15F);
             TypeLabe.Location = new Point(147, 190);
             TypeLabe.Name = "TypeLabe";
-            TypeLabe.Size = new Size(65, 28);
+            TypeLabe.Size = new Size(117, 28);
             TypeLabe.TabIndex = 9;
-            TypeLabe.Text = "label7";
+            TypeLabe.Text = "Самовывоз";
             // 
             // CostLabe
             // 
@@ -186,9 +185,17 @@
             PayementLabe.TabIndex = 12;
             PayementLabe.Text = "label7";
             // 
-            // orderBindingSource
+            // Food
             // 
-            orderBindingSource.DataSource = typeof(Model.Order);
+            Food.FillWeight = 300F;
+            Food.HeaderText = "Блюда";
+            Food.Name = "Food";
+            Food.Width = 150;
+            // 
+            // Numb
+            // 
+            Numb.HeaderText = "Кол-во";
+            Numb.Name = "Numb";
             // 
             // Order
             // 
@@ -207,10 +214,10 @@
             Controls.Add(label2);
             Controls.Add(OrderIDLabe);
             Controls.Add(label1);
-            Controls.Add(dataGridView1);
+            Controls.Add(FoodsGrid);
             Name = "Order";
             Text = "Order";
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)FoodsGrid).EndInit();
             ((System.ComponentModel.ISupportInitialize)orderBindingSource).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -218,8 +225,7 @@
 
         #endregion
 
-        private DataGridView dataGridView1;
-        private DataGridViewTextBoxColumn Food;
+        private DataGridView FoodsGrid;
         private Label label1;
         private Label OrderIDLabe;
         private Label label2;
@@ -233,5 +239,7 @@
         private Label BehaviourLabe;
         private Label PayementLabe;
         private BindingSource orderBindingSource;
+        private DataGridViewTextBoxColumn Food;
+        private DataGridViewTextBoxColumn Numb;
     }
 }

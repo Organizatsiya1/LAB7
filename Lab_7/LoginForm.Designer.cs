@@ -210,7 +210,7 @@
             maskedTextBoxPhone.Name = "maskedTextBoxPhone";
             maskedTextBoxPhone.Size = new Size(110, 23);
             maskedTextBoxPhone.TabIndex = 7;
-            maskedTextBoxPhone.MaskInputRejected += maskedTextBoxPhone_MaskInputRejected;
+            
             // 
             // labelCode
             // 
