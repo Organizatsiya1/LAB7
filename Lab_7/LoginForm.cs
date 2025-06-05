@@ -217,6 +217,7 @@ namespace Lab_7
 
                     if (!loadingCanceled)
                     {
+                        Logic.LoadFoods();
                         ShowMainForm(role);
                     }
                 }
@@ -236,6 +237,7 @@ namespace Lab_7
 
                 if (!loadingCanceled)
                 {
+                    Logic.LoadFoods();
                     ShowMainForm(UserStatus.Client);
                 }
             }

@@ -20,7 +20,135 @@ namespace Logic
 
         public List<IWorker> Workers { get; set; } = new List<IWorker>();
         public List<Client> Clients { get; set; } = new List<Client> { };
+        // Все доступные блюда (меню)
+        public static List<Food> Foods { get; private set; } = new List<Food>();
 
+        #region Menu
+
+        /// <summary>
+        /// Вызвать сразу при инициализации (например, после логина) для загрузки меню
+        /// Здесь приведён упрощённый пример: в реальности данные придут из файла/БД (DataConverter)
+        /// </summary>
+        public void LoadFoods()
+        {
+            Foods = new List<Food>()
+            {
+                new Food
+                {
+                    Id = 1,
+                    Name = "Брускетта с помидорами",
+                    Description = "Классическая итальянская закуска",
+                    Weight = 120,
+                    CoockingTime = 5,
+                    Cost = 150,
+                    Priority = FoodCategory.Snacks,
+                    Formula = new List<string> { "Хлеб", "Томаты", "Оливковое масло", "Базилик" }
+                },
+                new Food
+                {
+                    Id = 2,
+                    Name = "Томатный суп",
+                    Description = "Тёплый суп с ароматом базилика",
+                    Weight = 350,
+                    CoockingTime = 10,
+                    Cost = 200,
+                    Priority = FoodCategory.Soups,
+                    Formula = new List<string> { "Томаты", "Лук", "Чеснок", "Базилик" }
+                },
+                new Food
+                {
+                    Id = 3,
+                    Name = "Стейк из говядины",
+                    Description = "Стейк средней прожарки с соусом",
+                    Weight = 250,
+                    CoockingTime = 15,
+                    Cost = 450,
+                    Priority = FoodCategory.SecondCourses,
+                    Formula = new List<string> { "Говядина", "Соль", "Перец", "Соус" }
+                },
+                new Food
+                {
+                    Id = 4,
+                    Name = "Чизкейк",
+                    Description = "Классический чизкейк с ягодным соусом",
+                    Weight = 100,
+                    CoockingTime = 20,
+                    Cost = 250,
+                    Priority = FoodCategory.Desserts,
+                    Formula = new List<string> { "Сыр", "Печенье", "Сахар", "Ягоды" }
+                },
+                new Food
+                {
+                    Id = 5,
+                    Name = "Кола",
+                    Description = "Охлаждающий напиток",
+                    Weight = 330,
+                    CoockingTime = 0,
+                    Cost = 100,
+                    Priority = FoodCategory.Drinks,
+                    Formula = new List<string> { "Вода", "Сахар", "Газ" }
+                }
+            };
+        }
+
+        #endregion
+
+        public List<Food> GetFoodsByFilter(string nameContains)
+        {
+            if (string.IsNullOrWhiteSpace(nameContains))
+                return Foods.ToList();
+            nameContains = nameContains.Trim().ToLower();
+            return Foods
+                .Where(f => f.Name.ToLower().Contains(nameContains))
+                .ToList();
+        }
+
+        /// <summary>
+        /// Формирует и возвращает объект Order на основе списка блюд (cartFoods).
+        /// </summary>
+        public Order PlaceOrder(Client client, List<Food> cartFoods, PayementType payType, bool isDelivery)
+        {
+            if (client == null || cartFoods == null || cartFoods.Count == 0)
+                return null;
+
+            if (!client.Permissions.HasFlag(Permissions.MakeOrder))
+                return null;
+
+            var order = new Order
+            {
+                Id = OrdersID++,
+                PayementType = payType,
+                Behavior = OrderBehavior.IsCoocking,
+                Foods = cartFoods.ToList(), // копируем список, чтобы не модифицировать «живые» данные
+                TableID = isDelivery ? 0 : -1,
+                WaiterID = 0,
+                IsDelivered = isDelivery,
+                IsPayed = false
+            };
+
+            if (Clients.Contains(client))
+                client.Orders.Add(order.Id);
+            else
+            {
+                client.Orders = new List<int> { order.Id };
+                Clients.Add(client);
+            }
+
+            return order;
+        }
+
+        public Order GetCurrentOrderForClient(Client client)
+        {
+            if (client == null || client.Orders == null || client.Orders.Count == 0)
+                return null;
+
+            foreach (var oid in client.Orders.AsEnumerable().Reverse())
+            {
+                // ??? В ТЗ здесь нужно хранить все заказы в каком-то общем списке.
+                // пока чисто для демонстрации, если AllOrders отсутствует, оставим заглушку:
+            }
+            return null;
+        }
 
         public string GenerateNumber()
         {

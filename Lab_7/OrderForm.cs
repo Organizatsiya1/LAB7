@@ -13,6 +13,7 @@ namespace Lab_7
     public partial class OrderForm : Form
     {
         public OrderForm CurrentOrder { get; set; }
+
         public OrderForm(OrderForm order)
         {
             InitializeComponent();
