@@ -1,6 +1,6 @@
 ﻿namespace Lab_7
 {
-    partial class Order
+    partial class OrderForm
     {
         /// <summary>
         /// Required designer variable.
@@ -30,6 +30,8 @@
         {
             components = new System.ComponentModel.Container();
             FoodsGrid = new DataGridView();
+            Food = new DataGridViewTextBoxColumn();
+            Numb = new DataGridViewTextBoxColumn();
             label1 = new Label();
             OrderIDLabe = new Label();
             orderBindingSource = new BindingSource(components);
@@ -43,28 +45,46 @@
             CostLabe = new Label();
             BehaviourLabe = new Label();
             PayementLabe = new Label();
-            Food = new DataGridViewTextBoxColumn();
-            Numb = new DataGridViewTextBoxColumn();
+            pictureBox1 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)FoodsGrid).BeginInit();
             ((System.ComponentModel.ISupportInitialize)orderBindingSource).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // FoodsGrid
             // 
             FoodsGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             FoodsGrid.Columns.AddRange(new DataGridViewColumn[] { Food, Numb });
-            FoodsGrid.Location = new Point(294, 92);
+            FoodsGrid.Location = new Point(519, 13);
+            FoodsGrid.Margin = new Padding(3, 4, 3, 4);
             FoodsGrid.Name = "FoodsGrid";
-            FoodsGrid.Size = new Size(293, 307);
+            FoodsGrid.RowHeadersWidth = 51;
+            FoodsGrid.Size = new Size(335, 374);
             FoodsGrid.TabIndex = 0;
+            // 
+            // Food
+            // 
+            Food.FillWeight = 300F;
+            Food.HeaderText = "Блюда";
+            Food.MinimumWidth = 6;
+            Food.Name = "Food";
+            Food.Width = 150;
+            // 
+            // Numb
+            // 
+            Numb.HeaderText = "Кол-во";
+            Numb.MinimumWidth = 6;
+            Numb.Name = "Numb";
+            Numb.Width = 125;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 20F);
-            label1.Location = new Point(187, 9);
+            label1.Font = new Font("Microsoft Sans Serif", 16.2F, FontStyle.Bold);
+            label1.ForeColor = SystemColors.ControlLightLight;
+            label1.Location = new Point(178, 52);
             label1.Name = "label1";
-            label1.Size = new Size(85, 37);
+            label1.Size = new Size(97, 32);
             label1.TabIndex = 1;
             label1.Text = "Заказ";
             // 
@@ -72,10 +92,11 @@
             // 
             OrderIDLabe.AutoSize = true;
             OrderIDLabe.DataBindings.Add(new Binding("DataContext", orderBindingSource, "Id", true));
-            OrderIDLabe.Font = new Font("Segoe UI", 20F);
-            OrderIDLabe.Location = new Point(278, 9);
+            OrderIDLabe.Font = new Font("Microsoft Sans Serif", 16.2F, FontStyle.Bold);
+            OrderIDLabe.ForeColor = SystemColors.ControlLightLight;
+            OrderIDLabe.Location = new Point(281, 52);
             OrderIDLabe.Name = "OrderIDLabe";
-            OrderIDLabe.Size = new Size(49, 37);
+            OrderIDLabe.Size = new Size(52, 32);
             OrderIDLabe.TabIndex = 2;
             OrderIDLabe.Text = "ID:";
             // 
@@ -86,80 +107,88 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 15F);
-            label2.Location = new Point(39, 134);
+            label2.Font = new Font("Microsoft Sans Serif", 16.2F, FontStyle.Bold);
+            label2.ForeColor = SystemColors.ControlLightLight;
+            label2.Location = new Point(12, 155);
             label2.Name = "label2";
-            label2.Size = new Size(54, 28);
+            label2.Size = new Size(85, 32);
             label2.TabIndex = 3;
             label2.Text = "Дата";
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 15F);
-            label3.Location = new Point(47, 190);
+            label3.Font = new Font("Microsoft Sans Serif", 16.2F, FontStyle.Bold);
+            label3.ForeColor = SystemColors.ControlLightLight;
+            label3.Location = new Point(12, 204);
             label3.Name = "label3";
-            label3.Size = new Size(46, 28);
+            label3.Size = new Size(66, 32);
             label3.TabIndex = 4;
             label3.Text = "Тип";
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI", 15F);
-            label4.Location = new Point(12, 239);
+            label4.Font = new Font("Microsoft Sans Serif", 16.2F, FontStyle.Bold);
+            label4.ForeColor = SystemColors.ControlLightLight;
+            label4.Location = new Point(12, 250);
             label4.Name = "label4";
-            label4.Size = new Size(109, 28);
+            label4.Size = new Size(166, 32);
             label4.TabIndex = 5;
             label4.Text = "Стоимость";
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Font = new Font("Segoe UI", 15F);
-            label5.Location = new Point(2, 320);
+            label5.Font = new Font("Microsoft Sans Serif", 16.2F, FontStyle.Bold);
+            label5.ForeColor = SystemColors.ControlLightLight;
+            label5.Location = new Point(12, 346);
             label5.Name = "label5";
-            label5.Size = new Size(141, 28);
+            label5.Size = new Size(221, 32);
             label5.TabIndex = 6;
             label5.Text = "Статус оплаты";
             // 
             // label6
             // 
             label6.AutoSize = true;
-            label6.Font = new Font("Segoe UI", 15F);
-            label6.Location = new Point(39, 281);
+            label6.Font = new Font("Microsoft Sans Serif", 16.2F, FontStyle.Bold);
+            label6.ForeColor = SystemColors.ControlLightLight;
+            label6.Location = new Point(12, 297);
             label6.Name = "label6";
-            label6.Size = new Size(69, 28);
+            label6.Size = new Size(110, 32);
             label6.TabIndex = 7;
             label6.Text = "Статус";
             // 
             // DateLabe
             // 
             DateLabe.AutoSize = true;
-            DateLabe.Font = new Font("Segoe UI", 15F);
-            DateLabe.Location = new Point(147, 134);
+            DateLabe.Font = new Font("Microsoft Sans Serif", 16.2F, FontStyle.Bold);
+            DateLabe.ForeColor = SystemColors.ControlLightLight;
+            DateLabe.Location = new Point(281, 155);
             DateLabe.Name = "DateLabe";
-            DateLabe.Size = new Size(65, 28);
+            DateLabe.Size = new Size(98, 32);
             DateLabe.TabIndex = 8;
             DateLabe.Text = "label7";
             // 
             // TypeLabe
             // 
             TypeLabe.AutoSize = true;
-            TypeLabe.Font = new Font("Segoe UI", 15F);
-            TypeLabe.Location = new Point(147, 190);
+            TypeLabe.Font = new Font("Microsoft Sans Serif", 16.2F, FontStyle.Bold);
+            TypeLabe.ForeColor = SystemColors.ControlLightLight;
+            TypeLabe.Location = new Point(281, 204);
             TypeLabe.Name = "TypeLabe";
-            TypeLabe.Size = new Size(117, 28);
+            TypeLabe.Size = new Size(175, 32);
             TypeLabe.TabIndex = 9;
             TypeLabe.Text = "Самовывоз";
             // 
             // CostLabe
             // 
             CostLabe.AutoSize = true;
-            CostLabe.Font = new Font("Segoe UI", 15F);
-            CostLabe.Location = new Point(147, 239);
+            CostLabe.Font = new Font("Microsoft Sans Serif", 16.2F, FontStyle.Bold);
+            CostLabe.ForeColor = SystemColors.ControlLightLight;
+            CostLabe.Location = new Point(281, 250);
             CostLabe.Name = "CostLabe";
-            CostLabe.Size = new Size(65, 28);
+            CostLabe.Size = new Size(98, 32);
             CostLabe.TabIndex = 10;
             CostLabe.Text = "label7";
             // 
@@ -167,10 +196,11 @@
             // 
             BehaviourLabe.AutoSize = true;
             BehaviourLabe.DataBindings.Add(new Binding("DataContext", orderBindingSource, "Behavior", true));
-            BehaviourLabe.Font = new Font("Segoe UI", 15F);
-            BehaviourLabe.Location = new Point(147, 281);
+            BehaviourLabe.Font = new Font("Microsoft Sans Serif", 16.2F, FontStyle.Bold);
+            BehaviourLabe.ForeColor = SystemColors.ControlLightLight;
+            BehaviourLabe.Location = new Point(281, 297);
             BehaviourLabe.Name = "BehaviourLabe";
-            BehaviourLabe.Size = new Size(65, 28);
+            BehaviourLabe.Size = new Size(98, 32);
             BehaviourLabe.TabIndex = 11;
             BehaviourLabe.Text = "label7";
             // 
@@ -178,30 +208,32 @@
             // 
             PayementLabe.AutoSize = true;
             PayementLabe.DataBindings.Add(new Binding("DataContext", orderBindingSource, "IsPayed", true));
-            PayementLabe.Font = new Font("Segoe UI", 15F);
-            PayementLabe.Location = new Point(147, 320);
+            PayementLabe.Font = new Font("Microsoft Sans Serif", 16.2F, FontStyle.Bold);
+            PayementLabe.ForeColor = SystemColors.ControlLightLight;
+            PayementLabe.Location = new Point(281, 346);
             PayementLabe.Name = "PayementLabe";
-            PayementLabe.Size = new Size(65, 28);
+            PayementLabe.Size = new Size(98, 32);
             PayementLabe.TabIndex = 12;
             PayementLabe.Text = "label7";
             // 
-            // Food
+            // pictureBox1
             // 
-            Food.FillWeight = 300F;
-            Food.HeaderText = "Блюда";
-            Food.Name = "Food";
-            Food.Width = 150;
+            pictureBox1.Image = Properties.Resources.menu_restaurant_coffee_icon_210208;
+            pictureBox1.Location = new Point(12, 12);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(156, 127);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 13;
+            pictureBox1.TabStop = false;
             // 
-            // Numb
+            // OrderForm
             // 
-            Numb.HeaderText = "Кол-во";
-            Numb.Name = "Numb";
-            // 
-            // Order
-            // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(639, 450);
+            AutoSize = true;
+            BackColor = Color.FromArgb(99, 58, 52);
+            ClientSize = new Size(866, 408);
+            Controls.Add(pictureBox1);
             Controls.Add(PayementLabe);
             Controls.Add(BehaviourLabe);
             Controls.Add(CostLabe);
@@ -215,10 +247,13 @@
             Controls.Add(OrderIDLabe);
             Controls.Add(label1);
             Controls.Add(FoodsGrid);
-            Name = "Order";
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            Margin = new Padding(3, 4, 3, 4);
+            Name = "OrderForm";
             Text = "Order";
             ((System.ComponentModel.ISupportInitialize)FoodsGrid).EndInit();
             ((System.ComponentModel.ISupportInitialize)orderBindingSource).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -241,5 +276,6 @@
         private BindingSource orderBindingSource;
         private DataGridViewTextBoxColumn Food;
         private DataGridViewTextBoxColumn Numb;
+        private PictureBox pictureBox1;
     }
 }

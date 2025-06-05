@@ -217,8 +217,9 @@ namespace Lab_7
 
                     if (!loadingCanceled)
                     {
-                        Logic.LoadFoods();
+                        
                         ShowMainForm(role);
+                        Logic.LoadFoods();
                     }
                 }
                 else

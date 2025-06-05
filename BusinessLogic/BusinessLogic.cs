@@ -10,18 +10,18 @@ namespace Logic
         UserStatus Status { get; set; }
         int OrdersID = 1;
         int WorkersID = 1;
-        public static List<Human> Users = new List<Human>() // пока для наглядности
+
+        public List<Client> Clients { get; set; } = new List<Client> { };
+        // Все доступные блюда (меню)
+        public static List<Food> Foods { get; private set; } = new List<Food>();
+
+        public static List<Human> Workers = new List<Human>() // пока для наглядности
         {
             new Waiter { Name = "Анна", Login = "anna", Password = "1234" },
             new Chef { Name = "Борис", Login = "boris", Password = "chefpass" },
             new Admin { Name = "Админ", Login = "admin", Password = "adminpass" },
             new Courier { Name = "Пётр", Login = "petya", Password = "cour123" }
         };
-
-        public List<IWorker> Workers { get; set; } = new List<IWorker>();
-        public List<Client> Clients { get; set; } = new List<Client> { };
-        // Все доступные блюда (меню)
-        public static List<Food> Foods { get; private set; } = new List<Food>();
 
         #region Menu
 

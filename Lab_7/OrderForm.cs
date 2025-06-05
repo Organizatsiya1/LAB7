@@ -11,10 +11,10 @@ using System.Windows.Forms;
 
 namespace Lab_7
 {
-    public partial class Order : Form
+    public partial class OrderForm : Form
     {
         public Model.Order CurrentOrder { get; set; }
-        public Order(Model.Order order)
+        public OrderForm(Model.Order order)
         {
             InitializeComponent();
             CurrentOrder = order;

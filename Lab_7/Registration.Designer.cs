@@ -28,136 +28,166 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.PasswordLabe = new System.Windows.Forms.Label();
-            this.LoginLabe = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.StatusBox = new System.Windows.Forms.ComboBox();
-            this.PhoneBox = new System.Windows.Forms.MaskedTextBox();
-            this.NameBox = new System.Windows.Forms.TextBox();
-            this.RegistrationButton = new System.Windows.Forms.Button();
-            this.SuspendLayout();
+            PasswordLabe = new Label();
+            LoginLabe = new Label();
+            label5 = new Label();
+            label4 = new Label();
+            label3 = new Label();
+            label2 = new Label();
+            label1 = new Label();
+            StatusBox = new ComboBox();
+            PhoneBox = new MaskedTextBox();
+            NameBox = new TextBox();
+            RegistrationButton = new Button();
+            pictureBox1 = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            SuspendLayout();
             // 
             // PasswordLabe
             // 
-            this.PasswordLabe.AutoSize = true;
-            this.PasswordLabe.Location = new System.Drawing.Point(156, 274);
-            this.PasswordLabe.Name = "PasswordLabe";
-            this.PasswordLabe.Size = new System.Drawing.Size(50, 20);
-            this.PasswordLabe.TabIndex = 25;
-            this.PasswordLabe.Text = "label6";
+            PasswordLabe.AutoSize = true;
+            PasswordLabe.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold);
+            PasswordLabe.ForeColor = SystemColors.ControlLightLight;
+            PasswordLabe.Location = new Point(270, 228);
+            PasswordLabe.Name = "PasswordLabe";
+            PasswordLabe.Size = new Size(96, 38);
+            PasswordLabe.TabIndex = 25;
+            PasswordLabe.Text = "label6";
             // 
             // LoginLabe
             // 
-            this.LoginLabe.AutoSize = true;
-            this.LoginLabe.Location = new System.Drawing.Point(156, 225);
-            this.LoginLabe.Name = "LoginLabe";
-            this.LoginLabe.Size = new System.Drawing.Size(50, 20);
-            this.LoginLabe.TabIndex = 24;
-            this.LoginLabe.Text = "label6";
+            LoginLabe.AutoSize = true;
+            LoginLabe.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold);
+            LoginLabe.ForeColor = SystemColors.ControlLightLight;
+            LoginLabe.Location = new Point(270, 180);
+            LoginLabe.Name = "LoginLabe";
+            LoginLabe.Size = new Size(96, 38);
+            LoginLabe.TabIndex = 24;
+            LoginLabe.Text = "label6";
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(70, 274);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(93, 20);
-            this.label5.TabIndex = 23;
-            this.label5.Text = "Ваш пароль";
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold);
+            label5.ForeColor = SystemColors.ControlLightLight;
+            label5.Location = new Point(12, 228);
+            label5.Name = "label5";
+            label5.Size = new Size(189, 38);
+            label5.TabIndex = 23;
+            label5.Text = "Ваш пароль:";
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(77, 225);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(83, 20);
-            this.label4.TabIndex = 22;
-            this.label4.Text = "Ваш логин";
+            label4.AutoSize = true;
+            label4.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold);
+            label4.ForeColor = SystemColors.ControlLightLight;
+            label4.Location = new Point(14, 180);
+            label4.Name = "label4";
+            label4.Size = new Size(170, 38);
+            label4.TabIndex = 22;
+            label4.Text = "Ваш логин:";
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(89, 141);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(69, 20);
-            this.label3.TabIndex = 21;
-            this.label3.Text = "Телефон";
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold);
+            label3.ForeColor = SystemColors.ControlLightLight;
+            label3.Location = new Point(205, 111);
+            label3.Name = "label3";
+            label3.Size = new Size(134, 38);
+            label3.TabIndex = 21;
+            label3.Text = "Телефон";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(100, 93);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(39, 20);
-            this.label2.TabIndex = 20;
-            this.label2.Text = "Имя";
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold);
+            label2.ForeColor = SystemColors.ControlLightLight;
+            label2.Location = new Point(205, 59);
+            label2.Name = "label2";
+            label2.Size = new Size(77, 38);
+            label2.TabIndex = 20;
+            label2.Text = "Имя";
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(75, 45);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(86, 20);
-            this.label1.TabIndex = 19;
-            this.label1.Text = "Должность";
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold);
+            label1.ForeColor = SystemColors.ControlLightLight;
+            label1.Location = new Point(205, 12);
+            label1.Name = "label1";
+            label1.Size = new Size(173, 38);
+            label1.TabIndex = 19;
+            label1.Text = "Должность";
             // 
             // StatusBox
             // 
-            this.StatusBox.FormattingEnabled = true;
-            this.StatusBox.Location = new System.Drawing.Point(150, 42);
-            this.StatusBox.Name = "StatusBox";
-            this.StatusBox.Size = new System.Drawing.Size(149, 28);
-            this.StatusBox.TabIndex = 18;
+            StatusBox.FormattingEnabled = true;
+            StatusBox.Location = new Point(418, 22);
+            StatusBox.Name = "StatusBox";
+            StatusBox.Size = new Size(184, 28);
+            StatusBox.TabIndex = 18;
             // 
             // PhoneBox
             // 
-            this.PhoneBox.Location = new System.Drawing.Point(150, 138);
-            this.PhoneBox.Mask = "(999) 000-0000";
-            this.PhoneBox.Name = "PhoneBox";
-            this.PhoneBox.Size = new System.Drawing.Size(149, 27);
-            this.PhoneBox.TabIndex = 17;
+            PhoneBox.Location = new Point(418, 122);
+            PhoneBox.Mask = "(999) 000-0000";
+            PhoneBox.Name = "PhoneBox";
+            PhoneBox.Size = new Size(184, 27);
+            PhoneBox.TabIndex = 17;
             // 
             // NameBox
             // 
-            this.NameBox.Location = new System.Drawing.Point(150, 90);
-            this.NameBox.Name = "NameBox";
-            this.NameBox.Size = new System.Drawing.Size(149, 27);
-            this.NameBox.TabIndex = 16;
+            NameBox.Location = new Point(418, 70);
+            NameBox.Name = "NameBox";
+            NameBox.Size = new Size(184, 27);
+            NameBox.TabIndex = 16;
             // 
             // RegistrationButton
             // 
-            this.RegistrationButton.Location = new System.Drawing.Point(150, 185);
-            this.RegistrationButton.Name = "RegistrationButton";
-            this.RegistrationButton.Size = new System.Drawing.Size(149, 23);
-            this.RegistrationButton.TabIndex = 15;
-            this.RegistrationButton.Text = "Зарегистрировать";
-            this.RegistrationButton.UseVisualStyleBackColor = true;
-            this.RegistrationButton.Click += new System.EventHandler(this.RegistrationButton_Click);
+            RegistrationButton.Location = new Point(418, 193);
+            RegistrationButton.Name = "RegistrationButton";
+            RegistrationButton.Size = new Size(149, 38);
+            RegistrationButton.TabIndex = 15;
+            RegistrationButton.Text = "Зарегистрировать";
+            RegistrationButton.UseVisualStyleBackColor = true;
+            RegistrationButton.Click += RegistrationButton_Click;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = Properties.Resources.menu_restaurant_coffee_icon_210208;
+            pictureBox1.Location = new Point(12, 12);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(161, 137);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 26;
+            pictureBox1.TabStop = false;
             // 
             // Registration
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(428, 349);
-            this.Controls.Add(this.PasswordLabe);
-            this.Controls.Add(this.LoginLabe);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.StatusBox);
-            this.Controls.Add(this.PhoneBox);
-            this.Controls.Add(this.NameBox);
-            this.Controls.Add(this.RegistrationButton);
-            this.Name = "Registration";
-            this.Text = "Registration";
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            AutoSize = true;
+            BackColor = Color.FromArgb(99, 58, 52);
+            ClientSize = new Size(615, 278);
+            Controls.Add(pictureBox1);
+            Controls.Add(PasswordLabe);
+            Controls.Add(LoginLabe);
+            Controls.Add(label5);
+            Controls.Add(label4);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(StatusBox);
+            Controls.Add(PhoneBox);
+            Controls.Add(NameBox);
+            Controls.Add(RegistrationButton);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            Name = "Registration";
+            Text = "Registration";
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -173,5 +203,6 @@
         private System.Windows.Forms.MaskedTextBox PhoneBox;
         private System.Windows.Forms.TextBox NameBox;
         private System.Windows.Forms.Button RegistrationButton;
+        private PictureBox pictureBox1;
     }
 }

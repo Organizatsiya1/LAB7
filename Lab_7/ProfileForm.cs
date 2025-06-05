@@ -11,10 +11,10 @@ using System.Windows.Forms;
 
 namespace Lab_7
 {
-    public partial class Profile : Form
+    public partial class ProfileForm : Form
     {
         public Client User { get; set; }
-        public Profile(Client client)
+        public ProfileForm(Client client)
         {
             InitializeComponent();
             User = client;
@@ -29,7 +29,7 @@ namespace Lab_7
         private void OrdersGrid_CellDoubleClick(object sender, EventArgs e)
         {
             Model.Order selected = sender as Model.Order;
-            Order OrderForm = new Order(selected);
+            OrderForm OrderForm = new OrderForm(selected);
         }
 
         private void SaveProfile_Click(object sender, EventArgs e)
