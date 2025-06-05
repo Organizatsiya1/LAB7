@@ -14,7 +14,17 @@ namespace Lab_7
 {
     public partial class Registration : Form
     {
-        public BusinessLogic Logic { get; set; }
+
+        public BusinessLogic.BusinessLogic Logic { set; get; }
+
+        public Registration(BusinessLogic.BusinessLogic logic)
+        {
+            InitializeComponent();
+            Logic = logic;
+            StatusBox.DataSource = Enum.GetValues(typeof(UserStatus));
+        }
+
+
 
         public Registration(BusinessLogic logic)
         {
@@ -42,6 +52,7 @@ namespace Lab_7
             }
 
             UserStatus status = (UserStatus)StatusBox.SelectedValue;
+
 
             try
             {

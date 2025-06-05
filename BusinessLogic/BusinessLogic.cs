@@ -150,6 +150,7 @@ namespace Logic
             return null;
         }
 
+
         public string GenerateNumber()
         {
             Random random = new Random();
@@ -170,7 +171,7 @@ namespace Logic
             }
         }
 
-        public void FixateUser(Human user)//хз зачем это
+        public void FixateUser(Human user)
         {
             if (user is Admin)
             {
@@ -246,6 +247,10 @@ namespace Logic
                 password[i] = all[r.Next(all.Length)];
             }
             return new string(password.OrderBy(x => r.Next()).ToArray());
+        }
+        public void GroupFoods(List<Food> foods, List<GroupedFood> groupedFoods) 
+        {
+           
         }
     }
 }
