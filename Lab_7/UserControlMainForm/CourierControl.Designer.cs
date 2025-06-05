@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             panelMap = new Panel();
+            buttonCourierStartRoute = new Button();
             buttonWaiterProfile = new Button();
             pictureBoxIcon = new PictureBox();
             panel1 = new Panel();
@@ -37,7 +38,6 @@
             textBoxCourierTakenOrders = new TextBox();
             textBoxCourierActiveOrders = new TextBox();
             buttonCourierTakeOrder = new Button();
-            buttonCourierStartRoute = new Button();
             buttonCourierPayOrder = new Button();
             labelCourierRouteTime = new Label();
             panelMap.SuspendLayout();
@@ -56,6 +56,20 @@
             panelMap.Size = new Size(150, 700);
             panelMap.TabIndex = 0;
             // 
+            // buttonCourierStartRoute
+            // 
+            buttonCourierStartRoute.BackColor = Color.FromArgb(99, 58, 52);
+            buttonCourierStartRoute.Cursor = Cursors.Hand;
+            buttonCourierStartRoute.Enabled = false;
+            buttonCourierStartRoute.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            buttonCourierStartRoute.ForeColor = SystemColors.ControlLightLight;
+            buttonCourierStartRoute.Location = new Point(3, 156);
+            buttonCourierStartRoute.Name = "buttonCourierStartRoute";
+            buttonCourierStartRoute.Size = new Size(141, 75);
+            buttonCourierStartRoute.TabIndex = 13;
+            buttonCourierStartRoute.Text = "Начать маршрут";
+            buttonCourierStartRoute.UseVisualStyleBackColor = false;
+            // 
             // buttonWaiterProfile
             // 
             buttonWaiterProfile.BackColor = Color.FromArgb(99, 58, 52);
@@ -69,6 +83,7 @@
             buttonWaiterProfile.TabIndex = 11;
             buttonWaiterProfile.Text = "Профиль";
             buttonWaiterProfile.UseVisualStyleBackColor = false;
+            buttonWaiterProfile.Click += buttonCourierTakeOrder_Click;
             // 
             // pictureBoxIcon
             // 
@@ -91,6 +106,7 @@
             // 
             // listBoxCourierActiveOrders
             // 
+            listBoxCourierActiveOrders.BackColor = Color.FromArgb(234, 215, 209);
             listBoxCourierActiveOrders.FormattingEnabled = true;
             listBoxCourierActiveOrders.Location = new Point(156, 388);
             listBoxCourierActiveOrders.Name = "listBoxCourierActiveOrders";
@@ -99,6 +115,7 @@
             // 
             // listBoxCourierTakenOrders
             // 
+            listBoxCourierTakenOrders.BackColor = Color.FromArgb(234, 215, 209);
             listBoxCourierTakenOrders.FormattingEnabled = true;
             listBoxCourierTakenOrders.Location = new Point(747, 388);
             listBoxCourierTakenOrders.Name = "listBoxCourierTakenOrders";
@@ -135,20 +152,6 @@
             buttonCourierTakeOrder.Text = "Взять заказ";
             buttonCourierTakeOrder.UseVisualStyleBackColor = false;
             buttonCourierTakeOrder.Click += buttonCourierTakeOrder_Click;
-            // 
-            // buttonCourierStartRoute
-            // 
-            buttonCourierStartRoute.BackColor = Color.FromArgb(99, 58, 52);
-            buttonCourierStartRoute.Cursor = Cursors.Hand;
-            buttonCourierStartRoute.Enabled = false;
-            buttonCourierStartRoute.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            buttonCourierStartRoute.ForeColor = SystemColors.ControlLightLight;
-            buttonCourierStartRoute.Location = new Point(3, 156);
-            buttonCourierStartRoute.Name = "buttonCourierStartRoute";
-            buttonCourierStartRoute.Size = new Size(141, 75);
-            buttonCourierStartRoute.TabIndex = 13;
-            buttonCourierStartRoute.Text = "Начать маршрут";
-            buttonCourierStartRoute.UseVisualStyleBackColor = false;
             // 
             // buttonCourierPayOrder
             // 

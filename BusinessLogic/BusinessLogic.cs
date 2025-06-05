@@ -7,7 +7,7 @@ namespace Logic
     public class BusinessLogic
     {
         Human FixedUser { get; set; }
-        PersonStatus Status { get; set; }
+        UserStatus Status { get; set; }
         int OrdersID = 1;
         int WorkersID = 1;
         public static List<Human> Users = new List<Human>() // пока для наглядности
@@ -47,27 +47,27 @@ namespace Logic
             if (user is Admin)
             {
                 FixedUser = user;
-                Status = PersonStatus.Admin;
+                Status = UserStatus.Admin;
             }
             if (user is Client)
             {
                 FixedUser = user;
-                Status = PersonStatus.Client;
+                Status = UserStatus.Client;
             }
             if (user is Waiter)
             {
                 FixedUser = user;
-                Status = PersonStatus.Waiter;
+                Status = UserStatus.Waiter;
             }
             if (user is Chef)
             {
                 FixedUser = user;
-                Status = PersonStatus.Chef;
+                Status = UserStatus.Chef;
             }
             if (user is Courier)
             {
                 FixedUser = user;
-                Status = PersonStatus.Courier;
+                Status = UserStatus.Courier;
             }
         }
 

@@ -190,13 +190,13 @@ namespace Lab_7
                 string login = textBoxLogin.Text.Trim();
                 string password = textBoxPassword.Text.Trim();
 
-                var worker = BusinessLogic.Workers
+                var worker = Logic.Workers
                     .OfType<IWorker>()
                     .FirstOrDefault(w => w.Login == login && w.Password == password);
 
                 if (worker != null)
                 {
-                    var human = BusinessLogic.Workers.First(h => (h as IWorker)?.Login == login);
+                    var human = Logic.Workers.First(h => (h as IWorker)?.Login == login);
                     string roleName = human.GetType().Name;
 
                     UserStatus role = roleName switch

@@ -28,13 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ListViewGroup listViewGroup1 = new ListViewGroup("GroupSnacks", HorizontalAlignment.Left);
-            ListViewGroup listViewGroup2 = new ListViewGroup("GroupSoups", HorizontalAlignment.Left);
-            ListViewGroup listViewGroup3 = new ListViewGroup("GroupSecondCourses", HorizontalAlignment.Left);
-            ListViewGroup listViewGroup4 = new ListViewGroup("GroupDesserts", HorizontalAlignment.Left);
-            ListViewGroup listViewGroup5 = new ListViewGroup("GroupDrinks", HorizontalAlignment.Left);
-            ListViewItem listViewItem1 = new ListViewItem("Закуски");
-            ListViewItem listViewItem2 = new ListViewItem("Супы");
+            ListViewGroup listViewGroup11 = new ListViewGroup("GroupSnacks", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup12 = new ListViewGroup("GroupSoups", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup13 = new ListViewGroup("GroupSecondCourses", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup14 = new ListViewGroup("GroupDesserts", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup15 = new ListViewGroup("GroupDrinks", HorizontalAlignment.Left);
+            ListViewItem listViewItem5 = new ListViewItem("Закуски");
+            ListViewItem listViewItem6 = new ListViewItem("Супы");
             tabControlClient = new TabControl();
             tabPageClientMenu = new TabPage();
             textBoxClientCart = new TextBox();
@@ -126,6 +126,7 @@
             listViewClientCart.TabIndex = 11;
             listViewClientCart.UseCompatibleStateImageBehavior = false;
             listViewClientCart.View = View.Details;
+            listViewClientCart.ItemSelectionChanged += listViewClientCart_ItemSelectionChanged;
             // 
             // columnNameDish
             // 
@@ -153,6 +154,7 @@
             buttonFormClientOrder.TabIndex = 4;
             buttonFormClientOrder.Text = "Сделать заказ";
             buttonFormClientOrder.UseVisualStyleBackColor = false;
+            buttonFormClientOrder.Click += buttonFormClientOrder_Click;
             // 
             // labelClientTotalPrice
             // 
@@ -173,31 +175,34 @@
             textBoxClientSearch.Size = new Size(924, 30);
             textBoxClientSearch.TabIndex = 1;
             textBoxClientSearch.Text = "Поиск по названию...";
+            textBoxClientSearch.TextChanged += textBoxClientSearch_TextChanged;
             // 
             // listViewClientMenu
             // 
             listViewClientMenu.BackColor = Color.FromArgb(234, 215, 209);
             listViewClientMenu.Columns.AddRange(new ColumnHeader[] { columnNameDishMenu, columnPriceDish, columnPictureDish });
-            listViewGroup1.Header = "GroupSnacks";
-            listViewGroup1.Name = "Закуски";
-            listViewGroup2.Header = "GroupSoups";
-            listViewGroup2.Name = "Супы";
-            listViewGroup3.Header = "GroupSecondCourses";
-            listViewGroup3.Name = "Вторые блюда";
-            listViewGroup4.Header = "GroupDesserts";
-            listViewGroup4.Name = "Десерты";
-            listViewGroup5.Header = "GroupDrinks";
-            listViewGroup5.Name = "Напитки";
-            listViewClientMenu.Groups.AddRange(new ListViewGroup[] { listViewGroup1, listViewGroup2, listViewGroup3, listViewGroup4, listViewGroup5 });
-            listViewItem1.Group = listViewGroup1;
-            listViewItem2.Group = listViewGroup2;
-            listViewClientMenu.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2 });
+            listViewGroup11.Header = "GroupSnacks";
+            listViewGroup11.Name = "Закуски";
+            listViewGroup12.Header = "GroupSoups";
+            listViewGroup12.Name = "Супы";
+            listViewGroup13.Header = "GroupSecondCourses";
+            listViewGroup13.Name = "Вторые блюда";
+            listViewGroup14.Header = "GroupDesserts";
+            listViewGroup14.Name = "Десерты";
+            listViewGroup15.Header = "GroupDrinks";
+            listViewGroup15.Name = "Напитки";
+            listViewClientMenu.Groups.AddRange(new ListViewGroup[] { listViewGroup11, listViewGroup12, listViewGroup13, listViewGroup14, listViewGroup15 });
+            listViewItem5.Group = listViewGroup11;
+            listViewItem6.Group = listViewGroup12;
+            listViewClientMenu.Items.AddRange(new ListViewItem[] { listViewItem5, listViewItem6 });
             listViewClientMenu.Location = new Point(6, 42);
             listViewClientMenu.Name = "listViewClientMenu";
             listViewClientMenu.Size = new Size(503, 619);
             listViewClientMenu.TabIndex = 0;
             listViewClientMenu.UseCompatibleStateImageBehavior = false;
             listViewClientMenu.View = View.Details;
+            listViewClientMenu.ItemActivate += listViewClientMenu_ItemActivate;
+            listViewClientMenu.DoubleClick += listViewClientMenu_DoubleClick;
             // 
             // columnNameDishMenu
             // 
@@ -223,7 +228,7 @@
             tabPageClientCurrentOrder.Location = new Point(4, 29);
             tabPageClientCurrentOrder.Name = "tabPageClientCurrentOrder";
             tabPageClientCurrentOrder.Padding = new Padding(3);
-            tabPageClientCurrentOrder.Size = new Size(936, 667);
+            tabPageClientCurrentOrder.Size = new Size(936, 664);
             tabPageClientCurrentOrder.TabIndex = 2;
             tabPageClientCurrentOrder.Text = "Текущий заказ";
             // 

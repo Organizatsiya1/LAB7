@@ -14,7 +14,7 @@ namespace Model
         public double Weight {  get; set; }
         public int CoockingTime {  get; set; }
         public int Cost {  get; set; }
-        public int Priority { get; set; }
+        public FoodCategory Priority { get; set; }
         public List<string> Formula { get; set; }
     }
 }
