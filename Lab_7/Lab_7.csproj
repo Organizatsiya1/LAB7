@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Apis.Admin.Directory.directory_v1" Version="1.69.0.3785" />
+    <PackageReference Include="Google.Apis.Admin.Directory.directory_v1" Version="1.69.0.3799" />
   </ItemGroup>
 
   <ItemGroup>
