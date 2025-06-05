@@ -29,7 +29,7 @@ namespace BusinessLogic
                 return null;
             }
         }
-        public void FixateUser(Human user)//хз зачем это
+        public void FixateUser(Human user)
         {
             if (user is Admin)
             {
@@ -104,6 +104,10 @@ namespace BusinessLogic
                 password[i] = all[r.Next(all.Length)];
             }
             return new string(password.OrderBy(x => r.Next()).ToArray());
+        }
+        public void GroupFoods(List<Food> foods, List<GroupedFood> groupedFoods) 
+        {
+           
         }
     }
 }
