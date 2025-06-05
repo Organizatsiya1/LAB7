@@ -14,6 +14,7 @@ namespace Model
         public  int TableID {  get; set; } //sealed не применяется!?//
         public int WaiterID { get; set; }
         public bool IsPayed { get; set; }
+        public int Cost {  get; set; }
         public OrderBehavior Behavior { get; set; }
         public PayementType PayementType { get; set; }
     }

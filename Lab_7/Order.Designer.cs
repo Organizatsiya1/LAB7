@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             dataGridView1 = new DataGridView();
             Food = new DataGridViewTextBoxColumn();
             label1 = new Label();
@@ -42,7 +43,9 @@
             CostLabe = new Label();
             BehaviourLabe = new Label();
             PayementLabe = new Label();
+            orderBindingSource = new BindingSource(components);
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)orderBindingSource).BeginInit();
             SuspendLayout();
             // 
             // dataGridView1
@@ -73,6 +76,7 @@
             // OrderIDLabe
             // 
             OrderIDLabe.AutoSize = true;
+            OrderIDLabe.DataBindings.Add(new Binding("DataContext", orderBindingSource, "Id", true));
             OrderIDLabe.Font = new Font("Segoe UI", 20F);
             OrderIDLabe.Location = new Point(278, 9);
             OrderIDLabe.Name = "OrderIDLabe";
@@ -163,6 +167,7 @@
             // BehaviourLabe
             // 
             BehaviourLabe.AutoSize = true;
+            BehaviourLabe.DataBindings.Add(new Binding("DataContext", orderBindingSource, "Behavior", true));
             BehaviourLabe.Font = new Font("Segoe UI", 15F);
             BehaviourLabe.Location = new Point(147, 281);
             BehaviourLabe.Name = "BehaviourLabe";
@@ -173,12 +178,17 @@
             // PayementLabe
             // 
             PayementLabe.AutoSize = true;
+            PayementLabe.DataBindings.Add(new Binding("DataContext", orderBindingSource, "IsPayed", true));
             PayementLabe.Font = new Font("Segoe UI", 15F);
             PayementLabe.Location = new Point(147, 320);
             PayementLabe.Name = "PayementLabe";
             PayementLabe.Size = new Size(65, 28);
             PayementLabe.TabIndex = 12;
             PayementLabe.Text = "label7";
+            // 
+            // orderBindingSource
+            // 
+            orderBindingSource.DataSource = typeof(Model.Order);
             // 
             // Order
             // 
@@ -201,6 +211,7 @@
             Name = "Order";
             Text = "Order";
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)orderBindingSource).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -221,5 +232,6 @@
         private Label CostLabe;
         private Label BehaviourLabe;
         private Label PayementLabe;
+        private BindingSource orderBindingSource;
     }
 }
