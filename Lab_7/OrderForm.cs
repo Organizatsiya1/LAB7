@@ -13,8 +13,14 @@ namespace Lab_7
 {
     public partial class OrderForm : Form
     {
-        public Model.Order CurrentOrder { get; set; }
-        public OrderForm(Model.Order order)
+        // Текущий заказ, отображаемый в форме.
+        public Order CurrentOrder { get; set; }
+
+        /// <summary>
+        /// Заполняет элементы интерфейса данными заказа.
+        /// </summary>
+        /// <param name="order">Объект заказа, который будет отображён в форме</param>
+        public OrderForm(Order order)
         {
             InitializeComponent();
             CurrentOrder = order;

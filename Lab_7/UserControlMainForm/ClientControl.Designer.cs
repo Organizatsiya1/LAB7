@@ -282,6 +282,7 @@
             buttonClientProfile.TabIndex = 5;
             buttonClientProfile.Text = "Профиль";
             buttonClientProfile.UseVisualStyleBackColor = false;
+            buttonClientProfile.Click += ButtonClientProfile_Click;
             // 
             // pictureBoxIcon
             // 

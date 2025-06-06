@@ -17,7 +17,10 @@ namespace Lab_7
 
         public BusinessLogic Logic { set; get; }
 
-
+        /// <summary>
+        /// Устанавливает источник данных для выбора статуса пользователя
+        /// </summary>
+        /// <param name="logic">Объект бизнес-логики, используемый для регистрации</param>
         public Registration(BusinessLogic logic)
         {
             InitializeComponent();
@@ -25,6 +28,12 @@ namespace Lab_7
             StatusBox.DataSource = Enum.GetValues(typeof(UserStatus));
         }
 
+        /// <summary>
+        /// Обработчик события нажатия кнопки регистрации
+        /// Выполняет проверку введённых данных и регистрирует нового сотрудника
+        /// </summary>
+        /// <param name="sender">Источник события: кнопка регистрации</param>
+        /// <param name="e">Объект, содержащий данные события.</param>
         private void RegistrationButton_Click(object sender, EventArgs e)
         {
             string name = NameBox.Text;

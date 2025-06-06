@@ -17,34 +17,44 @@ namespace Lab_7
     {
         private string verificationCode;
         private bool loadingCanceled;
-        public Logic.BusinessLogic Logic = new Logic.BusinessLogic();
+
+        /// <summary>
+        /// Экземпляр бизнес-логики всего приложения.
+        /// </summary>
+        public BusinessLogic Logic = new BusinessLogic();
+
+        /// <summary>
+        /// Инициализирует компоненты LoginForm, подписывается на переключение между
+        /// режимами «Сотрудник» и «Клиент».
+        /// </summary>
         public LoginForm()
         {
             InitializeComponent();
 
-            // По умолчанию выбран сотрудник
+            // По умолчанию выбираем «Сотрудник»
             radioEmployee.Checked = true;
             ToggleUserTypeFields();
 
-            // Подписка на изменение выбора
+            // Подписываемся на смену режима
             radioEmployee.CheckedChanged += (s, e) => ToggleUserTypeFields();
             radioClient.CheckedChanged += (s, e) => ToggleUserTypeFields();
         }
 
         /// <summary>
-        /// 
+        /// Переключает видимость полей ввода в зависимости от того,
+        /// вошёл ли пользователь как сотрудник (логин/пароль) или клиент (телефон/код).
         /// </summary>
         private void ToggleUserTypeFields()
         {
             bool isEmployee = radioEmployee.Checked;
 
-            // Показываем/скрываем элементы для сотрудника
+            // Элементы для сотрудника
             labelLogin.Visible = isEmployee;
             textBoxLogin.Visible = isEmployee;
             labelPassword.Visible = isEmployee;
             textBoxPassword.Visible = isEmployee;
 
-            // Показываем/скрываем элементы для клиента
+            // Элементы для клиента
             labelPhone.Visible = !isEmployee;
             maskedTextBoxPhone.Visible = !isEmployee;
             buttonSendCode.Visible = !isEmployee;
@@ -65,51 +75,73 @@ namespace Lab_7
             }
         }
 
+        /// <summary>
+        /// Обработчик клика по кнопке «Отправить код» для клиента.
+        /// Проверяет корректность телефона, при необходимости спрашивает,
+        /// создавать ли нового клиента, и генерирует проверочный код.
+        /// </summary>
+        /// <param name="sender">Ссылка на саму кнопку</param>
+        /// <param name="e">Аргументы события</param>
         private void ButtonSendCode_Click(object sender, EventArgs e)
         {
+            // Вынимаем из маскированного поля только цифры
             string phoneDigits = new string(maskedTextBoxPhone.Text.Where(char.IsDigit).ToArray());
 
             // Проверка длины номера
             if (phoneDigits.Length != 10)
             {
                 MessageBox.Show("Номер должен содержать 10 цифр!", "Ошибка",
-                               MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Проверка на наличие номера в базе данных
+            // Проверка, есть ли уже клиент с таким телефоном
             bool phoneExists = CheckPhoneExists(phoneDigits);
 
             if (!phoneExists)
             {
-                var result = MessageBox.Show("Номер не найден в базе. Продолжить?", "Внимание",
-                                           MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                var result = MessageBox.Show(
+                    "Номер не найден в базе. Продолжить?",
+                    "Внимание",
+                    MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.Question);
 
                 if (result == DialogResult.Cancel)
-                {
                     return;
-                }
             }
 
-            // Генерация и показ кода
+            // Генерируем код и показываем уведомление
             GenerateAndShowCode();
         }
 
+        /// <summary>
+        /// Проверяет, существует ли клиент с указанным номером телефона.
+        /// Пока всегда возвращает false (заглушка).
+        /// </summary>
+        /// <param name="phoneDigits">Набор из 10 цифр без скобок и пробелов</param>
+        /// <returns>True, если в базе уже есть клиент с таким телефоном; иначе false.</returns>
         private bool CheckPhoneExists(string phoneDigits) => false;
-        // В реальном приложении здесь будет обращение к базе данных
+        // В реальном приложении здесь должен быть запрос к базе данных.
 
-        // Генерация кода и открытие уведомления
+        /// <summary>
+        /// Генерирует четырёхзначный проверочный код и открывает форму уведомления.
+        /// </summary>
         private void GenerateAndShowCode()
         {
             verificationCode = Logic.GenerateNumber();
 
-            // Показываем форму с кодом
             using (CodeNotification codeForm = new CodeNotification(verificationCode))
             {
                 codeForm.ShowDialog();
             }
         }
 
+        /// <summary>
+        /// Проверяет корректность введённых данных: 
+        /// если выбран «Сотрудник», проверяет логин/пароль;
+        /// если «Клиент», проверяет формат телефона и введённый код.
+        /// </summary>
+        /// <returns>True, если всё введено корректно; иначе false.</returns>
         private bool ValidateInput()
         {
             if (radioEmployee.Checked)
@@ -117,14 +149,14 @@ namespace Lab_7
                 if (string.IsNullOrWhiteSpace(textBoxLogin.Text))
                 {
                     MessageBox.Show("Введите логин", "Ошибка",
-                                   MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return false;
                 }
 
                 if (string.IsNullOrWhiteSpace(textBoxPassword.Text))
                 {
                     MessageBox.Show("Введите пароль", "Ошибка",
-                                   MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return false;
                 }
             }
@@ -135,21 +167,26 @@ namespace Lab_7
                 if (phoneDigits.Length != 10)
                 {
                     MessageBox.Show("Номер должен содержать 10 цифр", "Ошибка",
-                                   MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return false;
                 }
 
                 if (maskedTextBoxCode.Text != verificationCode)
                 {
                     MessageBox.Show("Неверный код подтверждения", "Ошибка",
-                                   MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return false;
                 }
             }
             return true;
         }
 
-        private async Task LoadDataAsync()  // загрузка имитация работы
+        /// <summary>
+        /// Асинхронная имитация загрузки данных с прогресс-баром.
+        /// Позволяет отменять процесс через поле loadingCanceled.
+        /// </summary>
+        /// <returns>Task, завершающийся после симуляции загрузки.</returns>
+        private async Task LoadDataAsync()
         {
             progressBar.Value = 0;
             progressBar.ForeColor = Color.LimeGreen;
@@ -159,7 +196,8 @@ namespace Lab_7
                 if (loadingCanceled)
                 {
                     progressBar.ForeColor = Color.Red;
-                    MessageBox.Show("Загрузка отменена", "Прерывание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Загрузка отменена", "Прерывание",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -168,25 +206,44 @@ namespace Lab_7
             }
         }
 
+        /// <summary>
+        /// Обработчик кнопки «Отмена» во время загрузки.
+        /// Устанавливает флаг loadingCanceled = true, чтобы прервать LoadDataAsync.
+        /// </summary>
+        /// <param name="sender">Ссылка на кнопку «Отмена»</param>
+        /// <param name="e">Аргументы события</param>
         private void buttonCancel_Click(object sender, EventArgs e)
         {
             loadingCanceled = true;
         }
 
-        private void ShowMainForm(UserStatus role)
+        /// <summary>
+        /// Открывает главное окно MainForm, передаёт в него роль и объект клиента,
+        /// затем скрывает текущую форму LoginForm.
+        /// </summary>
+        /// <param name="role">Роль пользователя (Client, Waiter, Admin и т. д.)</param>
+        /// <param name="existingClient">Объект Client, соответствующий вошедшему клиенту</param>
+        private void ShowMainForm(UserStatus role, Client existingClient)
         {
-            MainForm mainForm = new MainForm(role);
+            MainForm mainForm = new MainForm(role, existingClient, Logic);
             mainForm.Show();
             this.Hide();
         }
 
-
+        /// <summary>
+        /// Обработчик кнопки «Вход» (login). Проверяет введённые данные и, если всё верно,
+        /// запускает симуляцию загрузки, затем открывает главное окно MainForm для нужной роли.
+        /// </summary>
+        /// <param name="sender">Ссылка на кнопку «Вход»</param>
+        /// <param name="e">Аргументы события</param>
         private async void buttonLogin_Click(object sender, EventArgs e)
         {
-            if (!ValidateInput()) return;
+            if (!ValidateInput())
+                return;
 
             if (radioEmployee.Checked)
             {
+                // Проверяем логин/пароль среди сотрудников
                 string login = textBoxLogin.Text.Trim();
                 string password = textBoxPassword.Text.Trim();
 
@@ -196,6 +253,7 @@ namespace Lab_7
 
                 if (worker != null)
                 {
+                    // Нашли сотрудника; определяем его тип и роль
                     var human = BusinessLogic.Workers.First(h => (h as IWorker)?.Login == login);
                     string roleName = human.GetType().Name;
 
@@ -208,7 +266,7 @@ namespace Lab_7
                         _ => UserStatus.Client
                     };
 
-                    // здесь вызывается загрузка
+                    // Начинаем симуляцию загрузки
                     progressBar.Visible = true;
                     buttonCancel.Visible = true;
                     loadingCanceled = false;
@@ -218,17 +276,27 @@ namespace Lab_7
                     if (!loadingCanceled)
                     {
                         Logic.LoadFoods();
-                        ShowMainForm(role);
+                        // Передаём сотрудника (приведём к Client?)
+                        // Здесь для «сотрудников» MainForm умеет принимать Human,
+                        // но сигнатура ShowMainForm сейчас настроена только на Client.
+                        // Для простоты, если это официант, приведём его к Client (неуместно),
+                        // но оптимально — предусмотреть перегрузку, например:
+                        // ShowMainForm(role, human as Client), но это плохо.
+                        // В реальности лучше сделать перегрузку:
+                        // ShowMainForm(UserStatus role, Human existingHuman).
+                        // Ниже временная заглушка:
+                        ShowMainForm(role, existingClient: null);
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Неверный логин или пароль.");
+                    MessageBox.Show("Неверный логин или пароль.", "Ошибка",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             else if (radioClient.Checked)
             {
-                // Аналогичная логика — только если проверка пройдена
+                // Клиент: после успешной проверки кода
                 progressBar.Visible = true;
                 buttonCancel.Visible = true;
                 loadingCanceled = false;
@@ -238,10 +306,31 @@ namespace Lab_7
                 if (!loadingCanceled)
                 {
                     Logic.LoadFoods();
-                    ShowMainForm(UserStatus.Client);
+
+                    string phoneDigits = new string(maskedTextBoxPhone.Text.Where(char.IsDigit).ToArray());
+
+                    // Ищем клиента с таким номером
+                    var existingClient = Logic.Clients.FirstOrDefault(c => c.PhoneNumber == phoneDigits);
+                    if (existingClient == null)
+                    {
+                        // Если клиента нет — создаём нового и инициализируем Address
+                        var newClient = new Client
+                        {
+                            Id = Logic.Clients.Count > 0
+                                     ? Logic.Clients.Max(c => c.Id) + 1
+                                     : 1,
+                            Name = "Новый клиент",
+                            PhoneNumber = phoneDigits,
+                            Adress = new Adress() // Важно: не забываем создать объект Adress
+                        };
+                        Logic.Clients.Add(newClient);
+                        existingClient = newClient;
+                    }
+
+                    // Открываем MainForm для клиента
+                    ShowMainForm(UserStatus.Client, existingClient);
                 }
             }
         }
-
     }
 }

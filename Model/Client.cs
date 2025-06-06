@@ -14,7 +14,7 @@ namespace Model
         public Client()
         {
             Adress = new Adress();
-            Orders = new List<Order>();
+            Orders = new List<int>();
         }
     }
 }

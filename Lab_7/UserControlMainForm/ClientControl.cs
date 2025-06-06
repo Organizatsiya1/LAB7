@@ -14,32 +14,39 @@ namespace Lab_7
 {
     public partial class ClientControl : UserControl
     {
-        // Список всех блюд (меню)
-        private List<Food> allFoods = new List<Food>();
+        private readonly Client currentClient;      // Текущий клиент
+        private readonly BusinessLogic logic = new BusinessLogic();
+        private List<Food> allFoods = new List<Food>();   // Список всех блюд (меню)
+        private List<Food> cartFoods = new List<Food>();  // Корзина клиента
 
-        // Корзина клиента > просто List<Food> (каждый раз кладём один экземпляр)
-        private List<Food> cartFoods = new List<Food>();
-
-        // Текущий клиент
-        private Client currentClient;
-
-        public ClientControl()
+        /// <summary>
+        /// При создании этот конструктор получает объект Client и сохраняет его во внутреннем поле
+        /// Затем загружает меню и подписывает обработчик для кнопки "«Профиль»"
+        /// </summary>
+        /// <param name="clientFromLogin">Объект Client, соответствующий вошедшему пользователю</param>
+        public ClientControl(Client clientFromLogin)
         {
             InitializeComponent();
 
+            currentClient = clientFromLogin;
+
+            // Загружаем меню из статического списка BusinessLogic.Foods
             allFoods = BusinessLogic.Foods.ToList();
 
-            // Сразу заполняем всё меню
+            // Заполняем ListView блюдами
             PopulateMenu(allFoods);
 
-            // Изначально «Итого» = 0
+            // Счетчик «Итого» = 0
             UpdateTotalPrice();
 
+            // Подписываемся на кнопку «Профиль»
+            buttonClientProfile.Click += ButtonClientProfile_Click;
         }
 
         /// <summary>
-        /// Заполняет список меню переданным списком блюд (без учёта корзины)
+        /// Заполняет список меню передачными блюдами (без учёта корзины)
         /// </summary>
+        /// <param name="foods">Список Food для отображения</param>
         private void PopulateMenu(List<Food> foods)
         {
             listViewClientMenu.Items.Clear();
@@ -50,7 +57,7 @@ namespace Lab_7
                 {
                     food.Name,
                     food.Cost.ToString(),
-                    "" // сюда можно подставить путь/ID картинки, если будет
+                    "" // здесь можно добавить путь/название картинки
                 });
                 item.Tag = food;
 
@@ -78,8 +85,10 @@ namespace Lab_7
         }
 
         /// <summary>
-        /// При вводе текста в поле поиска фильтруем и обновляем меню
+        /// Фильтрует меню по введённому названию
         /// </summary>
+        /// <param name="sender">Ссылка на TextBox с поиском</param>
+        /// <param name="e">Аргументы события</param>
         private void textBoxClientSearch_TextChanged(object sender, EventArgs e)
         {
             string filter = textBoxClientSearch.Text.Trim().ToLower();
@@ -91,8 +100,10 @@ namespace Lab_7
         }
 
         /// <summary>
-        /// Двойной клик по элементу меню — добавляем его в корзину
+        /// Добавляет выбранное блюдо в корзину
         /// </summary>
+        /// <param name="sender">Ссылка на ListView с меню</param>
+        /// <param name="e">Аргументы события</param>
         private void listViewClientMenu_DoubleClick(object sender, EventArgs e)
         {
             if (listViewClientMenu.SelectedItems.Count == 0)
@@ -107,13 +118,13 @@ namespace Lab_7
         }
 
         /// <summary>
-        /// Обновляет отображение корзины, группируя корзину по Id (или по Name)
+        /// Обновляет отображение корзины: группирует по Id блюда и показывает
+        /// количество и общую сумму по каждому виду
         /// </summary>
         private void RefreshCartListView()
         {
             listViewClientCart.Items.Clear();
 
-            // Группируем по ID, чтобы понять, сколько штук каждого блюда
             var grouped = cartFoods
                 .GroupBy(f => f.Id)
                 .Select(g => new
@@ -131,14 +142,13 @@ namespace Lab_7
                     entry.Quantity.ToString(),
                     entry.Sum.ToString("F2")
                 });
-
                 item.Tag = entry.Dish;
                 listViewClientCart.Items.Add(item);
             }
         }
 
         /// <summary>
-        /// Пересчитывает и отображает общую сумму корзины
+        /// Пересчитывает и отображает общую сумму корзины в метке "Итого" на форме
         /// </summary>
         private void UpdateTotalPrice()
         {
@@ -146,10 +156,12 @@ namespace Lab_7
             labelClientTotalPrice.Text = $"Итого:   \t{total:F2} руб.";
         }
 
-
         /// <summary>
-        /// При переключении вкладки: если это «Текущий заказ», заполняем его данными
+        /// Если выбрана вкладка "«Текущий заказ»",
+        /// заполняет список готовности блюд данными из последнего «открытого» заказа клиента (кнопка формирования заказа!)
         /// </summary>
+        /// <param name="sender">Ссылка на TabControl</param>
+        /// <param name="e">Аргументы события</param>
         private void TabControlClient_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (tabControlClient.SelectedTab == tabPageClientCurrentOrder)
@@ -159,11 +171,10 @@ namespace Lab_7
                 if (currentClient == null)
                     return;
 
-                var order = new BusinessLogic().GetCurrentOrderForClient(currentClient);
+                var order = logic.GetCurrentOrderForClient(currentClient);
                 if (order == null)
                     return;
 
-                // Для каждого блюда в order.Foods ставим «В процессе» или «Готово»
                 foreach (var food in order.Foods)
                 {
                     var status = order.Behavior >= OrderBehavior.Coocked ? "Готово" : "В процессе";
@@ -174,11 +185,17 @@ namespace Lab_7
         }
 
         /// <summary>
-        /// Метод для передачи в этот контрол текущего клиента (вызывается после входа)
+        /// Открывает ProfileForm для текущего клиента по нажатию на кнопку "«Профиль»"
         /// </summary>
-        public void SetClient(Client client)
+        /// <param name="sender">Ссылка на кнопку "«Профиль»"</param>
+        /// <param name="e">Аргументы события</param>
+        private void ButtonClientProfile_Click(object sender, EventArgs e)
         {
-            currentClient = client;
+            // currentClient гарантированно не null, потому что мы передали его в конструкторе
+            using (var profileForm = new ProfileForm(currentClient))
+            {
+                profileForm.ShowDialog();
+            }
         }
     }
 }
