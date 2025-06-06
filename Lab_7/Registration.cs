@@ -51,7 +51,7 @@ namespace Lab_7
                 Logic.RegistrateWorker(name, status, phnumber);
 
                 // получаем последнего зарегистрированного сотрудника
-                var lastWorker = Logic.Workers[^1] as IWorker;
+                var lastWorker = BusinessLogic.Workers[^1] as IWorker;
 
                 if (lastWorker != null)
                 {

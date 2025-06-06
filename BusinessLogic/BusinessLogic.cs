@@ -21,7 +21,7 @@ namespace Logic
             new Chef { Name = "Борис", Login = "boris", Password = "chefpass" },
             new Admin { Name = "Админ", Login = "admin", Password = "adminpass" },
             new Courier { Name = "Пётр", Login = "petya", Password = "cour123" }
-        };
+        }; 
 
         #region Menu
 
