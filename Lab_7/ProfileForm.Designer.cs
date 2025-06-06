@@ -171,7 +171,7 @@
             // 
             // IDBox
             // 
-            IDBox.ForeColor = SystemColors.ControlLightLight;
+            IDBox.ForeColor = SystemColors.ActiveCaptionText;
             IDBox.Location = new Point(178, 176);
             IDBox.Margin = new Padding(3, 4, 3, 4);
             IDBox.Name = "IDBox";
@@ -180,6 +180,7 @@
             // 
             // NameBox
             // 
+            NameBox.ForeColor = SystemColors.ActiveCaptionText;
             NameBox.Location = new Point(178, 217);
             NameBox.Margin = new Padding(3, 4, 3, 4);
             NameBox.Name = "NameBox";
@@ -212,6 +213,7 @@
             // 
             // PhoneBox
             // 
+            PhoneBox.ForeColor = SystemColors.ActiveCaptionText;
             PhoneBox.Location = new Point(213, 260);
             PhoneBox.Margin = new Padding(3, 4, 3, 4);
             PhoneBox.Mask = "(999) 000-0000";

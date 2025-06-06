@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
-            buttonWaiterProfile = new Button();
             pictureBoxIcon = new PictureBox();
             listBoxChefOrders = new ListBox();
             textBoxChefOrders = new TextBox();
@@ -38,6 +37,7 @@
             textBoxChefNotReady = new TextBox();
             textBoxChefReady = new TextBox();
             button1 = new Button();
+            buttonWaiterProfile = new Button();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxIcon).BeginInit();
             SuspendLayout();
@@ -52,19 +52,6 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(150, 703);
             panel1.TabIndex = 0;
-            // 
-            // buttonWaiterProfile
-            // 
-            buttonWaiterProfile.BackColor = Color.FromArgb(99, 58, 52);
-            buttonWaiterProfile.Cursor = Cursors.Hand;
-            buttonWaiterProfile.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            buttonWaiterProfile.ForeColor = SystemColors.ControlLightLight;
-            buttonWaiterProfile.Location = new Point(3, 620);
-            buttonWaiterProfile.Name = "buttonWaiterProfile";
-            buttonWaiterProfile.Size = new Size(141, 75);
-            buttonWaiterProfile.TabIndex = 9;
-            buttonWaiterProfile.Text = "Профиль";
-            buttonWaiterProfile.UseVisualStyleBackColor = false;
             // 
             // pictureBoxIcon
             // 
@@ -153,6 +140,19 @@
             button1.Text = "Готово ⇒";
             button1.UseVisualStyleBackColor = false;
             // 
+            // buttonWaiterProfile
+            // 
+            buttonWaiterProfile.BackColor = Color.FromArgb(99, 58, 52);
+            buttonWaiterProfile.Cursor = Cursors.Hand;
+            buttonWaiterProfile.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            buttonWaiterProfile.ForeColor = SystemColors.ControlLightLight;
+            buttonWaiterProfile.Location = new Point(3, 620);
+            buttonWaiterProfile.Name = "buttonWaiterProfile";
+            buttonWaiterProfile.Size = new Size(141, 75);
+            buttonWaiterProfile.TabIndex = 9;
+            buttonWaiterProfile.Text = "Профиль";
+            buttonWaiterProfile.UseVisualStyleBackColor = false;
+            // 
             // ChefControl
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -178,7 +178,6 @@
         #endregion
 
         private Panel panel1;
-        private Button buttonWaiterProfile;
         private PictureBox pictureBoxIcon;
         private ListBox listBoxChefOrders;
         private TextBox textBoxChefOrders;
@@ -187,5 +186,6 @@
         private TextBox textBoxChefNotReady;
         private TextBox textBoxChefReady;
         private Button button1;
+        private Button buttonWaiterProfile;
     }
 }

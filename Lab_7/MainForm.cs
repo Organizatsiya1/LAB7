@@ -57,7 +57,7 @@ namespace Lab_7
 
                 case UserStatus.Waiter:
                     {
-                        var waiterControl = new WaiterControl()
+                        var waiterControl = new WaiterControl(client)
                         {
                             Dock = DockStyle.Fill
                         };

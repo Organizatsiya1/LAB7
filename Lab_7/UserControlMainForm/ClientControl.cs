@@ -38,9 +38,6 @@ namespace Lab_7
 
             // Счетчик «Итого» = 0
             UpdateTotalPrice();
-
-            // Подписываемся на кнопку «Профиль»
-            buttonClientProfile.Click += ButtonClientProfile_Click;
         }
 
         /// <summary>
