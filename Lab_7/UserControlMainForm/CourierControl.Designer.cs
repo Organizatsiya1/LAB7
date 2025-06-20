@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             panelMap = new Panel();
+            buttonCourierLogout = new Button();
             buttonCourierStartRoute = new Button();
             buttonWaiterProfile = new Button();
             pictureBoxIcon = new PictureBox();
@@ -47,6 +48,7 @@
             // panelMap
             // 
             panelMap.BackColor = Color.White;
+            panelMap.Controls.Add(buttonCourierLogout);
             panelMap.Controls.Add(buttonCourierStartRoute);
             panelMap.Controls.Add(buttonWaiterProfile);
             panelMap.Controls.Add(pictureBoxIcon);
@@ -56,6 +58,20 @@
             panelMap.Size = new Size(150, 700);
             panelMap.TabIndex = 0;
             // 
+            // buttonCourierLogout
+            // 
+            buttonCourierLogout.BackColor = Color.FromArgb(99, 58, 52);
+            buttonCourierLogout.Cursor = Cursors.Hand;
+            buttonCourierLogout.Dock = DockStyle.Bottom;
+            buttonCourierLogout.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            buttonCourierLogout.ForeColor = SystemColors.ControlLightLight;
+            buttonCourierLogout.Location = new Point(0, 630);
+            buttonCourierLogout.Name = "buttonCourierLogout";
+            buttonCourierLogout.Size = new Size(150, 70);
+            buttonCourierLogout.TabIndex = 18;
+            buttonCourierLogout.Text = "Выход";
+            buttonCourierLogout.UseVisualStyleBackColor = false;
+            // 
             // buttonCourierStartRoute
             // 
             buttonCourierStartRoute.BackColor = Color.FromArgb(99, 58, 52);
@@ -63,9 +79,9 @@
             buttonCourierStartRoute.Enabled = false;
             buttonCourierStartRoute.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
             buttonCourierStartRoute.ForeColor = SystemColors.ControlLightLight;
-            buttonCourierStartRoute.Location = new Point(3, 156);
+            buttonCourierStartRoute.Location = new Point(0, 267);
             buttonCourierStartRoute.Name = "buttonCourierStartRoute";
-            buttonCourierStartRoute.Size = new Size(141, 75);
+            buttonCourierStartRoute.Size = new Size(150, 75);
             buttonCourierStartRoute.TabIndex = 13;
             buttonCourierStartRoute.Text = "Начать маршрут";
             buttonCourierStartRoute.UseVisualStyleBackColor = false;
@@ -77,9 +93,9 @@
             buttonWaiterProfile.Enabled = false;
             buttonWaiterProfile.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
             buttonWaiterProfile.ForeColor = SystemColors.ControlLightLight;
-            buttonWaiterProfile.Location = new Point(3, 623);
+            buttonWaiterProfile.Location = new Point(0, 156);
             buttonWaiterProfile.Name = "buttonWaiterProfile";
-            buttonWaiterProfile.Size = new Size(141, 75);
+            buttonWaiterProfile.Size = new Size(150, 75);
             buttonWaiterProfile.TabIndex = 11;
             buttonWaiterProfile.Text = "Профиль";
             buttonWaiterProfile.UseVisualStyleBackColor = false;
@@ -215,5 +231,6 @@
         private Label labelCourierRouteTime;
         private Button buttonCourierStartRoute;
         private Button buttonCourierPayOrder;
+        private Button buttonCourierLogout;
     }
 }

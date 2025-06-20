@@ -54,6 +54,7 @@
             columnNameDishCurrentOrder = new ColumnHeader();
             columnStatus = new ColumnHeader();
             panel1 = new Panel();
+            buttonClientLogout = new Button();
             buttonClientProfile = new Button();
             pictureBoxIcon = new PictureBox();
             tabControlClient.SuspendLayout();
@@ -72,7 +73,7 @@
             tabControlClient.SelectedIndex = 0;
             tabControlClient.Size = new Size(944, 697);
             tabControlClient.TabIndex = 1;
-            tabControlClient.SelectedIndexChanged += TabControlClient_SelectedIndexChanged;
+            tabControlClient.SelectedIndexChanged += tabControlClient_SelectedIndexChanged;
             // 
             // tabPageClientMenu
             // 
@@ -262,6 +263,7 @@
             // panel1
             // 
             panel1.BackColor = SystemColors.Control;
+            panel1.Controls.Add(buttonClientLogout);
             panel1.Controls.Add(buttonClientProfile);
             panel1.Controls.Add(pictureBoxIcon);
             panel1.Dock = DockStyle.Left;
@@ -270,19 +272,34 @@
             panel1.Size = new Size(150, 703);
             panel1.TabIndex = 2;
             // 
+            // buttonClientLogout
+            // 
+            buttonClientLogout.BackColor = Color.FromArgb(99, 58, 52);
+            buttonClientLogout.Cursor = Cursors.Hand;
+            buttonClientLogout.Dock = DockStyle.Bottom;
+            buttonClientLogout.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            buttonClientLogout.ForeColor = SystemColors.ControlLightLight;
+            buttonClientLogout.Location = new Point(0, 633);
+            buttonClientLogout.Name = "buttonClientLogout";
+            buttonClientLogout.Size = new Size(150, 70);
+            buttonClientLogout.TabIndex = 6;
+            buttonClientLogout.Text = "Выход";
+            buttonClientLogout.UseVisualStyleBackColor = false;
+            buttonClientLogout.Click += buttonClientLogout_Click;
+            // 
             // buttonClientProfile
             // 
             buttonClientProfile.BackColor = Color.FromArgb(99, 58, 52);
             buttonClientProfile.Cursor = Cursors.Hand;
             buttonClientProfile.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
             buttonClientProfile.ForeColor = SystemColors.ControlLightLight;
-            buttonClientProfile.Location = new Point(3, 618);
+            buttonClientProfile.Location = new Point(0, 156);
             buttonClientProfile.Name = "buttonClientProfile";
-            buttonClientProfile.Size = new Size(141, 75);
+            buttonClientProfile.Size = new Size(150, 75);
             buttonClientProfile.TabIndex = 5;
             buttonClientProfile.Text = "Профиль";
             buttonClientProfile.UseVisualStyleBackColor = false;
-            buttonClientProfile.Click += ButtonClientProfile_Click;
+            buttonClientProfile.Click += buttonClientProfile_Click;
             // 
             // pictureBoxIcon
             // 
@@ -339,5 +356,6 @@
         private ColumnHeader columnCountDishCart;
         private ColumnHeader columnSum;
         private TextBox textBoxWaiterOrderItems;
+        private Button buttonClientLogout;
     }
 }

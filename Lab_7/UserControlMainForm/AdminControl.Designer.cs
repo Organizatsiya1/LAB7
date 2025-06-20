@@ -30,6 +30,7 @@
         {
             comboBoxAdminEmployeeType = new ComboBox();
             panel1 = new Panel();
+            buttonAdminLogout = new Button();
             buttonAdminRegisterEmployee = new Button();
             buttonStatsAdmin = new Button();
             buttonWaiterProfile = new Button();
@@ -60,6 +61,7 @@
             // panel1
             // 
             panel1.BackColor = SystemColors.Control;
+            panel1.Controls.Add(buttonAdminLogout);
             panel1.Controls.Add(buttonAdminRegisterEmployee);
             panel1.Controls.Add(buttonStatsAdmin);
             panel1.Controls.Add(buttonWaiterProfile);
@@ -70,6 +72,21 @@
             panel1.Size = new Size(150, 703);
             panel1.TabIndex = 1;
             // 
+            // buttonAdminLogout
+            // 
+            buttonAdminLogout.BackColor = Color.FromArgb(99, 58, 52);
+            buttonAdminLogout.Cursor = Cursors.Hand;
+            buttonAdminLogout.Dock = DockStyle.Bottom;
+            buttonAdminLogout.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            buttonAdminLogout.ForeColor = SystemColors.ControlLightLight;
+            buttonAdminLogout.Location = new Point(0, 633);
+            buttonAdminLogout.Name = "buttonAdminLogout";
+            buttonAdminLogout.Size = new Size(150, 70);
+            buttonAdminLogout.TabIndex = 17;
+            buttonAdminLogout.Text = "Выход";
+            buttonAdminLogout.UseVisualStyleBackColor = false;
+            buttonAdminLogout.Click += buttonAdminLogout_Click;
+            // 
             // buttonAdminRegisterEmployee
             // 
             buttonAdminRegisterEmployee.BackColor = Color.FromArgb(99, 58, 52);
@@ -77,9 +94,9 @@
             buttonAdminRegisterEmployee.Enabled = false;
             buttonAdminRegisterEmployee.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
             buttonAdminRegisterEmployee.ForeColor = SystemColors.ControlLightLight;
-            buttonAdminRegisterEmployee.Location = new Point(3, 271);
+            buttonAdminRegisterEmployee.Location = new Point(0, 366);
             buttonAdminRegisterEmployee.Name = "buttonAdminRegisterEmployee";
-            buttonAdminRegisterEmployee.Size = new Size(141, 98);
+            buttonAdminRegisterEmployee.Size = new Size(150, 98);
             buttonAdminRegisterEmployee.TabIndex = 16;
             buttonAdminRegisterEmployee.Text = "Регистрация нового сотрудника";
             buttonAdminRegisterEmployee.UseVisualStyleBackColor = false;
@@ -91,9 +108,9 @@
             buttonStatsAdmin.Enabled = false;
             buttonStatsAdmin.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
             buttonStatsAdmin.ForeColor = SystemColors.ControlLightLight;
-            buttonStatsAdmin.Location = new Point(6, 166);
+            buttonStatsAdmin.Location = new Point(0, 261);
             buttonStatsAdmin.Name = "buttonStatsAdmin";
-            buttonStatsAdmin.Size = new Size(141, 99);
+            buttonStatsAdmin.Size = new Size(150, 99);
             buttonStatsAdmin.TabIndex = 16;
             buttonStatsAdmin.Text = "Общая статистика клиентов";
             buttonStatsAdmin.UseVisualStyleBackColor = false;
@@ -105,9 +122,9 @@
             buttonWaiterProfile.Enabled = false;
             buttonWaiterProfile.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
             buttonWaiterProfile.ForeColor = SystemColors.ControlLightLight;
-            buttonWaiterProfile.Location = new Point(3, 624);
+            buttonWaiterProfile.Location = new Point(0, 156);
             buttonWaiterProfile.Name = "buttonWaiterProfile";
-            buttonWaiterProfile.Size = new Size(141, 75);
+            buttonWaiterProfile.Size = new Size(150, 75);
             buttonWaiterProfile.TabIndex = 15;
             buttonWaiterProfile.Text = "Профиль";
             buttonWaiterProfile.UseVisualStyleBackColor = false;
@@ -125,6 +142,7 @@
             // 
             // listViewAdminEmployees
             // 
+            listViewAdminEmployees.BackColor = Color.FromArgb(234, 215, 209);
             listViewAdminEmployees.Columns.AddRange(new ColumnHeader[] { columnEmployeeID, columnNameEmployee, columnTypeEmployee, columnPhoneEmployee, columnLogin, columnEffectiveness });
             listViewAdminEmployees.Location = new Point(156, 44);
             listViewAdminEmployees.Name = "listViewAdminEmployees";
@@ -209,5 +227,6 @@
         private ColumnHeader columnLogin;
         private ColumnHeader columnEffectiveness;
         private Button buttonAdminRegisterEmployee;
+        private Button buttonAdminLogout;
     }
 }

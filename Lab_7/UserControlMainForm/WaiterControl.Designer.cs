@@ -39,6 +39,7 @@
             tabPage1 = new TabPage();
             tabPage2 = new TabPage();
             panelWaiter = new Panel();
+            buttonWaiterLogout = new Button();
             buttonWaiterProfile = new Button();
             pictureBoxIcon = new PictureBox();
             tabControlWaiter = new TabControl();
@@ -106,6 +107,7 @@
             // panelWaiter
             // 
             panelWaiter.BackColor = SystemColors.Control;
+            panelWaiter.Controls.Add(buttonWaiterLogout);
             panelWaiter.Controls.Add(buttonWaiterProfile);
             panelWaiter.Controls.Add(tabControl1);
             panelWaiter.Controls.Add(pictureBoxIcon);
@@ -115,15 +117,30 @@
             panelWaiter.Size = new Size(150, 705);
             panelWaiter.TabIndex = 1;
             // 
+            // buttonWaiterLogout
+            // 
+            buttonWaiterLogout.BackColor = Color.FromArgb(99, 58, 52);
+            buttonWaiterLogout.Cursor = Cursors.Hand;
+            buttonWaiterLogout.Dock = DockStyle.Bottom;
+            buttonWaiterLogout.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            buttonWaiterLogout.ForeColor = SystemColors.ControlLightLight;
+            buttonWaiterLogout.Location = new Point(0, 635);
+            buttonWaiterLogout.Name = "buttonWaiterLogout";
+            buttonWaiterLogout.Size = new Size(150, 70);
+            buttonWaiterLogout.TabIndex = 8;
+            buttonWaiterLogout.Text = "Выход";
+            buttonWaiterLogout.UseVisualStyleBackColor = false;
+            buttonWaiterLogout.Click += buttonWaiterLogout_Click;
+            // 
             // buttonWaiterProfile
             // 
             buttonWaiterProfile.BackColor = Color.FromArgb(99, 58, 52);
             buttonWaiterProfile.Cursor = Cursors.Hand;
             buttonWaiterProfile.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
             buttonWaiterProfile.ForeColor = SystemColors.ControlLightLight;
-            buttonWaiterProfile.Location = new Point(3, 615);
+            buttonWaiterProfile.Location = new Point(0, 156);
             buttonWaiterProfile.Name = "buttonWaiterProfile";
-            buttonWaiterProfile.Size = new Size(141, 75);
+            buttonWaiterProfile.Size = new Size(150, 75);
             buttonWaiterProfile.TabIndex = 7;
             buttonWaiterProfile.Text = "Профиль";
             buttonWaiterProfile.UseVisualStyleBackColor = false;
@@ -423,5 +440,6 @@
         private TextBox textBoxWaiterCart;
         private TextBox textBoxWaiterOrderItems;
         private TextBox textBoxWaiterOrders;
+        private Button buttonWaiterLogout;
     }
 }

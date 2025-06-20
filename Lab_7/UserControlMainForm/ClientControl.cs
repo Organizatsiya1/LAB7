@@ -21,7 +21,7 @@ namespace Lab_7
 
         /// <summary>
         /// При создании этот конструктор получает объект Client и сохраняет его во внутреннем поле
-        /// Затем загружает меню и подписывает обработчик для кнопки "«Профиль»"
+        /// Затем загружает меню и подписывает обработчик для кнопки "Профиль"
         /// </summary>
         /// <param name="clientFromLogin">Объект Client, соответствующий вошедшему пользователю</param>
         public ClientControl(Client clientFromLogin)
@@ -154,12 +154,12 @@ namespace Lab_7
         }
 
         /// <summary>
-        /// Если выбрана вкладка "«Текущий заказ»",
+        /// Если выбрана вкладка "Текущий заказ",
         /// заполняет список готовности блюд данными из последнего «открытого» заказа клиента (кнопка формирования заказа!)
         /// </summary>
         /// <param name="sender">Ссылка на TabControl</param>
         /// <param name="e">Аргументы события</param>
-        private void TabControlClient_SelectedIndexChanged(object sender, EventArgs e)
+        private void tabControlClient_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (tabControlClient.SelectedTab == tabPageClientCurrentOrder)
             {
@@ -182,17 +182,36 @@ namespace Lab_7
         }
 
         /// <summary>
-        /// Открывает ProfileForm для текущего клиента по нажатию на кнопку "«Профиль»"
+        /// Открывает ProfileForm для текущего клиента по нажатию на кнопку "Профиль"
         /// </summary>
-        /// <param name="sender">Ссылка на кнопку "«Профиль»"</param>
+        /// <param name="sender">Ссылка на кнопку "Профиль"</param>
         /// <param name="e">Аргументы события</param>
-        private void ButtonClientProfile_Click(object sender, EventArgs e)
+        private void buttonClientProfile_Click(object sender, EventArgs e)
         {
             // currentClient гарантированно не null, потому что мы передали его в конструкторе
             using (var profileForm = new ProfileForm(currentClient))
             {
                 profileForm.ShowDialog();
             }
+        }
+
+        /// <summary>
+        /// Закрывает окно для текущего клиента после нажатия кнопки "Выход" и открывает LoginForm
+        /// </summary>
+        /// <param name="sender">Ссылка на кнопку "Выход"</param>
+        /// <param name="e">Аргументы события</param>
+        private void buttonClientLogout_Click(object sender, EventArgs e)
+        {
+            // Скрываем текущее окно
+            var currentForm = this.FindForm();
+            currentForm.Hide();
+
+            // Открываем форму входа
+            var loginForm = new LoginForm();
+            loginForm.Show();
+
+            // Закрываем окно после открытия loginForm
+            currentForm.Close();
         }
     }
 }
