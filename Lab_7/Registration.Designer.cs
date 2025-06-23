@@ -184,6 +184,7 @@
             Controls.Add(RegistrationButton);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Name = "Registration";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Registration";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);

@@ -47,7 +47,7 @@ namespace Logic
                     Weight = 120,
                     CoockingTime = 5,
                     Cost = 150,
-                    Priority = FoodCategory.Snacks,
+                    Priority = FoodCategory.Entree,
                     Formula = new List<string> { "Хлеб", "Томаты", "Оливковое масло", "Базилик" }
                 },
                 new Food
@@ -58,7 +58,7 @@ namespace Logic
                     Weight = 350,
                     CoockingTime = 10,
                     Cost = 200,
-                    Priority = FoodCategory.Soups,
+                    Priority = FoodCategory.MainCourse,
                     Formula = new List<string> { "Томаты", "Лук", "Чеснок", "Базилик" }
                 },
                 new Food
@@ -69,7 +69,7 @@ namespace Logic
                     Weight = 250,
                     CoockingTime = 15,
                     Cost = 450,
-                    Priority = FoodCategory.SecondCourses,
+                    Priority = FoodCategory.Entremets,
                     Formula = new List<string> { "Говядина", "Соль", "Перец", "Соус" }
                 },
                 new Food
@@ -91,7 +91,7 @@ namespace Logic
                     Weight = 330,
                     CoockingTime = 0,
                     Cost = 100,
-                    Priority = FoodCategory.Drinks,
+                    Priority = FoodCategory.Digestif,
                     Formula = new List<string> { "Вода", "Сахар", "Газ" }
                 }
             };
@@ -181,6 +181,7 @@ namespace Logic
                     DeliveryAdress = deliveryAdress
                 };
                 newOrder = dOrder;
+                dOrder.Date = DateTime.Now;
             }
             else
             {
@@ -195,6 +196,7 @@ namespace Logic
                     PayementType = payementType,
                     Behavior = OrderBehavior.IsCoocking
                 };
+                newOrder.Date = DateTime.Now;
             }
 
             OrdersID++;
@@ -241,6 +243,8 @@ namespace Logic
                     PayementType = payementType,
                     Behavior = OrderBehavior.IsCoocking
                 };
+                made.Date = DateTime.Now;
+
                 OrdersID++;
                 AllOrders.Add(made);
                 return made;

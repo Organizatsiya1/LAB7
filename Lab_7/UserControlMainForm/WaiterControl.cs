@@ -60,19 +60,19 @@ namespace Lab_7
 
                 switch (food.Priority)
                 {
-                    case FoodCategory.Snacks:
+                    case FoodCategory.Entree:
                         item.Group = listViewWaiterMenu.Groups["Закуски"];
                         break;
-                    case FoodCategory.Soups:
+                    case FoodCategory.MainCourse:
                         item.Group = listViewWaiterMenu.Groups["Супы"];
                         break;
-                    case FoodCategory.SecondCourses:
+                    case FoodCategory.Entremets:
                         item.Group = listViewWaiterMenu.Groups["Вторые блюда"];
                         break;
                     case FoodCategory.Desserts:
                         item.Group = listViewWaiterMenu.Groups["Десерты"];
                         break;
-                    case FoodCategory.Drinks:
+                    case FoodCategory.Digestif:
                         item.Group = listViewWaiterMenu.Groups["Напитки"];
                         break;
                 }

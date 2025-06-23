@@ -24,7 +24,9 @@ namespace Lab_7
         {
             InitializeComponent();
             CurrentOrder = order;
+
             OrderIDLabe.Text = $"ID: {CurrentOrder.Id}";
+            DateLabe.Text = order.Date.ToString("dd.MM.yyyy HH:mm");
             if (CurrentOrder is DeliveredOrder)
             {
                 TypeLabe.Text = "Доставка";
@@ -32,13 +34,21 @@ namespace Lab_7
             CostLabe.Text = CurrentOrder.Cost.ToString();
             BehaviourLabe.Text = CurrentOrder.Behavior.ToString();
             PayementLabe.Text = "Не оплачено";
-            if(CurrentOrder.IsPayed == true)
+            if (CurrentOrder.IsPayed == true)
             {
                 PayementLabe.Text = "Оплачено";
             }
-        }
-        
 
-        
+            // Стоимость — суммируем в форме
+            var total = order.Foods.Sum(f => f.Cost);
+            CostLabe.Text = $"{total:F2} руб.";
+
+            // Заполняем таблицу: каждый тип блюда с количеством
+            var counts = order.Foods
+                .GroupBy(f => f.Name)
+                .Select(g => (Name: g.Key, Qty: g.Count()));
+            foreach (var (Name, Qty) in counts)
+                FoodsGrid.Rows.Add(Name, Qty);
+        }
     }
 }

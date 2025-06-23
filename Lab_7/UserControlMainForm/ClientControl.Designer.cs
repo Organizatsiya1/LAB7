@@ -28,11 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ListViewGroup listViewGroup1 = new ListViewGroup("Закуски", HorizontalAlignment.Left);
-            ListViewGroup listViewGroup2 = new ListViewGroup("Супы", HorizontalAlignment.Left);
-            ListViewGroup listViewGroup3 = new ListViewGroup("Вторые блюда", HorizontalAlignment.Left);
-            ListViewGroup listViewGroup4 = new ListViewGroup("Десерты", HorizontalAlignment.Left);
-            ListViewGroup listViewGroup5 = new ListViewGroup("Напитки", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup1 = new ListViewGroup("Аперитив", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup2 = new ListViewGroup("Антре", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup3 = new ListViewGroup("Основное блюдо", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup4 = new ListViewGroup("Антреме", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup5 = new ListViewGroup("Десерт", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup6 = new ListViewGroup("Дижестив", HorizontalAlignment.Left);
             tabControlClient = new TabControl();
             tabPageClientMenu = new TabPage();
             textBoxClientCart = new TextBox();
@@ -153,6 +154,7 @@
             buttonFormClientOrder.TabIndex = 4;
             buttonFormClientOrder.Text = "Сделать заказ";
             buttonFormClientOrder.UseVisualStyleBackColor = false;
+            buttonFormClientOrder.Click += buttonFormClientOrder_Click;
             // 
             // labelClientTotalPrice
             // 
@@ -179,17 +181,19 @@
             // 
             listViewClientMenu.BackColor = Color.FromArgb(234, 215, 209);
             listViewClientMenu.Columns.AddRange(new ColumnHeader[] { columnNameDishMenu, columnPriceDish, columnPictureDish });
-            listViewGroup1.Header = "Закуски";
-            listViewGroup1.Name = "Закуски";
-            listViewGroup2.Header = "Супы";
-            listViewGroup2.Name = "Супы";
-            listViewGroup3.Header = "Вторые блюда";
-            listViewGroup3.Name = "Вторые блюда";
-            listViewGroup4.Header = "Десерты";
-            listViewGroup4.Name = "Десерты";
-            listViewGroup5.Header = "Напитки";
-            listViewGroup5.Name = "Напитки";
-            listViewClientMenu.Groups.AddRange(new ListViewGroup[] { listViewGroup1, listViewGroup2, listViewGroup3, listViewGroup4, listViewGroup5 });
+            listViewGroup1.Header = "Аперитив";
+            listViewGroup1.Name = "Аперитив";
+            listViewGroup2.Header = "Антре";
+            listViewGroup2.Name = "Антре";
+            listViewGroup3.Header = "Основное блюдо";
+            listViewGroup3.Name = "Основное блюдо";
+            listViewGroup4.Header = "Антреме";
+            listViewGroup4.Name = "Антреме";
+            listViewGroup5.Header = "Десерт";
+            listViewGroup5.Name = "Десерт";
+            listViewGroup6.Header = "Дижестив";
+            listViewGroup6.Name = "Дижестив";
+            listViewClientMenu.Groups.AddRange(new ListViewGroup[] { listViewGroup1, listViewGroup2, listViewGroup3, listViewGroup4, listViewGroup5, listViewGroup6 });
             listViewClientMenu.Location = new Point(6, 42);
             listViewClientMenu.Name = "listViewClientMenu";
             listViewClientMenu.Size = new Size(503, 619);
@@ -242,7 +246,8 @@
             // 
             listViewClientCurrentOrder.BackColor = Color.FromArgb(234, 215, 209);
             listViewClientCurrentOrder.Columns.AddRange(new ColumnHeader[] { columnNameDishCurrentOrder, columnStatus });
-            listViewClientCurrentOrder.ForeColor = SystemColors.ControlLightLight;
+            listViewClientCurrentOrder.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            listViewClientCurrentOrder.ForeColor = Color.Black;
             listViewClientCurrentOrder.Location = new Point(6, 35);
             listViewClientCurrentOrder.Name = "listViewClientCurrentOrder";
             listViewClientCurrentOrder.Size = new Size(924, 626);

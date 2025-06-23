@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             label1 = new Label();
-            label2 = new Label();
-            label3 = new Label();
+            labelProfileID = new Label();
+            labelProfileName = new Label();
             label4 = new Label();
             OrdersGrid = new DataGridView();
             ID = new DataGridViewTextBoxColumn();
@@ -62,27 +62,27 @@
             label1.TabIndex = 0;
             label1.Text = "Профиль";
             // 
-            // label2
+            // labelProfileID
             // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Microsoft Sans Serif", 16.2F, FontStyle.Bold);
-            label2.ForeColor = SystemColors.ControlLightLight;
-            label2.Location = new Point(14, 212);
-            label2.Name = "label2";
-            label2.Size = new Size(43, 32);
-            label2.TabIndex = 1;
-            label2.Text = "ID";
+            labelProfileID.AutoSize = true;
+            labelProfileID.Font = new Font("Microsoft Sans Serif", 16.2F, FontStyle.Bold);
+            labelProfileID.ForeColor = SystemColors.ControlLightLight;
+            labelProfileID.Location = new Point(14, 212);
+            labelProfileID.Name = "labelProfileID";
+            labelProfileID.Size = new Size(43, 32);
+            labelProfileID.TabIndex = 1;
+            labelProfileID.Text = "ID";
             // 
-            // label3
+            // labelProfileName
             // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Microsoft Sans Serif", 16.2F, FontStyle.Bold);
-            label3.ForeColor = SystemColors.ControlLightLight;
-            label3.Location = new Point(14, 169);
-            label3.Name = "label3";
-            label3.Size = new Size(72, 32);
-            label3.TabIndex = 2;
-            label3.Text = "Имя";
+            labelProfileName.AutoSize = true;
+            labelProfileName.Font = new Font("Microsoft Sans Serif", 16.2F, FontStyle.Bold);
+            labelProfileName.ForeColor = SystemColors.ControlLightLight;
+            labelProfileName.Location = new Point(14, 169);
+            labelProfileName.Name = "labelProfileName";
+            labelProfileName.Size = new Size(72, 32);
+            labelProfileName.TabIndex = 2;
+            labelProfileName.Text = "Имя";
             // 
             // label4
             // 
@@ -172,7 +172,7 @@
             // IDBox
             // 
             IDBox.ForeColor = SystemColors.ActiveCaptionText;
-            IDBox.Location = new Point(178, 176);
+            IDBox.Location = new Point(178, 212);
             IDBox.Margin = new Padding(3, 4, 3, 4);
             IDBox.Name = "IDBox";
             IDBox.Size = new Size(162, 27);
@@ -181,7 +181,7 @@
             // NameBox
             // 
             NameBox.ForeColor = SystemColors.ActiveCaptionText;
-            NameBox.Location = new Point(178, 217);
+            NameBox.Location = new Point(178, 174);
             NameBox.Margin = new Padding(3, 4, 3, 4);
             NameBox.Name = "NameBox";
             NameBox.Size = new Size(162, 27);
@@ -265,12 +265,13 @@
             Controls.Add(label5);
             Controls.Add(OrdersGrid);
             Controls.Add(label4);
-            Controls.Add(label3);
-            Controls.Add(label2);
+            Controls.Add(labelProfileName);
+            Controls.Add(labelProfileID);
             Controls.Add(label1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Margin = new Padding(3, 4, 3, 4);
             Name = "ProfileForm";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Profile";
             ((System.ComponentModel.ISupportInitialize)OrdersGrid).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
@@ -283,8 +284,8 @@
         #endregion
 
         private Label label1;
-        private Label label2;
-        private Label label3;
+        private Label labelProfileID;
+        private Label labelProfileName;
         private Label label4;
         private DataGridView OrdersGrid;
         private DataGridViewTextBoxColumn ID;

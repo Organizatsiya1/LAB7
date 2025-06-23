@@ -21,10 +21,11 @@ namespace Logic
         MarkCoocked = 128,
         Register = 256,
         ShowInfo = 512,
-        MarkIsGotten = 1024,
-        All = MarkPayed|MarkDelivered|MarkReady|MarkGiven|BookTable|MakeOrder|MarkCoockedFood|Register|ShowInfo|MarkIsGotten
-        
-       
+        GiveBonus = 1024,
+        ViewStats = 2048,
+        All = MarkPayed|MarkDelivered|MarkReady|MarkGiven|BookTable|MakeOrder|MarkCoockedFood|Register|ShowInfo|GiveBonus|ViewStats
+
+
     }
 
 }

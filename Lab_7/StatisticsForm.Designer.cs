@@ -227,6 +227,7 @@
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Margin = new Padding(3, 4, 3, 4);
             Name = "StatisticsForm";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "StatisticsForm";
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();

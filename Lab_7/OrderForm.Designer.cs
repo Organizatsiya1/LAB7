@@ -55,7 +55,7 @@
             // 
             FoodsGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             FoodsGrid.Columns.AddRange(new DataGridViewColumn[] { Food, Numb });
-            FoodsGrid.Location = new Point(519, 13);
+            FoodsGrid.Location = new Point(566, 13);
             FoodsGrid.Margin = new Padding(3, 4, 3, 4);
             FoodsGrid.Name = "FoodsGrid";
             FoodsGrid.RowHeadersWidth = 51;
@@ -232,7 +232,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             BackColor = Color.FromArgb(99, 58, 52);
-            ClientSize = new Size(866, 408);
+            ClientSize = new Size(912, 401);
             Controls.Add(pictureBox1);
             Controls.Add(PayementLabe);
             Controls.Add(BehaviourLabe);
@@ -250,6 +250,7 @@
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Margin = new Padding(3, 4, 3, 4);
             Name = "OrderForm";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Order";
             ((System.ComponentModel.ISupportInitialize)FoodsGrid).EndInit();
             ((System.ComponentModel.ISupportInitialize)orderBindingSource).EndInit();

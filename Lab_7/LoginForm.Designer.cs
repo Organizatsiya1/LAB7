@@ -267,6 +267,7 @@
             Controls.Add(groupBox1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Name = "LoginForm";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Restaurant Management System";
             panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();

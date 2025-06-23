@@ -54,26 +54,29 @@ namespace Lab_7
                 {
                     food.Name,
                     food.Cost.ToString(),
-                    "" // здесь можно добавить путь/название картинки
+                    "" // здесь можно добавить путь к картинке
                 });
                 item.Tag = food;
 
                 switch (food.Priority)
                 {
-                    case FoodCategory.Snacks:
-                        item.Group = listViewClientMenu.Groups["Закуски"];
+                    case FoodCategory.Aperitif:
+                        item.Group = listViewClientMenu.Groups["Приветственный напиток"];
                         break;
-                    case FoodCategory.Soups:
-                        item.Group = listViewClientMenu.Groups["Супы"];
+                    case FoodCategory.Entree:
+                        item.Group = listViewClientMenu.Groups["Закуска"];
                         break;
-                    case FoodCategory.SecondCourses:
-                        item.Group = listViewClientMenu.Groups["Вторые блюда"];
+                    case FoodCategory.MainCourse:
+                        item.Group = listViewClientMenu.Groups["Основное блюдо"];
+                        break;
+                    case FoodCategory.Entremets:
+                        item.Group = listViewClientMenu.Groups["Антреме"];
                         break;
                     case FoodCategory.Desserts:
-                        item.Group = listViewClientMenu.Groups["Десерты"];
+                        item.Group = listViewClientMenu.Groups["Десерт"];
                         break;
-                    case FoodCategory.Drinks:
-                        item.Group = listViewClientMenu.Groups["Напитки"];
+                    case FoodCategory.Digestif:
+                        item.Group = listViewClientMenu.Groups["Дижестив"];
                         break;
                 }
 
@@ -106,12 +109,19 @@ namespace Lab_7
             if (listViewClientMenu.SelectedItems.Count == 0)
                 return;
 
-            var sel = listViewClientMenu.SelectedItems[0];
-            var food = (Food)sel.Tag;
-
-            cartFoods.Add(food);
-            RefreshCartListView();
-            UpdateTotalPrice();
+            var food = (Food)listViewClientMenu.SelectedItems[0].Tag;
+            using (var detail = new FoodForm(food))
+            {
+                // Показываем форму как диалог
+                if (detail.ShowDialog() == DialogResult.OK && detail.AddToCart)
+                {
+                    // Пользователь нажал «Добавить в корзину»
+                    cartFoods.Add(food);
+                    RefreshCartListView();
+                    UpdateTotalPrice();
+                }
+                // Если вернулся без OK — просто закрыли окно деталей
+            }
         }
 
         /// <summary>
@@ -212,6 +222,35 @@ namespace Lab_7
 
             // Закрываем окно после открытия loginForm
             currentForm.Close();
+        }
+
+        private void buttonFormClientOrder_Click(object sender, EventArgs e)
+        {
+            // 1) Создаём заказ в логике. Клиент всегда самовывоз (tableID = 0), оплата — наличные (пример).
+            var newOrder = logic.CreateOrderForClient(
+                currentClient,
+                cartFoods,
+                tableID: 0,
+                waiterID: 0,
+                payementType: PayementType.Cash,
+                isDelivery: false);
+
+            if (newOrder == null)
+            {
+                MessageBox.Show("Не удалось оформить заказ. Проверьте корзину.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // 2) Открываем форму просмотра/оформления заказа
+            using (var orderForm = new OrderForm(newOrder))
+            {
+                orderForm.ShowDialog();
+            }
+
+            // 3) Сбрасываем корзину и обновляем интерфейс
+            cartFoods.Clear();
+            RefreshCartListView();
+            UpdateTotalPrice();
         }
     }
 }

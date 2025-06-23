@@ -65,11 +65,13 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoSize = true;
             BackColor = Color.FromArgb(99, 58, 52);
             ClientSize = new Size(273, 84);
             Controls.Add(panel1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Name = "CodeNotification";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Code Notification";
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
