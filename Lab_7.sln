@@ -16,7 +16,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogic", "BusinessLo
 		{020E8832-1564-47A3-8B4D-46AD581D681E} = {020E8832-1564-47A3-8B4D-46AD581D681E}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBase", "DataBase\DataBase.csproj", "{69712F4E-6DAF-4B08-B3CF-70016448C181}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataConverter", "DataConverter\DataConverter.csproj", "{522D6DB7-8565-4475-88BB-C30CC0D94A14}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,10 +36,10 @@ Global
 		{49DF010E-F25A-4909-95BF-035501BCA74D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49DF010E-F25A-4909-95BF-035501BCA74D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49DF010E-F25A-4909-95BF-035501BCA74D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{69712F4E-6DAF-4B08-B3CF-70016448C181}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{69712F4E-6DAF-4B08-B3CF-70016448C181}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{69712F4E-6DAF-4B08-B3CF-70016448C181}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{69712F4E-6DAF-4B08-B3CF-70016448C181}.Release|Any CPU.Build.0 = Release|Any CPU
+		{522D6DB7-8565-4475-88BB-C30CC0D94A14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{522D6DB7-8565-4475-88BB-C30CC0D94A14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{522D6DB7-8565-4475-88BB-C30CC0D94A14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{522D6DB7-8565-4475-88BB-C30CC0D94A14}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
