@@ -21,6 +21,7 @@ namespace Lab_7
         public LoginForm()
         {
             InitializeComponent();
+            Task.Run(() => Logic.LoadClientsAsync());
 
             // По умолчанию выбираем «Сотрудник»
             radioEmployee.Checked = true;
@@ -106,13 +107,13 @@ namespace Lab_7
         }
 
         /// <summary>
-        /// Проверяет, существует ли клиент с указанным номером телефона.
-        /// Пока всегда возвращает false (заглушка).
+        /// Проверяет, существует ли клиент с указанным номером телефона
+        /// Пока всегда возвращает false (заглушка)
         /// </summary>
         /// <param name="phoneDigits">Набор из 10 цифр без скобок и пробелов</param>
-        /// <returns>True, если в базе уже есть клиент с таким телефоном; иначе false.</returns>
-        private bool CheckPhoneExists(string phoneDigits) => false;
-        // В реальном приложении здесь должен быть запрос к базе данных.
+        /// <returns>True, если в базе уже есть клиент с таким телефоном; иначе false</returns>
+        private bool CheckPhoneExists(string phoneDigits)
+            => Logic.Clients.Any(c => c.PhoneNumber == phoneDigits);
 
         /// <summary>
         /// Генерирует четырёхзначный проверочный код и открывает форму уведомления.
@@ -287,40 +288,46 @@ namespace Lab_7
             }
             else if (radioClient.Checked)
             {
-                // Клиент: после успешной проверки кода
+                // Показ прогресса
                 progressBar.Visible = true;
                 buttonCancel.Visible = true;
                 loadingCanceled = false;
-
                 await LoadDataAsync();
+                if (loadingCanceled) return;
 
-                if (!loadingCanceled)
+                // 1) Загружаем список клиентов, если ещё не загружен
+                if (Logic.Clients.Count == 0)
+                    await Logic.LoadClientsAsync();
+
+                // 2) Достаём цифры из маски и ищем клиента
+                string phoneDigits = new string(maskedTextBoxPhone.Text.Where(char.IsDigit).ToArray());
+                var existingClient = Logic.Clients.FirstOrDefault(c => c.PhoneNumber == phoneDigits);
+
+                Client clientToShow;
+                if (existingClient == null)
                 {
-                    Logic.LoadFoods();
-
-                    string phoneDigits = new string(maskedTextBoxPhone.Text.Where(char.IsDigit).ToArray());
-
-                    // Ищем клиента с таким номером
-                    var existingClient = Logic.Clients.FirstOrDefault(c => c.PhoneNumber == phoneDigits);
-                    if (existingClient == null)
+                    // 3) Если клиента нет — создаём нового
+                    clientToShow = new Client
                     {
-                        // Если клиента нет — создаём нового и инициализируем Address
-                        var newClient = new Client
-                        {
-                            Id = Logic.Clients.Count > 0
-                                     ? Logic.Clients.Max(c => c.Id) + 1
-                                     : 1,
-                            Name = "Новый клиент",
-                            PhoneNumber = phoneDigits,
-                            Adress = new Adress() // Важно: не забываем создать объект Adress
-                        };
-                        Logic.Clients.Add(newClient);
-                        existingClient = newClient;
-                    }
+                        Id = Logic.Clients.Any() ? Logic.Clients.Max(c => c.Id) + 1 : 1,
+                        Name = "Новый клиент",
+                        PhoneNumber = phoneDigits,
+                        Adress = new Adress(),
+                        Orders = new List<int>()
+                    };
 
-                    // Открываем MainForm для клиента
-                    ShowMainForm(UserStatus.Client, existingClient);
+                    Logic.Clients.Add(clientToShow);
+                    // 4) Сохраняем сразу же в JSON
+                    await Logic.SaveClientsAsync();
                 }
+                else
+                {
+                    clientToShow = existingClient;
+                }
+
+                // 5) Фиксируем и уходим в MainForm
+                Logic.FixateUser(clientToShow);
+                ShowMainForm(UserStatus.Client, clientToShow);
             }
         }
     }

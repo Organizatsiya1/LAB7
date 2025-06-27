@@ -9,8 +9,26 @@ namespace Logic
         private int OrdersID = 1;
         private int WorkersID = 1;
 
-        // Список всех клиентов в системе.
-        public List<Client> Clients { get; set; } = new List<Client>();
+        private readonly DataConverter converter = new DataConverter();
+        private const string ClientsFileName = "DataClients.json";
+
+        public List<Client> Clients { get; private set; } = new List<Client>();
+
+        /// <summary>
+        /// Загружает клиентов из файла (вызывается при старте формы)
+        /// </summary>
+        public async Task LoadClientsAsync()
+        {
+            Clients = await converter.ReadClientsAsync(ClientsFileName);
+        }
+
+        /// <summary>
+        /// Сохраняет текущих клиентов в файл (вызывается после добавления/изменения)
+        /// </summary>
+        public async Task SaveClientsAsync()
+        {
+            await converter.WriteClientsAsync(Clients, ClientsFileName);
+        }
 
         // Статический список всех блюд (меню) в системе.
         public static List<Food> Foods { get; private set; } = new List<Food>();

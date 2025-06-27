@@ -1,23 +1,100 @@
 ﻿using Model;
-using System.Text;
+using System.Text.Json;
+using System.Windows;
 
 namespace Logic
 {
     public class DataConverter
     {
-        /// <summary>
-        /// Асинхронно должен записывать данные о БЛЮДАХ в файл с применением фильтрации и группировки
-        /// </summary>
-        /// <param name="foods">Список блюд для записи</param>
-        /// <param name="filename">Путь к файлу для сохранения</param>
-        async void WriteFood(List<Food> foods, string filename)
+        // 1. Базовая папка для всех файлов приложения
+        // %AppData%\YourCompany\YourAppName
+        private static readonly string BaseFolder = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "DataBase");
+
+        // 2. Убедиться, что папка существует
+        static DataConverter()
         {
-            FileInfo fileinfo = new FileInfo(filename);
-            FileStream stream = fileinfo.Create();
-            //тут применяются методы на фильтрацию, и группировку блюд из условия
-            stream.Write(Encoding.UTF8.GetBytes($"\n"));
-            
+            Directory.CreateDirectory(BaseFolder);
         }
+
+
+
+        /// <summary>
+        /// Асинхронно записывает упорядоченный по идентификаторам список клиентов в JSON-файл
+        /// </summary>
+        /// <param name="clients">Список клиентов, который нужно сохранить</param>
+        /// <param name="filename">Путь к JSON-файлу для записи (создается или перезаписывается) </param>
+        /// <returns>Задача, представляющая асинхронную операцию записи</returns>
+        public async Task WriteClientsAsync(List<Client> clients, string filename)
+        {
+
+            string fullPath = Path.Combine(BaseFolder, filename);
+
+            // Обрабатываем ситуацию, если каталог вдруг исчез:
+            Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+
+            // Сортируем по Id, чтобы файл был человекочитаем и клиенты упорядочены
+            var toWrite = clients.OrderBy(c => c.Id).ToList();
+
+            // Опции форматированного (отступы) JSON
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+
+            // Открываем поток с асинхронной записью
+            using var stream = new FileStream(
+                filename,
+                FileMode.Create,    // создаёт или перезаписывает файл
+                FileAccess.Write,
+                FileShare.None,
+                bufferSize: 4096,
+                useAsync: true);
+
+            // Сериализуем сразу в поток
+            await JsonSerializer.SerializeAsync(stream, toWrite, options);
+        }
+
+        /// <summary>
+        /// Асинхронно читает из JSON-файла список клиентов
+        /// </summary>
+        /// <param name="filename">Путь к JSON-файлу для чтения</param>
+        /// <returns>Задача, результатом которой является список клиентов (или пустой список если файл не найден)</returns>
+        public async Task<List<Client>> ReadClientsAsync(string filename)
+        {
+            // Если файла нет — возвращаем пустой список
+            if (!File.Exists(filename))
+                return new List<Client>();
+
+            using var stream = new FileStream(
+                filename,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.Read,
+                bufferSize: 4096,
+                useAsync: true);
+
+            // Десериализуем
+            var clients = await JsonSerializer.DeserializeAsync<List<Client>>(stream);
+
+            // Если файл был пустой или испорченный — защитимся от null
+            return clients ?? new List<Client>();
+        }
+
+        ///// <summary>
+        ///// Асинхронно должен записывать данные о БЛЮДАХ в файл с применением фильтрации и группировки
+        ///// </summary>
+        ///// <param name="foods">Список блюд для записи</param>
+        ///// <param name="filename">Путь к файлу для сохранения</param>
+        //async void WriteFood(List<Food> foods, string filename)
+        //{
+        //    FileInfo fileinfo = new FileInfo(filename);
+        //    FileStream stream = fileinfo.Create();
+        //    //тут применяются методы на фильтрацию, и группировку блюд из условия
+        //    stream.Write(Encoding.UTF8.GetBytes($"\n"));
+
+        //}
 
         ///// <summary>
         ///// Асинхронно должен записывать данные о ЗАКАЗАХ в файл с применением фильтрации и группировки
@@ -29,20 +106,6 @@ namespace Logic
         //    FileInfo fileinfo = new FileInfo(filename);
         //    FileStream stream = fileinfo.Create();
         //    //тут применяются методы на фильтрацию, и группировку заказов из условия
-        //    stream.Write(Encoding.UTF8.GetBytes($"\n"));
-            
-        //}
-
-        ///// <summary>
-        ///// Асинхронно должен записывать данные о КЛИЕНТАХ и их заказах в файл
-        ///// </summary>
-        ///// <param name="clients">Список клиентов для записи</param>
-        ///// <param name="filename">Путь к файлу для сохранения</param>
-        //async void WriteClients(List<Client> clients, string filename)
-        //{
-        //    FileInfo fileinfo = new FileInfo(filename);
-        //    FileStream stream = fileinfo.Create();
-        //    //тут применяются методы на фильтрацию, и группировку клиент-заказы
         //    stream.Write(Encoding.UTF8.GetBytes($"\n"));
 
         //}
