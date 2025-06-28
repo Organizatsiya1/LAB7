@@ -1,23 +1,23 @@
 ﻿using Model;
 using System.Text.Json;
-using System.Windows;
 
 namespace Logic
 {
     public class DataConverter
     {
         // 1. Базовая папка для всех файлов приложения
-        // %AppData%\YourCompany\YourAppName
-        private static readonly string BaseFolder = Path.Combine(
+        // %AppData%\Organization Sigma Cat\ULTIMATE SEVEN LAB
+        private static readonly string DataBase = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "Organization Sigma Cat",
+            "ULTIMATE SEVEN LAB",
             "DataBase");
 
-        // 2. Убедиться, что папка существует
+        // Убедиться, что папка существует
         static DataConverter()
         {
-            Directory.CreateDirectory(BaseFolder);
+            Directory.CreateDirectory(DataBase);
         }
-
 
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace Logic
         public async Task WriteClientsAsync(List<Client> clients, string filename)
         {
 
-            string fullPath = Path.Combine(BaseFolder, filename);
+            string fullPath = Path.Combine(DataBase, filename);
 
             // Обрабатываем ситуацию, если каталог вдруг исчез:
             Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
@@ -45,7 +45,7 @@ namespace Logic
 
             // Открываем поток с асинхронной записью
             using var stream = new FileStream(
-                filename,
+                fullPath,
                 FileMode.Create,    // создаёт или перезаписывает файл
                 FileAccess.Write,
                 FileShare.None,
@@ -63,12 +63,14 @@ namespace Logic
         /// <returns>Задача, результатом которой является список клиентов (или пустой список если файл не найден)</returns>
         public async Task<List<Client>> ReadClientsAsync(string filename)
         {
+            string fullPath = Path.Combine(DataBase, filename);
+
             // Если файла нет — возвращаем пустой список
-            if (!File.Exists(filename))
+            if (!File.Exists(fullPath))
                 return new List<Client>();
 
             using var stream = new FileStream(
-                filename,
+                fullPath,
                 FileMode.Open,
                 FileAccess.Read,
                 FileShare.Read,

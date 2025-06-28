@@ -306,6 +306,8 @@ namespace Lab_7
                 Client clientToShow;
                 if (existingClient == null)
                 {
+                    Logic.LoadFoods();
+
                     // 3) Если клиента нет — создаём нового
                     clientToShow = new Client
                     {
