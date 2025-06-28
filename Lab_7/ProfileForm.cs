@@ -1,30 +1,23 @@
-﻿using Model;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using Logic;
+using Model;
 
 namespace Lab_7
 {
     public partial class ProfileForm : Form
     {
-        
+        private readonly BusinessLogic Logic;
         public Client User { get; set; } // клиент, чьи данные показываются/редактируются в форме
 
         /// <summary>
         /// Конструктор, инициализирует поля формы значениями из объекта Client
         /// </summary>
         /// <param name="client">Экземпляр Client, чьё свойство отображается</param>
-        public ProfileForm(Client client)
+        public ProfileForm(Client client, BusinessLogic logic)
         {
             InitializeComponent();
 
             User = client;
+            Logic = logic;
 
             // Заполняем текстовые поля данными клиента
             IDBox.Text = User.Id.ToString();
@@ -61,10 +54,13 @@ namespace Lab_7
         /// </summary>
         /// <param name="sender">Ссылка на кнопку "«Сохранить»"</param>
         /// <param name="e">Аргументы события</param>
-        private void SaveProfile_Click(object sender, EventArgs e)
+        private async void SaveProfile_Click(object sender, EventArgs e)
         {
             User.Name = NameBox.Text;
-            User.PhoneNumber = PhoneBox.Text;
+
+            // вытаскиваем только цифры
+            var digits = new string(PhoneBox.Text.Where(char.IsDigit).ToArray());
+            User.PhoneNumber = digits;
 
             if (int.TryParse(IDBox.Text, out int newId))
                 User.Id = newId;
@@ -80,6 +76,8 @@ namespace Lab_7
 
             if (int.TryParse(FlatBox.Text, out int fn))
                 User.Adress.FlatNumb = fn;
+
+            await Logic.SaveClientsAsync();
 
             MessageBox.Show("Профиль сохранён!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }

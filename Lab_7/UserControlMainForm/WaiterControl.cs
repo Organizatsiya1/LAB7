@@ -172,7 +172,7 @@ namespace Lab_7
         private void ButtonClientProfile_Click(object sender, EventArgs e)
         {
             // currentClient гарантированно не null, потому что мы передали его в конструкторе
-            using (var profileForm = new ProfileForm(currentClient))
+            using (var profileForm = new ProfileForm(currentClient, logic))
             {
                 profileForm.ShowDialog();
             }

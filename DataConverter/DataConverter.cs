@@ -1,5 +1,7 @@
 ﻿using Model;
+using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Unicode;
 
 namespace Logic
 {
@@ -40,8 +42,10 @@ namespace Logic
             // Опции форматированного (отступы) JSON
             var options = new JsonSerializerOptions
             {
-                WriteIndented = true
+                WriteIndented = true,
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
             };
+
 
             // Открываем поток с асинхронной записью
             using var stream = new FileStream(

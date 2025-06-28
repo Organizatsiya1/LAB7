@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Logic;
+﻿using Logic;
 using Model;
 
 namespace Lab_7
@@ -15,21 +6,21 @@ namespace Lab_7
     public partial class MainForm : Form
     {
         private UserStatus Role;
-        private Client client;
-        private BusinessLogic logic;
+        private Client Client;
+        private BusinessLogic Logic;
 
         /// <summary>
         /// Инициализирует главное окно
         /// </summary>
         /// <param name="role">Роль текущего пользователя</param>
-        /// <param name="existingClient">Объект Client, или null, если пользователь – не клиент</param>
-        /// <param name="sharedLogic">Единый экземпляр BusinessLogic для всего приложения</param>
-        public MainForm(UserStatus role, Client existingClient, BusinessLogic sharedLogic)
+        /// <param name="client">Объект Client, или null, если пользователь – не клиент</param>
+        /// <param name="logic">Единый экземпляр BusinessLogic для всего приложения</param>
+        public MainForm(UserStatus role, Client client, BusinessLogic logic)
         {
             InitializeComponent();
             Role = role;
-            client = existingClient;
-            logic = sharedLogic;
+            Client = client;
+            Logic = logic;
             LoadRoleInterface();
         }
 
@@ -46,7 +37,7 @@ namespace Lab_7
                 case UserStatus.Client:
                     {
                         // Для клиента передаём объект client в конструктор контролла
-                        var clientControl = new ClientControl(client)
+                        var clientControl = new ClientControl(Client, Logic)
                         {
                             Dock = DockStyle.Fill
                         };
@@ -57,7 +48,7 @@ namespace Lab_7
 
                 case UserStatus.Waiter:
                     {
-                        var waiterControl = new WaiterControl(client)
+                        var waiterControl = new WaiterControl(Client)
                         {
                             Dock = DockStyle.Fill
                         };

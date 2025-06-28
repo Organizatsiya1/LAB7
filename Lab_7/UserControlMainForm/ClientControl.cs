@@ -7,7 +7,7 @@ namespace Lab_7
     public partial class ClientControl : UserControl
     {
         private readonly Client currentClient;      // Текущий клиент
-        private readonly BusinessLogic logic = new BusinessLogic();
+        private readonly BusinessLogic Logic;
         private List<Food> allFoods = new List<Food>();   // Список всех блюд (меню)
         private List<Food> cartFoods = new List<Food>();  // Корзина клиента
 
@@ -16,11 +16,12 @@ namespace Lab_7
         /// Затем загружает меню и подписывает обработчик для кнопки "Профиль"
         /// </summary>
         /// <param name="clientFromLogin">Объект Client, соответствующий вошедшему пользователю</param>
-        public ClientControl(Client clientFromLogin)
+        public ClientControl(Client clientFromLogin, BusinessLogic logic)
         {
             InitializeComponent();
 
             currentClient = clientFromLogin;
+            Logic = logic;
 
             // Загружаем меню из статического списка BusinessLogic.Foods
             allFoods = BusinessLogic.Foods.ToList();
@@ -170,7 +171,7 @@ namespace Lab_7
                 if (currentClient == null)
                     return;
 
-                var order = logic.GetCurrentOrderForClient(currentClient);
+                var order = Logic.GetCurrentOrderForClient(currentClient);
                 if (order == null)
                     return;
 
@@ -191,7 +192,7 @@ namespace Lab_7
         private void buttonClientProfile_Click(object sender, EventArgs e)
         {
             // currentClient гарантированно не null, потому что мы передали его в конструкторе
-            using (var profileForm = new ProfileForm(currentClient))
+            using (var profileForm = new ProfileForm(currentClient, Logic))
             {
                 profileForm.ShowDialog();
             }
@@ -219,7 +220,7 @@ namespace Lab_7
         private void buttonFormClientOrder_Click(object sender, EventArgs e)
         {
             // 1) Создаём заказ в логике. Клиент всегда самовывоз (tableID = 0), оплата — наличные (пример).
-            var newOrder = logic.CreateOrderForClient(
+            var newOrder = Logic.CreateOrderForClient(
                 currentClient,
                 cartFoods,
                 tableID: 0,
