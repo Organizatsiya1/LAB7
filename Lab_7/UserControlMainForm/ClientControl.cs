@@ -1,0 +1,248 @@
+﻿using Logic;
+using Model;
+using System.Data;
+
+namespace Lab_7
+{
+    public partial class ClientControl : UserControl
+    {
+        private readonly Client currentClient;      // Текущий клиент
+        private readonly BusinessLogic logic = new BusinessLogic();
+        private List<Food> allFoods = new List<Food>();   // Список всех блюд (меню)
+        private List<Food> cartFoods = new List<Food>();  // Корзина клиента
+
+        /// <summary>
+        /// При создании этот конструктор получает объект Client и сохраняет его во внутреннем поле
+        /// Затем загружает меню и подписывает обработчик для кнопки "Профиль"
+        /// </summary>
+        /// <param name="clientFromLogin">Объект Client, соответствующий вошедшему пользователю</param>
+        public ClientControl(Client clientFromLogin)
+        {
+            InitializeComponent();
+
+            currentClient = clientFromLogin;
+
+            // Загружаем меню из статического списка BusinessLogic.Foods
+            allFoods = BusinessLogic.Foods.ToList();
+
+            // Заполняем ListView блюдами
+            PopulateMenu(allFoods);
+
+            // Счетчик «Итого» = 0
+            UpdateTotalPrice();
+        }
+
+        /// <summary>
+        /// Заполняет список меню передачными блюдами (без учёта корзины)
+        /// </summary>
+        /// <param name="foods">Список Food для отображения</param>
+        private void PopulateMenu(List<Food> foods)
+        {
+            listViewClientMenu.Items.Clear();
+
+            foreach (var food in foods)
+            {
+                var item = new ListViewItem(new[]
+                {
+                    food.Name,
+                    food.Cost.ToString(),
+                    "" // здесь можно добавить путь к картинке
+                });
+                item.Tag = food;
+
+                switch (food.Priority)
+                {
+                    case FoodCategory.Aperitif:
+                        item.Group = listViewClientMenu.Groups["Приветственный напиток"];
+                        break;
+                    case FoodCategory.Entree:
+                        item.Group = listViewClientMenu.Groups["Закуска"];
+                        break;
+                    case FoodCategory.MainCourse:
+                        item.Group = listViewClientMenu.Groups["Основное блюдо"];
+                        break;
+                    case FoodCategory.Entremets:
+                        item.Group = listViewClientMenu.Groups["Антреме"];
+                        break;
+                    case FoodCategory.Desserts:
+                        item.Group = listViewClientMenu.Groups["Десерт"];
+                        break;
+                    case FoodCategory.Digestif:
+                        item.Group = listViewClientMenu.Groups["Дижестив"];
+                        break;
+                }
+
+                listViewClientMenu.Items.Add(item);
+            }
+        }
+
+        /// <summary>
+        /// Фильтрует меню по введённому названию
+        /// </summary>
+        /// <param name="sender">Ссылка на TextBox с поиском</param>
+        /// <param name="e">Аргументы события</param>
+        private void textBoxClientSearch_TextChanged(object sender, EventArgs e)
+        {
+            string filter = textBoxClientSearch.Text.Trim().ToLower();
+            var filtered = string.IsNullOrEmpty(filter)
+                ? allFoods.ToList()
+                : allFoods.Where(f => f.Name.ToLower().Contains(filter)).ToList();
+
+            PopulateMenu(filtered);
+        }
+
+        /// <summary>
+        /// Добавляет выбранное блюдо в корзину
+        /// </summary>
+        /// <param name="sender">Ссылка на ListView с меню</param>
+        /// <param name="e">Аргументы события</param>
+        private void listViewClientMenu_DoubleClick(object sender, EventArgs e)
+        {
+            if (listViewClientMenu.SelectedItems.Count == 0)
+                return;
+
+            var food = (Food)listViewClientMenu.SelectedItems[0].Tag;
+            using (var detail = new FoodForm(food))
+            {
+                // Показываем форму как диалог
+                if (detail.ShowDialog() == DialogResult.OK && detail.AddToCart)
+                {
+                    // Пользователь нажал «Добавить в корзину»
+                    cartFoods.Add(food);
+                    RefreshCartListView();
+                    UpdateTotalPrice();
+                }
+                // Если вернулся без OK — просто закрыли окно деталей
+            }
+        }
+
+        /// <summary>
+        /// Обновляет отображение корзины: группирует по Id блюда и показывает
+        /// количество и общую сумму по каждому виду
+        /// </summary>
+        private void RefreshCartListView()
+        {
+            listViewClientCart.Items.Clear();
+
+            var grouped = cartFoods
+                .GroupBy(f => f.Id)
+                .Select(g => new
+                {
+                    Dish = g.First(),
+                    Quantity = g.Count(),
+                    Sum = g.Sum(x => x.Cost)
+                });
+
+            foreach (var entry in grouped)
+            {
+                var item = new ListViewItem(new[]
+                {
+                    entry.Dish.Name,
+                    entry.Quantity.ToString(),
+                    entry.Sum.ToString("F2")
+                });
+                item.Tag = entry.Dish;
+                listViewClientCart.Items.Add(item);
+            }
+        }
+
+        /// <summary>
+        /// Пересчитывает и отображает общую сумму корзины в метке "Итого" на форме
+        /// </summary>
+        private void UpdateTotalPrice()
+        {
+            double total = cartFoods.Sum(f => f.Cost);
+            labelClientTotalPrice.Text = $"Итого:   \t{total:F2} руб.";
+        }
+
+        /// <summary>
+        /// Если выбрана вкладка "Текущий заказ",
+        /// заполняет список готовности блюд данными из последнего «открытого» заказа клиента (кнопка формирования заказа!)
+        /// </summary>
+        /// <param name="sender">Ссылка на TabControl</param>
+        /// <param name="e">Аргументы события</param>
+        private void tabControlClient_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControlClient.SelectedTab == tabPageClientCurrentOrder)
+            {
+                listViewClientCurrentOrder.Items.Clear();
+
+                if (currentClient == null)
+                    return;
+
+                var order = logic.GetCurrentOrderForClient(currentClient);
+                if (order == null)
+                    return;
+
+                foreach (var food in order.Foods)
+                {
+                    var status = order.Behavior >= OrderBehavior.Coocked ? "Готово" : "В процессе";
+                    var item = new ListViewItem(new[] { food.Name, status });
+                    listViewClientCurrentOrder.Items.Add(item);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Открывает ProfileForm для текущего клиента по нажатию на кнопку "Профиль"
+        /// </summary>
+        /// <param name="sender">Ссылка на кнопку "Профиль"</param>
+        /// <param name="e">Аргументы события</param>
+        private void buttonClientProfile_Click(object sender, EventArgs e)
+        {
+            // currentClient гарантированно не null, потому что мы передали его в конструкторе
+            using (var profileForm = new ProfileForm(currentClient))
+            {
+                profileForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// Закрывает окно для текущего клиента после нажатия кнопки "Выход" и открывает LoginForm
+        /// </summary>
+        /// <param name="sender">Ссылка на кнопку "Выход"</param>
+        /// <param name="e">Аргументы события</param>
+        private void buttonClientLogout_Click(object sender, EventArgs e)
+        {
+            // Скрываем текущее окно
+            var currentForm = this.FindForm();
+            currentForm.Hide();
+
+            // Открываем форму входа
+            var loginForm = new LoginForm();
+            loginForm.Show();
+
+            // Закрываем окно после открытия loginForm
+            currentForm.Close();
+        }
+
+        private void buttonFormClientOrder_Click(object sender, EventArgs e)
+        {
+            // 1) Создаём заказ в логике. Клиент всегда самовывоз (tableID = 0), оплата — наличные (пример).
+            var newOrder = logic.CreateOrderForClient(
+                currentClient,
+                cartFoods,
+                tableID: 0,
+                waiterID: 0,
+                payementType: PayementType.Cash,
+                isDelivery: false);
+
+            if (newOrder == null)
+            {
+                MessageBox.Show("Не удалось оформить заказ. Проверьте корзину.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // 2) Открываем форму просмотра/оформления заказа
+            using (var orderForm = new OrderForm(newOrder))
+            {
+                orderForm.ShowDialog();
+            }
+
+            // 3) Сбрасываем корзину и обновляем интерфейс
+            cartFoods.Clear();
+            RefreshCartListView();
+            UpdateTotalPrice();
+        }
+    }
+}
