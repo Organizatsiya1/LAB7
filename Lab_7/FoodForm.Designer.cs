@@ -49,6 +49,7 @@ namespace Lab_7
             // 
             // pictureBoxFood
             // 
+            pictureBoxFood.Image = Properties.Resources.PlaceholderMenu;
             pictureBoxFood.Location = new Point(12, 95);
             pictureBoxFood.Name = "pictureBoxFood";
             pictureBoxFood.Size = new Size(200, 200);

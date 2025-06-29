@@ -267,7 +267,7 @@ namespace Lab_7
 
                     if (!loadingCanceled)
                     {
-                        Logic.LoadFoods();
+                        await Logic.LoadDishesAsync();
                         // Передаём сотрудника (приведём к Client?)
                         // Здесь для «сотрудников» MainForm умеет принимать Human,
                         // но сигнатура ShowMainForm сейчас настроена только на Client.
@@ -306,7 +306,7 @@ namespace Lab_7
                 Client clientToShow;
                 if (existingClient == null)
                 {
-                    Logic.LoadFoods();
+                    await Logic.LoadDishesAsync();
 
                     // 3) Если клиента нет — создаём нового
                     clientToShow = new Client

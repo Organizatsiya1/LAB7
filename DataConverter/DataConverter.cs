@@ -7,18 +7,51 @@ namespace Logic
 {
     public class DataConverter
     {
-        // 1. Базовая папка для всех файлов приложения
-        // %AppData%\Organization Sigma Cat\ULTIMATE SEVEN LAB
-        private static readonly string DataBase = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "Organization Sigma Cat",
-            "ULTIMATE SEVEN LAB",
-            "DataBase");
+        private const string DishesFileName = "DataDishes.json";
+        public static string DataBase { get; }
 
-        // Убедиться, что папка существует
+        /// <summary>
+        /// 
+        /// </summary>
         static DataConverter()
         {
-            Directory.CreateDirectory(DataBase);
+            //Базовая папка для всех файлов приложения
+            // %AppData%\Organization Sigma Cat\ULTIMATE SEVEN LAB
+            DataBase = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "Organization Sigma Cat",
+                "ULTIMATE SEVEN LAB",
+                "DataBase"); Directory.CreateDirectory(DataBase);
+
+            Directory.CreateDirectory(Path.Combine(DataBase, "Images"));
+
+            string dishesPath = Path.Combine(DataBase, DishesFileName);
+            if (!File.Exists(dishesPath))
+            {
+                var defaultDishes = new List<Food>
+                {
+                    new Food {
+                        Id = 1,
+                        Name = "Брускетта с помидорами",
+                        Description = "Классическая итальянская закуска",
+                        Weight = 120,
+                        CoockingTime = 5,
+                        Cost = 150,
+                        Priority = FoodCategory.Entree,
+                        Formula = new List<string> { "Хлеб", "Томаты", "Оливковое масло", "Базилик" },
+                        PhotoFile = "bruschetta.jpg"
+                    },
+                    // … ваш оставшийся набор блюд …
+                };
+
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
+                };
+                using var fs = new FileStream(dishesPath, FileMode.CreateNew, FileAccess.Write, FileShare.None);
+                JsonSerializer.Serialize(fs, defaultDishes, options);
+            }
         }
 
 
@@ -61,7 +94,7 @@ namespace Logic
         }
 
         /// <summary>
-        /// Асинхронно читает из JSON-файла список клиентов
+        /// Асинхронно читает из JSON-файла список КЛИЕНТОВ
         /// </summary>
         /// <param name="filename">Путь к JSON-файлу для чтения</param>
         /// <returns>Задача, результатом которой является список клиентов (или пустой список если файл не найден)</returns>
@@ -86,6 +119,34 @@ namespace Logic
 
             // Если файл был пустой или испорченный — защитимся от null
             return clients ?? new List<Client>();
+        }
+
+        /// <summary>
+        /// Асинхронно читает из JSON-файла данные о БЛЮДЕ
+        /// </summary>
+        /// <param name="filename">Путь к JSON-файлу для чтения</param>
+        /// <returns>Задача, результатом которой является список клиентов (или пустой список если файл не найден)</returns>
+        public async Task<List<Food>> ReadDishesAsync(string filename)
+        {
+            string fullPath = Path.Combine(DataBase, filename);
+
+            // Если файла нет — возвращаем пустой список
+            if (!File.Exists(fullPath))
+                return new List<Food>();
+
+            using var stream = new FileStream(
+                fullPath,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.Read,
+                bufferSize: 4096,
+                useAsync: true);
+
+            // Десериализуем
+            var dishes = await JsonSerializer.DeserializeAsync<List<Food>>(stream);
+
+            // Если файл был пустой или испорченный — защитимся от null
+            return dishes ?? new List<Food>();
         }
 
         ///// <summary>

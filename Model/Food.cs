@@ -16,5 +16,6 @@ namespace Model
         public int Cost {  get; set; }
         public FoodCategory Priority { get; set; }
         public List<string> Formula { get; set; }
+        public string PhotoFile { get; set; }
     }
 }

@@ -11,8 +11,10 @@ namespace Logic
 
         private readonly DataConverter converter = new DataConverter();
         private const string ClientsFileName = "DataClients.json";
+        private const string DishesFileName = "DataDishes.json";
 
         public List<Client> Clients { get; private set; } = new List<Client>();
+        public List<Food> Dishes { get; private set; } = new List<Food>();
 
         /// <summary>
         /// Загружает клиентов из файла (вызывается при старте формы)
@@ -30,8 +32,13 @@ namespace Logic
             await converter.WriteClientsAsync(Clients, ClientsFileName);
         }
 
-        // Статический список всех блюд (меню) в системе.
-        public static List<Food> Foods { get; private set; } = new List<Food>();
+        /// <summary>
+        /// Загружает клиентов из файла (вызывается при старте формы)
+        /// </summary>
+        public async Task LoadDishesAsync()
+        {
+            Dishes = await converter.ReadDishesAsync(DishesFileName);
+        }
 
         // Список всех заказов, созданных в системе.
         public List<Order> AllOrders { get; } = new List<Order>();
@@ -45,74 +52,6 @@ namespace Logic
             new Courier{ Id = 4, Name = "Пётр", Login = "petya", Password = "cour123" }
         };
 
-        #region Menu
-
-        /// <summary>
-        /// Загрузка меню (Food) из какого-то источника (пока для наглядности)
-        /// </summary>
-        public void LoadFoods()
-        {
-            Foods = new List<Food>()
-            {
-                new Food
-                {
-                    Id = 1,
-                    Name = "Брускетта с помидорами",
-                    Description = "Классическая итальянская закуска",
-                    Weight = 120,
-                    CoockingTime = 5,
-                    Cost = 150,
-                    Priority = FoodCategory.Entree,
-                    Formula = new List<string> { "Хлеб", "Томаты", "Оливковое масло", "Базилик" }
-                },
-                new Food
-                {
-                    Id = 2,
-                    Name = "Томатный суп",
-                    Description = "Тёплый суп с ароматом базилика",
-                    Weight = 350,
-                    CoockingTime = 10,
-                    Cost = 200,
-                    Priority = FoodCategory.MainCourse,
-                    Formula = new List<string> { "Томаты", "Лук", "Чеснок", "Базилик" }
-                },
-                new Food
-                {
-                    Id = 3,
-                    Name = "Стейк из говядины",
-                    Description = "Стейк средней прожарки с соусом",
-                    Weight = 250,
-                    CoockingTime = 15,
-                    Cost = 450,
-                    Priority = FoodCategory.Entremets,
-                    Formula = new List<string> { "Говядина", "Соль", "Перец", "Соус" }
-                },
-                new Food
-                {
-                    Id = 4,
-                    Name = "Чизкейк",
-                    Description = "Классический чизкейк с ягодным соусом",
-                    Weight = 100,
-                    CoockingTime = 20,
-                    Cost = 250,
-                    Priority = FoodCategory.Desserts,
-                    Formula = new List<string> { "Сыр", "Печенье", "Сахар", "Ягоды" }
-                },
-                new Food
-                {
-                    Id = 5,
-                    Name = "Кола",
-                    Description = "Охлаждающий напиток",
-                    Weight = 330,
-                    CoockingTime = 0,
-                    Cost = 100,
-                    Priority = FoodCategory.Digestif,
-                    Formula = new List<string> { "Вода", "Сахар", "Газ" }
-                }
-            };
-        }
-
-        #endregion
 
         /// <summary>
         /// Возвращает список блюд, название которых содержит переданную подстроку
@@ -122,10 +61,10 @@ namespace Logic
         public List<Food> GetFoodsByFilter(string nameContains)
         {
             if (string.IsNullOrWhiteSpace(nameContains))
-                return Foods.ToList();
+                return Dishes.ToList();
 
             string filter = nameContains.Trim().ToLower();
-            return Foods
+            return Dishes
                 .Where(f => f.Name.ToLower().Contains(filter))
                 .ToList();
         }

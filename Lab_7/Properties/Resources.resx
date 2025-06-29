@@ -121,4 +121,7 @@
   <data name="menu_restaurant_coffee_icon_210208" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menu_restaurant_coffee_icon_210208.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="PlaceholderMenu" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PlaceholderMenu.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

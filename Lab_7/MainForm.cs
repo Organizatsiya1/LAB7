@@ -21,14 +21,14 @@ namespace Lab_7
             Role = role;
             Client = client;
             Logic = logic;
-            LoadRoleInterface();
+            LoadRoleInterfaceAsync();
         }
 
         /// <summary>
         /// в зависимости от роли создаёт соответствующий UserControl
         /// передаёт ему нужные параметры и добавляет на форму
         /// </summary>
-        private void LoadRoleInterface()
+        private async Task LoadRoleInterfaceAsync()
         {
             UserControl userControl = null;
 
@@ -43,19 +43,20 @@ namespace Lab_7
                         };
                         this.Controls.Clear();
                         this.Controls.Add(clientControl);
+                        await clientControl.InitializeAsync();
                     }
                     break;
 
-                case UserStatus.Waiter:
-                    {
-                        var waiterControl = new WaiterControl(Client)
-                        {
-                            Dock = DockStyle.Fill
-                        };
-                        this.Controls.Clear();
-                        this.Controls.Add(waiterControl);
-                    }
-                    break;
+                //case UserStatus.Waiter:
+                //    {
+                //        var waiterControl = new WaiterControl(Client)
+                //        {
+                //            Dock = DockStyle.Fill
+                //        };
+                //        this.Controls.Clear();
+                //        this.Controls.Add(waiterControl);
+                //    }
+                //    break;
 
                 case UserStatus.Chef:
                     userControl = new ChefControl() { Dock = DockStyle.Fill };

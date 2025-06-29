@@ -23,13 +23,18 @@ namespace Lab_7
             currentClient = clientFromLogin;
             Logic = logic;
 
-            // Загружаем меню из статического списка BusinessLogic.Foods
-            allFoods = BusinessLogic.Foods.ToList();
-
             // Заполняем ListView блюдами
             PopulateMenu(allFoods);
 
             // Счетчик «Итого» = 0
+            UpdateTotalPrice();
+        }
+
+        public async Task InitializeAsync()
+        {
+            await Logic.LoadDishesAsync();
+            allFoods = Logic.Dishes;
+            PopulateMenu(allFoods);
             UpdateTotalPrice();
         }
 
