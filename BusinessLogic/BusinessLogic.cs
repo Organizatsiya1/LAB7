@@ -214,8 +214,7 @@ namespace Logic
                 newOrder.Date = DateTime.Now;
             }
 
-            OrdersID++;
-            AllOrders.Add(newOrder);
+            
 
             if (client.Orders == null)
                 client.Orders = new List<int>();
@@ -421,9 +420,24 @@ namespace Logic
         /// </summary>
         /// <param name="foods">Список Food, который нужно сгруппировать</param>
         /// <param name="groupedFoods">Сюда складываем результат</param>
-        public void GroupFoods(List<Food> foods, List<GroupedFood> groupedFoods)
+        public void GroupFoods(List<Order> orders, List<GroupedFood> groupedFoods)
         {
-
+            groupedFoods = orders
+            .SelectMany(order => order.Foods) // "Разворачиваем" все блюда из всех заказов
+            .GroupBy(food => food.Name)       // Группируем по названию блюда
+            .Select(group => new  GroupedFood            // Преобразуем в анонимный тип (или можно создать класс)
+            {
+                Name = group.Key,         // Название блюда
+                Count = group.Count()         // Количество таких блюд
+            }).ToList();   
+        }
+        public void Sort_By_FoodCount(List<GroupedFood> groupedFoods)
+        {
+            groupedFoods.OrderByDescending(x => x.Count);
+        }
+        public void Sort_By_FoodName(List<GroupedFood> groupedFoods)
+        {
+            groupedFoods.OrderBy(x => x.Name);
         }
     }
 }

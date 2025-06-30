@@ -53,11 +53,10 @@
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { IDColumn, NameColumn, OrdersNumb, SpentMoney });
-            dataGridView1.Location = new Point(474, 143);
-            dataGridView1.Margin = new Padding(3, 4, 3, 4);
+            dataGridView1.Location = new Point(415, 107);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(426, 441);
+            dataGridView1.Size = new Size(373, 331);
             dataGridView1.TabIndex = 0;
             // 
             // IDColumn
@@ -92,11 +91,10 @@
             // 
             dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView2.Columns.AddRange(new DataGridViewColumn[] { FoodName, FoodNumb });
-            dataGridView2.Location = new Point(27, 143);
-            dataGridView2.Margin = new Padding(3, 4, 3, 4);
+            dataGridView2.Location = new Point(24, 107);
             dataGridView2.Name = "dataGridView2";
             dataGridView2.RowHeadersWidth = 51;
-            dataGridView2.Size = new Size(392, 441);
+            dataGridView2.Size = new Size(343, 331);
             dataGridView2.TabIndex = 1;
             // 
             // FoodName
@@ -118,18 +116,17 @@
             label1.AutoSize = true;
             label1.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             label1.ForeColor = SystemColors.ControlLightLight;
-            label1.Location = new Point(27, 12);
+            label1.Location = new Point(24, 9);
             label1.Name = "label1";
-            label1.Size = new Size(195, 29);
+            label1.Size = new Size(158, 24);
             label1.TabIndex = 2;
             label1.Text = "Всего заказов:";
             // 
             // SortFoodByName
             // 
-            SortFoodByName.Location = new Point(78, 99);
-            SortFoodByName.Margin = new Padding(3, 4, 3, 4);
+            SortFoodByName.Location = new Point(68, 74);
             SortFoodByName.Name = "SortFoodByName";
-            SortFoodByName.Size = new Size(144, 32);
+            SortFoodByName.Size = new Size(126, 24);
             SortFoodByName.TabIndex = 3;
             SortFoodByName.Text = "Названию";
             SortFoodByName.UseVisualStyleBackColor = true;
@@ -137,50 +134,46 @@
             // 
             // SortFoodByNumber
             // 
-            SortFoodByNumber.Location = new Point(228, 99);
-            SortFoodByNumber.Margin = new Padding(3, 4, 3, 4);
+            SortFoodByNumber.Location = new Point(200, 74);
             SortFoodByNumber.Name = "SortFoodByNumber";
-            SortFoodByNumber.Size = new Size(153, 31);
+            SortFoodByNumber.Size = new Size(134, 23);
             SortFoodByNumber.TabIndex = 4;
             SortFoodByNumber.Text = "Чатсоте";
             SortFoodByNumber.UseVisualStyleBackColor = true;
+            SortFoodByNumber.Click += SortFoodByNumber_Click;
             // 
             // SortClientsByID
             // 
-            SortClientsByID.Location = new Point(520, 99);
-            SortClientsByID.Margin = new Padding(3, 4, 3, 4);
+            SortClientsByID.Location = new Point(455, 74);
             SortClientsByID.Name = "SortClientsByID";
-            SortClientsByID.Size = new Size(58, 31);
+            SortClientsByID.Size = new Size(51, 23);
             SortClientsByID.TabIndex = 5;
             SortClientsByID.Text = "ID";
             SortClientsByID.UseVisualStyleBackColor = true;
             // 
             // SortClientsByName
             // 
-            SortClientsByName.Location = new Point(584, 99);
-            SortClientsByName.Margin = new Padding(3, 4, 3, 4);
+            SortClientsByName.Location = new Point(511, 74);
             SortClientsByName.Name = "SortClientsByName";
-            SortClientsByName.Size = new Size(111, 31);
+            SortClientsByName.Size = new Size(97, 23);
             SortClientsByName.TabIndex = 6;
             SortClientsByName.Text = "Имени";
             SortClientsByName.UseVisualStyleBackColor = true;
             // 
             // SortClientsByOrders
             // 
-            SortClientsByOrders.Location = new Point(701, 99);
-            SortClientsByOrders.Margin = new Padding(3, 4, 3, 4);
+            SortClientsByOrders.Location = new Point(613, 74);
             SortClientsByOrders.Name = "SortClientsByOrders";
-            SortClientsByOrders.Size = new Size(80, 31);
+            SortClientsByOrders.Size = new Size(70, 23);
             SortClientsByOrders.TabIndex = 7;
             SortClientsByOrders.Text = "Заказам";
             SortClientsByOrders.UseVisualStyleBackColor = true;
             // 
             // SortClientsByMoney
             // 
-            SortClientsByMoney.Location = new Point(787, 99);
-            SortClientsByMoney.Margin = new Padding(3, 4, 3, 4);
+            SortClientsByMoney.Location = new Point(689, 74);
             SortClientsByMoney.Name = "SortClientsByMoney";
-            SortClientsByMoney.Size = new Size(112, 31);
+            SortClientsByMoney.Size = new Size(98, 23);
             SortClientsByMoney.TabIndex = 8;
             SortClientsByMoney.Text = "Потраченным";
             SortClientsByMoney.UseVisualStyleBackColor = true;
@@ -190,9 +183,9 @@
             label2.AutoSize = true;
             label2.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             label2.ForeColor = SystemColors.ControlLightLight;
-            label2.Location = new Point(108, 52);
+            label2.Location = new Point(94, 39);
             label2.Name = "label2";
-            label2.Size = new Size(209, 29);
+            label2.Size = new Size(171, 24);
             label2.TabIndex = 9;
             label2.Text = "Сортировать по";
             // 
@@ -201,18 +194,18 @@
             label3.AutoSize = true;
             label3.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             label3.ForeColor = SystemColors.ControlLightLight;
-            label3.Location = new Point(584, 52);
+            label3.Location = new Point(511, 39);
             label3.Name = "label3";
-            label3.Size = new Size(209, 29);
+            label3.Size = new Size(171, 24);
             label3.TabIndex = 10;
             label3.Text = "Сортировать по";
             // 
             // StatisticsForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(99, 58, 52);
-            ClientSize = new Size(914, 600);
+            ClientSize = new Size(800, 450);
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(SortClientsByMoney);
@@ -225,7 +218,6 @@
             Controls.Add(dataGridView2);
             Controls.Add(dataGridView1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
-            Margin = new Padding(3, 4, 3, 4);
             Name = "StatisticsForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "StatisticsForm";
