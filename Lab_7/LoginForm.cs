@@ -6,13 +6,10 @@ namespace Lab_7
 {
     public partial class LoginForm : Form
     {
+        public BusinessLogic Logic = new BusinessLogic();
         private string verificationCode;
         private bool loadingCanceled;
-
-        /// <summary>
-        /// Экземпляр бизнес-логики всего приложения.
-        /// </summary>
-        public BusinessLogic Logic = new BusinessLogic();
+        
 
         /// <summary>
         /// Инициализирует компоненты LoginForm, подписывается на переключение между
@@ -21,7 +18,7 @@ namespace Lab_7
         public LoginForm()
         {
             InitializeComponent();
-            Task.Run(() => Logic.LoadClientsAsync());
+            Task.Run(async () => await Logic.ReadAsync());
 
             // По умолчанию выбираем «Сотрудник»
             radioEmployee.Checked = true;
@@ -267,7 +264,7 @@ namespace Lab_7
 
                     if (!loadingCanceled)
                     {
-                        await Logic.LoadDishesAsync();
+                        //await Logic.LoadDishesAsync();
                         // Передаём сотрудника (приведём к Client?)
                         // Здесь для «сотрудников» MainForm умеет принимать Human,
                         // но сигнатура ShowMainForm сейчас настроена только на Client.
@@ -292,12 +289,9 @@ namespace Lab_7
                 progressBar.Visible = true;
                 buttonCancel.Visible = true;
                 loadingCanceled = false;
+
                 await LoadDataAsync();
                 if (loadingCanceled) return;
-
-                // 1) Загружаем список клиентов, если ещё не загружен
-                if (Logic.Clients.Count == 0)
-                    await Logic.LoadClientsAsync();
 
                 // 2) Достаём цифры из маски и ищем клиента
                 string phoneDigits = new string(maskedTextBoxPhone.Text.Where(char.IsDigit).ToArray());
@@ -306,8 +300,6 @@ namespace Lab_7
                 Client clientToShow;
                 if (existingClient == null)
                 {
-                    await Logic.LoadDishesAsync();
-
                     // 3) Если клиента нет — создаём нового
                     clientToShow = new Client
                     {
@@ -320,7 +312,7 @@ namespace Lab_7
 
                     Logic.Clients.Add(clientToShow);
                     // 4) Сохраняем сразу же в JSON
-                    await Logic.SaveClientsAsync();
+                    await Logic.WriteAsync();
                 }
                 else
                 {

@@ -21,6 +21,7 @@ namespace Lab_7
             Role = role;
             Client = client;
             Logic = logic;
+
             LoadRoleInterfaceAsync();
         }
 
@@ -41,8 +42,8 @@ namespace Lab_7
                         {
                             Dock = DockStyle.Fill
                         };
-                        this.Controls.Clear();
-                        this.Controls.Add(clientControl);
+                        Controls.Clear();
+                        Controls.Add(clientControl);
                         await clientControl.InitializeAsync();
                     }
                     break;

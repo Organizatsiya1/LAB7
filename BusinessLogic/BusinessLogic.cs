@@ -10,50 +10,38 @@ namespace Logic
         private int WorkersID = 1;
 
         private readonly DataConverter converter = new DataConverter();
-        private const string ClientsFileName = "DataClients.json";
-        private const string DishesFileName = "DataDishes.json";
 
         public List<Client> Clients { get; private set; } = new List<Client>();
         public List<Food> Dishes { get; private set; } = new List<Food>();
+        public List<Order> AllOrders { get; private set; } = new List<Order>();
 
-        /// <summary>
-        /// Загружает клиентов из файла (вызывается при старте формы)
-        /// </summary>
-        public async Task LoadClientsAsync()
-        {
-            Clients = await converter.ReadClientsAsync(ClientsFileName);
-        }
-
-        /// <summary>
-        /// Сохраняет текущих клиентов в файл (вызывается после добавления/изменения)
-        /// </summary>
-        public async Task SaveClientsAsync()
-        {
-            await converter.WriteClientsAsync(Clients, ClientsFileName);
-        }
-
-        /// <summary>
-        /// Загружает клиентов из файла (вызывается при старте формы)
-        /// </summary>
-        public async Task LoadDishesAsync()
-        {
-            Dishes = await converter.ReadDishesAsync(DishesFileName);
-        }
-
-
-
-        // Список всех заказов, созданных в системе.
-        public List<Order> AllOrders { get; } = new List<Order>();
-
-        // Статический список всех сотрудников (Waiter, Chef, Admin, Courier).
+        /// <summary>Статический список всех сотрудников (Waiter, Chef, Admin, Courier).</summary>
         public static List<Human> Workers = new List<Human>()
         {
-            new Waiter { Id = 1, Name = "Анна", Login = "anna", Password = "1234" },
-            new Chef   { Id = 2, Name = "Борис", Login = "boris", Password = "chefpass" },
-            new Admin  { Id = 3, Name = "Админ", Login = "admin", Password = "adminpass" },
-            new Courier{ Id = 4, Name = "Пётр", Login = "petya", Password = "cour123" }
+            new Waiter  { Id = 1, Name = "Анна",  Login = "anna", Password = "1234"    },
+            new Chef    { Id = 2, Name = "Борис", Login = "boris", Password = "chefpass"},
+            new Admin   { Id = 3, Name = "Админ", Login = "admin", Password = "adminpass"},
+            new Courier { Id = 4, Name = "Пётр",  Login = "petya", Password = "cour123" }
         };
 
+        /// <summary> 
+        /// Загружает из файлов клиентов, блюда и заказы 
+        /// </summary>
+        public async Task ReadAsync()
+        {
+            Clients = await converter.ReadClientsAsync();
+            Dishes = await converter.ReadDishesAsync();
+            AllOrders = await converter.ReadOrdersAsync();
+        }
+
+        /// <summary> 
+        /// Сохраняет в файлы клиентов, блюда (по необходимости) и заказы 
+        /// </summary>
+        public async Task WriteAsync()
+        {
+            await converter.WriteClientsAsync(Clients);
+            await converter.WriteOrdersAsync(AllOrders);
+        }
 
         /// <summary>
         /// Возвращает список блюд, название которых содержит переданную подстроку
@@ -107,7 +95,10 @@ namespace Logic
         /// <param name="deliveryAdress"> Адрес доставки (если isDelivery = true) </param>
         /// <param name="courierId"> ID курьера (если доставка).</param>
         /// <returns> Созданный объект заказа или доставки заказа, либо null при ошибке входных данных </returns>
-        public Order CreateOrderForClient(
+        /// <summary>
+        /// Создаёт новый заказ, добавляет в AllOrders и сразу сохраняет в файл
+        /// </summary>
+        public async Task<Order> CreateOrderForClientAsync(
             Client client,
             List<Food> cartFoods,
             int tableID,
@@ -117,16 +108,18 @@ namespace Logic
             Adress deliveryAdress = null,
             int courierId = 0)
         {
-            if (client == null || cartFoods == null || cartFoods.Count == 0)
+            if (client == null || cartFoods.Count == 0)
                 return null;
 
-            Order newOrder;
-            if (isDelivery)
-            {
-                var dOrder = new DeliveredOrder
+            // Сгенерируем новый Id по текущему файлу
+            int newId = AllOrders.Any() ? AllOrders.Max(o => o.Id) + 1 : 1;
+
+            Order newOrder = isDelivery
+                ? new DeliveredOrder
                 {
-                    Id = OrdersID,
+                    Id = newId,
                     Foods = cartFoods.ToList(),
+                    Date = DateTime.Now,
                     IsDelivered = false,
                     IsPayed = false,
                     TableID = 0,
@@ -135,16 +128,12 @@ namespace Logic
                     Behavior = OrderBehavior.IsCoocking,
                     CourierId = courierId,
                     DeliveryAdress = deliveryAdress
-                };
-                newOrder = dOrder;
-                dOrder.Date = DateTime.Now;
-            }
-            else
-            {
-                newOrder = new Order
+                }
+                : new Order
                 {
-                    Id = OrdersID,
+                    Id = newId,
                     Foods = cartFoods.ToList(),
+                    Date = DateTime.Now,
                     IsDelivered = false,
                     IsPayed = false,
                     TableID = tableID,
@@ -152,16 +141,13 @@ namespace Logic
                     PayementType = payementType,
                     Behavior = OrderBehavior.IsCoocking
                 };
-                newOrder.Date = DateTime.Now;
-            }
 
-            OrdersID++;
             AllOrders.Add(newOrder);
+            client.Orders ??= new List<int>();
+            client.Orders.Add(newId);
 
-            if (client.Orders == null)
-                client.Orders = new List<int>();
-            client.Orders.Add(newOrder.Id);
-
+            // Сохраняем сразу и клиентов (т.к. мы добавили новый order.Id в client.Orders)
+            await WriteAsync();
             return newOrder;
         }
 

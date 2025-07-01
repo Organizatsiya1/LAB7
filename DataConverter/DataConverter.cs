@@ -8,7 +8,9 @@ namespace Logic
 {
     public class DataConverter
     {
+        private const string ClientsFileName = "DataClients.json";
         private const string DishesFileName = "DataDishes.json";
+        private const string OrdersFileName = "DataOrders.json";
         public static string DataBase { get; }
 
         /// <summary>
@@ -30,17 +32,15 @@ namespace Logic
             
         }
 
-
         /// <summary>
         /// Асинхронно записывает упорядоченный по идентификаторам список клиентов в JSON-файл
         /// </summary>
         /// <param name="clients">Список клиентов, который нужно сохранить</param>
-        /// <param name="filename">Путь к JSON-файлу для записи (создается или перезаписывается) </param>
         /// <returns>Задача, представляющая асинхронную операцию записи</returns>
-        public async Task WriteClientsAsync(List<Client> clients, string filename)
+        public async Task WriteClientsAsync(List<Client> clients)
         {
 
-            string fullPath = Path.Combine(DataBase, filename);
+            string fullPath = Path.Combine(DataBase, ClientsFileName);
 
             // Обрабатываем ситуацию, если каталог вдруг исчез:
             Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
@@ -72,11 +72,10 @@ namespace Logic
         /// <summary>
         /// Асинхронно читает из JSON-файла список КЛИЕНТОВ
         /// </summary>
-        /// <param name="filename">Путь к JSON-файлу для чтения</param>
         /// <returns>Задача, результатом которой является список клиентов (или пустой список если файл не найден)</returns>
-        public async Task<List<Client>> ReadClientsAsync(string filename)
+        public async Task<List<Client>> ReadClientsAsync()
         {
-            string fullPath = Path.Combine(DataBase, filename);
+            string fullPath = Path.Combine(DataBase, ClientsFileName);
 
             // Если файла нет — возвращаем пустой список
             if (!File.Exists(fullPath))
@@ -100,11 +99,10 @@ namespace Logic
         /// <summary>
         /// Асинхронно читает из JSON-файла данные о БЛЮДЕ
         /// </summary>
-        /// <param name="filename">Путь к JSON-файлу для чтения</param>
         /// <returns>Задача, результатом которой является список клиентов (или пустой список если файл не найден)</returns>
-        public async Task<List<Food>> ReadDishesAsync(string filename)
+        public async Task<List<Food>> ReadDishesAsync()
         {
-            string fullPath = Path.Combine(DataBase, filename);
+            string fullPath = Path.Combine(DataBase, DishesFileName);
 
             // Если файла нет — возвращаем пустой список
             if (!File.Exists(fullPath))
@@ -148,32 +146,30 @@ namespace Logic
             }
         }
 
-        ///// <summary>
-        ///// Асинхронно должен записывать данные о БЛЮДАХ в файл с применением фильтрации и группировки
-        ///// </summary>
-        ///// <param name="foods">Список блюд для записи</param>
-        ///// <param name="filename">Путь к файлу для сохранения</param>
-        //async void WriteFood(List<Food> foods, string filename)
-        //{
-        //    FileInfo fileinfo = new FileInfo(filename);
-        //    FileStream stream = fileinfo.Create();
-        //    //тут применяются методы на фильтрацию, и группировку блюд из условия
-        //    stream.Write(Encoding.UTF8.GetBytes($"\n"));
+        /// <summary>
+        /// Асинхронно читает список заказов из JSON
+        /// </summary>
+        public async Task<List<Order>> ReadOrdersAsync()
+        {
+            string fullPath = Path.Combine(DataBase, OrdersFileName);
+            if (!File.Exists(fullPath)) return new List<Order>();
 
-        //}
+            using var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true);
+            var orders = await JsonSerializer.DeserializeAsync<List<Order>>(stream);
+            return orders ?? new List<Order>();
+        }
 
-        ///// <summary>
-        ///// Асинхронно должен записывать данные о ЗАКАЗАХ в файл с применением фильтрации и группировки
-        ///// </summary>
-        ///// <param name="orders">Список заказов для записи</param>
-        ///// <param name="filename">Путь к файлу для сохранения</param>
-        //async void WriteOrders(List<Order> orders, string filename)
-        //{
-        //    FileInfo fileinfo = new FileInfo(filename);
-        //    FileStream stream = fileinfo.Create();
-        //    //тут применяются методы на фильтрацию, и группировку заказов из условия
-        //    stream.Write(Encoding.UTF8.GetBytes($"\n"));
+        /// <summary>
+        /// Асинхронно записывает список заказов в JSON
+        /// </summary>
+        public async Task WriteOrdersAsync(List<Order> orders)
+        {
+            string fullPath = Path.Combine(DataBase, OrdersFileName);
+            Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
 
-        //}
+            var options = new JsonSerializerOptions { WriteIndented = true, Encoder = JavaScriptEncoder.Create(UnicodeRanges.All) };
+            using var stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, useAsync: true);
+            await JsonSerializer.SerializeAsync(stream, orders.OrderBy(o => o.Id).ToList(), options);
+        }
     }
 }

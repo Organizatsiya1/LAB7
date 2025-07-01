@@ -15,7 +15,6 @@ namespace Lab_7
         public ProfileForm(Client client, BusinessLogic logic)
         {
             InitializeComponent();
-
             User = client;
             Logic = logic;
 
@@ -56,11 +55,8 @@ namespace Lab_7
         /// <param name="e">Аргументы события</param>
         private async void SaveProfile_Click(object sender, EventArgs e)
         {
-            User.Name = NameBox.Text;
-
-            // вытаскиваем только цифры
-            var digits = new string(PhoneBox.Text.Where(char.IsDigit).ToArray());
-            User.PhoneNumber = digits;
+            User.Name = NameBox.Text.Trim();
+            User.PhoneNumber = new string(PhoneBox.Text.Where(char.IsDigit).ToArray());
 
             if (int.TryParse(IDBox.Text, out int newId))
                 User.Id = newId;
@@ -77,7 +73,7 @@ namespace Lab_7
             if (int.TryParse(FlatBox.Text, out int fn))
                 User.Adress.FlatNumb = fn;
 
-            await Logic.SaveClientsAsync();
+            await Logic.WriteAsync();
 
             MessageBox.Show("Профиль сохранён!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }

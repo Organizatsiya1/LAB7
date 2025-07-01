@@ -19,21 +19,13 @@ namespace Lab_7
         public ClientControl(Client clientFromLogin, BusinessLogic logic)
         {
             InitializeComponent();
-
             currentClient = clientFromLogin;
             Logic = logic;
-
-            // Заполняем ListView блюдами
-            PopulateMenu(allFoods);
-
-            // Счетчик «Итого» = 0
-            UpdateTotalPrice();
         }
 
         public async Task InitializeAsync()
         {
-            await Logic.LoadDishesAsync();
-            allFoods = Logic.Dishes;
+            allFoods = Logic.Dishes.ToList();
             PopulateMenu(allFoods);
             UpdateTotalPrice();
         }
@@ -46,11 +38,6 @@ namespace Lab_7
         {
             listViewClientMenu.Items.Clear();
             imageListDishes.Images.Clear(); // Очищаем предыдущие изображения
-
-            // Настройка списка изображений
-            
-            
-
 
             foreach (var food in foods)
             {
@@ -66,8 +53,8 @@ namespace Lab_7
                 // Создаем элемент списка
                 var item = new ListViewItem(new[]
                 {
-                food.Name,
-                food.Cost.ToString("C0")
+                    food.Name,
+                    food.Cost.ToString("C0")
                 })
                 {
                     Tag = food,
@@ -240,10 +227,10 @@ namespace Lab_7
             currentForm.Close();
         }
 
-        private void buttonFormClientOrder_Click(object sender, EventArgs e)
+        private async void buttonFormClientOrder_Click(object sender, EventArgs e)
         {
             // 1) Создаём заказ в логике. Клиент всегда самовывоз (tableID = 0), оплата — наличные (пример).
-            var newOrder = Logic.CreateOrderForClient(
+            var newOrder = await Logic.CreateOrderForClientAsync(
                 currentClient,
                 cartFoods,
                 tableID: 0,

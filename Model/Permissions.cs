@@ -24,8 +24,6 @@ namespace Logic
         GiveBonus = 1024,
         ViewStats = 2048,
         All = MarkPayed|MarkDelivered|MarkReady|MarkGiven|BookTable|MakeOrder|MarkCoockedFood|Register|ShowInfo|GiveBonus|ViewStats
-
-
     }
 
 }
