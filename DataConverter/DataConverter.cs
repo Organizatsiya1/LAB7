@@ -2,6 +2,7 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
+using System.Drawing;
 
 namespace Logic
 {
@@ -26,32 +27,7 @@ namespace Logic
             Directory.CreateDirectory(Path.Combine(DataBase, "Images"));
 
             string dishesPath = Path.Combine(DataBase, DishesFileName);
-            if (!File.Exists(dishesPath))
-            {
-                var defaultDishes = new List<Food>
-                {
-                    new Food {
-                        Id = 1,
-                        Name = "Брускетта с помидорами",
-                        Description = "Классическая итальянская закуска",
-                        Weight = 120,
-                        CoockingTime = 5,
-                        Cost = 150,
-                        Priority = FoodCategory.Entree,
-                        Formula = new List<string> { "Хлеб", "Томаты", "Оливковое масло", "Базилик" },
-                        PhotoFile = "bruschetta.jpg"
-                    },
-                    // … ваш оставшийся набор блюд …
-                };
-
-                var options = new JsonSerializerOptions
-                {
-                    WriteIndented = true,
-                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
-                };
-                using var fs = new FileStream(dishesPath, FileMode.CreateNew, FileAccess.Write, FileShare.None);
-                JsonSerializer.Serialize(fs, defaultDishes, options);
-            }
+            
         }
 
 
@@ -147,6 +123,29 @@ namespace Logic
 
             // Если файл был пустой или испорченный — защитимся от null
             return dishes ?? new List<Food>();
+        }
+
+        public static Image LoadFoodImage(string imageName)
+        {
+            if (string.IsNullOrEmpty(imageName))
+                return null;
+
+            string imagesDir = Path.Combine(DataBase, "Images");
+            string fullPath = Path.Combine(imagesDir, imageName);
+
+            if (!File.Exists(fullPath))
+                return null; // Вернем null, обработка будет в UI
+
+            try
+            {
+                // Загрузка без блокировки файла
+                using var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
+                return Image.FromStream(stream);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         ///// <summary>

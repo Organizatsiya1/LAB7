@@ -40,6 +40,8 @@ namespace Logic
             Dishes = await converter.ReadDishesAsync(DishesFileName);
         }
 
+
+
         // Список всех заказов, созданных в системе.
         public List<Order> AllOrders { get; } = new List<Order>();
 
@@ -360,9 +362,8 @@ namespace Logic
         /// </summary>
         /// <param name="foods">Список Food, который нужно сгруппировать</param>
         /// <param name="groupedFoods">Сюда складываем результат</param>
-        public void GroupFoods(List<Food> foods, List<GroupedFood> groupedFoods)
+        public void GroupFoods(List<Order> orders, List<GroupedFood> groupedFoods)
         {
-
         }
     }
 }

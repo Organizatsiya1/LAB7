@@ -45,24 +45,43 @@ namespace Lab_7
         private void PopulateMenu(List<Food> foods)
         {
             listViewClientMenu.Items.Clear();
+            imageListDishes.Images.Clear(); // Очищаем предыдущие изображения
+
+            // Настройка списка изображений
+            
+            
+
 
             foreach (var food in foods)
             {
+                // Загружаем изображение
+                Image foodImage = DataConverter.LoadFoodImage(food.PhotoFile);
+
+                // Добавляем изображение в список
+                if (foodImage != null)
+                {
+                    imageListDishes.Images.Add(food.Id.ToString(), foodImage);
+                }
+
+                // Создаем элемент списка
                 var item = new ListViewItem(new[]
                 {
-                    food.Name,
-                    food.Cost.ToString(),
-                    "" // здесь можно добавить путь к картинке
-                });
-                item.Tag = food;
+                food.Name,
+                food.Cost.ToString("C0")
+                })
+                {
+                    Tag = food,
+                    ImageKey = food.Id.ToString()
+                };
 
+                // Назначение группы по категории
                 switch (food.Priority)
                 {
                     case FoodCategory.Aperitif:
-                        item.Group = listViewClientMenu.Groups["Приветственный напиток"];
+                        item.Group = listViewClientMenu.Groups["Аперитив"];
                         break;
                     case FoodCategory.Entree:
-                        item.Group = listViewClientMenu.Groups["Закуска"];
+                        item.Group = listViewClientMenu.Groups["Антре"];
                         break;
                     case FoodCategory.MainCourse:
                         item.Group = listViewClientMenu.Groups["Основное блюдо"];
@@ -118,7 +137,6 @@ namespace Lab_7
                     RefreshCartListView();
                     UpdateTotalPrice();
                 }
-                // Если вернулся без OK — просто закрыли окно деталей
             }
         }
 

@@ -19,7 +19,7 @@ namespace Lab_7
 
             labelName.Text = food.Name;
             labelDescription.Text = food.Description;
-            textBoxDescription.Text = $"{string.Join(", ", food.Formula)}";
+            labelFormula.Text = $"{string.Join(", ", food.Formula)}";
             labelWeight.Text = $"{food.Weight} г";
             labelCost.Text = $"{food.Cost} руб.";
 
