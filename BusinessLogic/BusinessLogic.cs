@@ -439,5 +439,34 @@ namespace Logic
         {
             groupedFoods.OrderBy(x => x.Name);
         }
+        public void Group_Clients(List<Client> clients, List<GroupedClient> grouped)
+        {
+             grouped = clients
+                .Select(client => new GroupedClient()
+                {
+                    Id = client.Id,
+                    Name = client.Name,
+                    Orders = client.Orders,
+                    Spent = AllOrders
+                        .Where(order => client.Orders.Contains(order.Id))
+                        .Sum(order => order.Cost)
+                }).ToList();
+        }
+        public void Sort_By_ClientID(List<GroupedClient> grouped)
+        {
+            grouped.OrderBy(x=>x.Id);
+        }
+        public void Sort_By_ClientName(List<GroupedClient> grouped)
+        {
+            grouped.OrderBy(x => x.Name);
+        }
+        public void Sort_By_ClientOrders(List<GroupedClient> grouped)
+        {
+            grouped.OrderByDescending(x => x.Orders.Count);
+        }
+        public void Sort_By_ClientSpent(List<GroupedClient> grouped)
+        {
+            grouped.OrderByDescending(x => x.Spent);
+        }
     }
 }

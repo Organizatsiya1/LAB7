@@ -150,6 +150,7 @@
             SortClientsByID.TabIndex = 5;
             SortClientsByID.Text = "ID";
             SortClientsByID.UseVisualStyleBackColor = true;
+            SortClientsByID.Click += SortClientsByID_Click;
             // 
             // SortClientsByName
             // 
@@ -159,6 +160,7 @@
             SortClientsByName.TabIndex = 6;
             SortClientsByName.Text = "Имени";
             SortClientsByName.UseVisualStyleBackColor = true;
+            SortClientsByName.Click += SortClientsByName_Click;
             // 
             // SortClientsByOrders
             // 
@@ -168,6 +170,7 @@
             SortClientsByOrders.TabIndex = 7;
             SortClientsByOrders.Text = "Заказам";
             SortClientsByOrders.UseVisualStyleBackColor = true;
+            SortClientsByOrders.Click += SortClientsByOrders_Click;
             // 
             // SortClientsByMoney
             // 
@@ -177,6 +180,7 @@
             SortClientsByMoney.TabIndex = 8;
             SortClientsByMoney.Text = "Потраченным";
             SortClientsByMoney.UseVisualStyleBackColor = true;
+            SortClientsByMoney.Click += SortClientsByMoney_Click;
             // 
             // label2
             // 
