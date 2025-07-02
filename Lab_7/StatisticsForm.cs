@@ -1,35 +1,42 @@
-п»їusing Logic;
+using Logic;
 using Model;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Lab_7
 {
     public partial class StatisticsForm : Form
     {
-        BusinessLogic BusinessLogic { get; set; }
+        private BusinessLogic Logic;
+        private List<Order> AllOrders;
         List<GroupedFood> foods = new List<GroupedFood>();
         List<GroupedClient> clients = new List<GroupedClient>();
-        public StatisticsForm()
+
+        public StatisticsForm(BusinessLogic logic)
         {
             InitializeComponent();
+            Logic = logic;
 
-            BusinessLogic.GroupFoods(BusinessLogic.AllOrders, foods);
-            BusinessLogic.Group_Clients(BusinessLogic.Clients, clients);
+            // Показываем общее количество заказов сверху
+            labelAllOrders.Text = $"Всего заказов: {Logic.AllOrders?.Count ?? 0}";
+
+            Logic.GroupFoods(Logic.AllOrders, foods);
+            Logic.GroupClients(Logic.Clients, clients);
+            RefreshFoodGrid();
+            RefreshClientGrid();
+        }
+
+        private void RefreshFoodGrid()
+        {
             dataGridView2.Rows.Clear();
-            dataGridView1.Rows.Clear();
-            foreach (GroupedFood food in foods)
+            foreach (var food in foods)
             {
-                dataGridView2.Rows.Add(food.Name, food.Count);
+                dataGridView2.Rows.Add(food.Name, food.Category, food.Count);
             }
-            foreach (GroupedClient client in clients)
+        }
+
+        private void RefreshClientGrid()
+        {
+            dataGridView1.Rows.Clear();
+            foreach (var client in clients)
             {
                 dataGridView1.Rows.Add(client.Id, client.Name, client.Orders.Count, client.Spent);
             }
@@ -37,61 +44,70 @@ namespace Lab_7
 
         private void SortFoodByName_Click(object sender, EventArgs e)
         {
-            BusinessLogic.Sort_By_FoodName(foods);
-            dataGridView2.Rows.Clear();
-            foreach (GroupedFood food in foods)
-            {
-                dataGridView2.Rows.Add(food.Name, food.Count);
-            }
+            Logic.SortByFoodName(foods);
+            RefreshFoodGrid();
+        }
+
+        private void SortFoodByType_Click(object sender, EventArgs e)
+        {
+            Logic.SortByFoodType(foods);
+            RefreshFoodGrid();
         }
 
         private void SortFoodByNumber_Click(object sender, EventArgs e)
         {
-            BusinessLogic.Sort_By_FoodCount(foods);
-            dataGridView2.Rows.Clear();
-            foreach (GroupedFood food in foods)
-            {
-                dataGridView2.Rows.Add(food.Name, food.Count);
-            }
+            Logic.SortByFoodCount(foods);
+            RefreshFoodGrid();
         }
 
         private void SortClientsByID_Click(object sender, EventArgs e)
         {
-            BusinessLogic.Sort_By_ClientID(clients);
-            dataGridView1.Rows.Clear();
-            foreach (GroupedClient client in clients)
-            {
-                dataGridView1.Rows.Add(client.Id, client.Name, client.Orders.Count, client.Spent);
-            }
+            Logic.SortByClientID(clients);
+            RefreshClientGrid();
         }
 
         private void SortClientsByName_Click(object sender, EventArgs e)
         {
-            BusinessLogic.Sort_By_ClientName(clients);
-            dataGridView1.Rows.Clear();
-            foreach (GroupedClient client in clients)
-            {
-                dataGridView1.Rows.Add(client.Id, client.Name, client.Orders.Count, client.Spent);
-            }
+            Logic.SortByClientName(clients);
+            RefreshClientGrid();
         }
 
         private void SortClientsByOrders_Click(object sender, EventArgs e)
         {
-            BusinessLogic.Sort_By_ClientOrders(clients);
-            dataGridView1.Rows.Clear();
-            foreach (GroupedClient client in clients)
-            {
-                dataGridView1.Rows.Add(client.Id, client.Name, client.Orders.Count, client.Spent);
-            }
+            Logic.SortByClientOrders(clients);
+            RefreshClientGrid();
         }
 
         private void SortClientsByMoney_Click(object sender, EventArgs e)
         {
-            BusinessLogic.Sort_By_ClientSpent(clients);
-            dataGridView1.Rows.Clear();
-            foreach (GroupedClient client in clients)
+            Logic.SortByClientSpent(clients);
+            RefreshClientGrid();
+        }
+
+        private void buttonFilterByDate_Click(object sender, EventArgs e)
+        {
+            var filtered = Logic.GetOrdersByDateRange(
+                dateTimePickerFrom.Value,
+                dateTimePickerTo.Value);
+
+            foods.Clear();
+            Logic.GroupFoods(filtered, foods);
+            RefreshFoodGrid();
+        }
+
+
+        private void comboBoxFoodCategory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedCategory = comboBoxFoodCategory.SelectedItem.ToString();
+
+            foreach (DataGridViewRow row in dataGridView2.Rows)
             {
-                dataGridView1.Rows.Add(client.Id, client.Name, client.Orders.Count, client.Spent);
+                if (row.IsNewRow) continue;
+
+                string type = row.Cells["TypeDishes"].Value?.ToString();
+
+                // Показываем всё — если выбрано "Все"
+                row.Visible = selectedCategory == "Все" || type == selectedCategory;
             }
         }
     }

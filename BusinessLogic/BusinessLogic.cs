@@ -4,115 +4,37 @@ namespace Logic
 {
     public class BusinessLogic
     {
-        private Human FixedUser { get; set; }
+        public Human FixedUser { get; set; }
         private UserStatus Status { get; set; }
         private int OrdersID = 1;
-        private int WorkersID = 1;
 
         private readonly DataConverter converter = new DataConverter();
-        private const string ClientsFileName = "DataClients.json";
 
         public List<Client> Clients { get; private set; } = new List<Client>();
+        public List<Food> Dishes { get; private set; } = new List<Food>();
+        public List<Order> AllOrders { get; private set; } = new List<Order>();
+        public List<Human> Workers { get; private set; } = new List<Human>();
 
-        /// <summary>
-        /// Загружает клиентов из файла (вызывается при старте формы)
+        /// <summary> 
+        /// Загружает из файлов клиентов, блюда и заказы 
         /// </summary>
-        public async Task LoadClientsAsync()
+        public async Task ReadAsync()
         {
-            Clients = await converter.ReadClientsAsync(ClientsFileName);
+            Clients = await converter.ReadClientsAsync();
+            Dishes = await converter.ReadDishesAsync();
+            AllOrders = await converter.ReadOrdersAsync();
+            Workers = await converter.ReadWorkersAsync();
         }
 
-        /// <summary>
-        /// Сохраняет текущих клиентов в файл (вызывается после добавления/изменения)
+        /// <summary> 
+        /// Сохраняет в файлы клиентов, блюда (по необходимости) и заказы 
         /// </summary>
-        public async Task SaveClientsAsync()
+        public async Task WriteAsync()
         {
-            await converter.WriteClientsAsync(Clients, ClientsFileName);
+            await converter.WriteClientsAsync(Clients);
+            await converter.WriteOrdersAsync(AllOrders);
+            await converter.WriteWorkersAsync(Workers);
         }
-
-        // Статический список всех блюд (меню) в системе.
-        public static List<Food> Foods { get; private set; } = new List<Food>();
-
-        // Список всех заказов, созданных в системе.
-        public List<Order> AllOrders { get; } = new List<Order>();
-
-        // Статический список всех сотрудников (Waiter, Chef, Admin, Courier).
-        public static List<Human> Workers = new List<Human>()
-        {
-            new Waiter { Id = 1, Name = "Анна", Login = "anna", Password = "1234" },
-            new Chef   { Id = 2, Name = "Борис", Login = "boris", Password = "chefpass" },
-            new Admin  { Id = 3, Name = "Админ", Login = "admin", Password = "adminpass" },
-            new Courier{ Id = 4, Name = "Пётр", Login = "petya", Password = "cour123" }
-        };
-
-        #region Menu
-
-        /// <summary>
-        /// Загрузка меню (Food) из какого-то источника (пока для наглядности)
-        /// </summary>
-        public void LoadFoods()
-        {
-            Foods = new List<Food>()
-            {
-                new Food
-                {
-                    Id = 1,
-                    Name = "Брускетта с помидорами",
-                    Description = "Классическая итальянская закуска",
-                    Weight = 120,
-                    CoockingTime = 5,
-                    Cost = 150,
-                    Priority = FoodCategory.Entree,
-                    Formula = new List<string> { "Хлеб", "Томаты", "Оливковое масло", "Базилик" }
-                },
-                new Food
-                {
-                    Id = 2,
-                    Name = "Томатный суп",
-                    Description = "Тёплый суп с ароматом базилика",
-                    Weight = 350,
-                    CoockingTime = 10,
-                    Cost = 200,
-                    Priority = FoodCategory.MainCourse,
-                    Formula = new List<string> { "Томаты", "Лук", "Чеснок", "Базилик" }
-                },
-                new Food
-                {
-                    Id = 3,
-                    Name = "Стейк из говядины",
-                    Description = "Стейк средней прожарки с соусом",
-                    Weight = 250,
-                    CoockingTime = 15,
-                    Cost = 450,
-                    Priority = FoodCategory.Entremets,
-                    Formula = new List<string> { "Говядина", "Соль", "Перец", "Соус" }
-                },
-                new Food
-                {
-                    Id = 4,
-                    Name = "Чизкейк",
-                    Description = "Классический чизкейк с ягодным соусом",
-                    Weight = 100,
-                    CoockingTime = 20,
-                    Cost = 250,
-                    Priority = FoodCategory.Desserts,
-                    Formula = new List<string> { "Сыр", "Печенье", "Сахар", "Ягоды" }
-                },
-                new Food
-                {
-                    Id = 5,
-                    Name = "Кола",
-                    Description = "Охлаждающий напиток",
-                    Weight = 330,
-                    CoockingTime = 0,
-                    Cost = 100,
-                    Priority = FoodCategory.Digestif,
-                    Formula = new List<string> { "Вода", "Сахар", "Газ" }
-                }
-            };
-        }
-
-        #endregion
 
         /// <summary>
         /// Возвращает список блюд, название которых содержит переданную подстроку
@@ -122,10 +44,10 @@ namespace Logic
         public List<Food> GetFoodsByFilter(string nameContains)
         {
             if (string.IsNullOrWhiteSpace(nameContains))
-                return Foods.ToList();
+                return Dishes.ToList();
 
             string filter = nameContains.Trim().ToLower();
-            return Foods
+            return Dishes
                 .Where(f => f.Name.ToLower().Contains(filter))
                 .ToList();
         }
@@ -166,7 +88,10 @@ namespace Logic
         /// <param name="deliveryAdress"> Адрес доставки (если isDelivery = true) </param>
         /// <param name="courierId"> ID курьера (если доставка).</param>
         /// <returns> Созданный объект заказа или доставки заказа, либо null при ошибке входных данных </returns>
-        public Order CreateOrderForClient(
+        /// <summary>
+        /// Создаёт новый заказ, добавляет в AllOrders и сразу сохраняет в файл
+        /// </summary>
+        public async Task<Order> CreateOrderForClientAsync(
             Client client,
             List<OrderedFood> cartFoods,
             int tableID,
@@ -176,16 +101,18 @@ namespace Logic
             Adress deliveryAdress = null,
             int courierId = 0)
         {
-            if (client == null || cartFoods == null || cartFoods.Count == 0)
+            if (client == null || cartFoods.Count == 0)
                 return null;
 
-            Order newOrder;
-            if (isDelivery)
-            {
-                var dOrder = new DeliveredOrder
+            // Сгенерируем новый Id по текущему файлу
+            int newId = AllOrders.Any() ? AllOrders.Max(o => o.Id) + 1 : 1;
+
+            Order newOrder = isDelivery
+                ? new DeliveredOrder
                 {
-                    Id = OrdersID,
+                    Id = newId,
                     Foods = cartFoods.ToList(),
+                    Date = DateTime.Now,
                     IsDelivered = false,
                     IsPayed = false,
                     TableID = 0,
@@ -194,16 +121,12 @@ namespace Logic
                     Behavior = OrderBehavior.IsCoocking,
                     CourierId = courierId,
                     DeliveryAdress = deliveryAdress
-                };
-                newOrder = dOrder;
-                dOrder.Date = DateTime.Now;
-            }
-            else
-            {
-                newOrder = new Order
+                }
+                : new Order
                 {
-                    Id = OrdersID,
+                    Id = newId,
                     Foods = cartFoods.ToList(),
+                    Date = DateTime.Now,
                     IsDelivered = false,
                     IsPayed = false,
                     TableID = tableID,
@@ -211,15 +134,13 @@ namespace Logic
                     PayementType = payementType,
                     Behavior = OrderBehavior.IsCoocking
                 };
-                newOrder.Date = DateTime.Now;
-            }
 
-            
+            AllOrders.Add(newOrder);
+            client.Orders ??= new List<int>();
+            client.Orders.Add(newId);
 
-            if (client.Orders == null)
-                client.Orders = new List<int>();
-            client.Orders.Add(newOrder.Id);
-
+            // Сохраняем сразу и клиентов (т.к. мы добавили новый order.Id в client.Orders)
+            await WriteAsync();
             return newOrder;
         }
 
@@ -340,50 +261,19 @@ namespace Logic
         /// <param name="name">Имя нового сотрудника</param>
         /// <param name="status">Роль сотрудника</param>
         /// <param name="phone">Телефон (используется для формирования логина)</param>
-        public void RegistrateWorker(string name, UserStatus status, string phone)
+        public async Task RegistrateWorkerAsync(string name, UserStatus status)
         {
-            if (status == UserStatus.Admin)
+            int newId = Workers.Any() ? Workers.Max(w => w.Id) + 1 : 1;
+            Human worker = status switch
             {
-                Workers.Add(new Admin
-                {
-                    Id = WorkersID,
-                    Login = name + phone,
-                    Password = GeneratePassword(),
-                    Name = name
-                });
-            }
-            else if (status == UserStatus.Chef)
-            {
-                Workers.Add(new Chef
-                {
-                    Id = WorkersID,
-                    Login = name + phone,
-                    Password = GeneratePassword(),
-                    Name = name
-                });
-            }
-            else if (status == UserStatus.Waiter)
-            {
-                Workers.Add(new Waiter
-                {
-                    Id = WorkersID,
-                    Login = name + phone,
-                    Password = GeneratePassword(),
-                    Name = name
-                });
-            }
-            else if (status == UserStatus.Courier)
-            {
-                Workers.Add(new Courier
-                {
-                    Id = WorkersID,
-                    Login = name + phone,
-                    Password = GeneratePassword(),
-                    Name = name
-                });
-            }
-
-            WorkersID++;
+                UserStatus.Admin => new Admin { Id = newId, Name = name, Login = $"{name}_{newId}", Password = GeneratePassword() },
+                UserStatus.Chef => new Chef { Id = newId, Name = name, Login = $"{name}_{newId}", Password = GeneratePassword() },
+                UserStatus.Waiter => new Waiter { Id = newId, Name = name, Login = $"{name}_{newId}", Password = GeneratePassword() },
+                UserStatus.Courier => new Courier { Id = newId, Name = name, Login = $"{name}_{newId}", Password = GeneratePassword() },
+                _ => throw new ArgumentException("Неверный статус")
+            };
+            Workers.Add(worker);
+            await WriteAsync();
         }
 
         /// <summary>
@@ -422,39 +312,79 @@ namespace Logic
         /// <param name="groupedFoods">Сюда складываем результат</param>
         public void GroupFoods(List<Order> orders, List<GroupedFood> groupedFoods)
         {
-            groupedFoods = orders
+            groupedFoods.Clear();
+            var temp = orders
             .SelectMany(order => order.Foods) // "Разворачиваем" все блюда из всех заказов
-            .GroupBy(food => food.Food.Name)       // Группируем по названию блюда
-            .Select(group => new  GroupedFood            // Преобразуем в анонимный тип (или можно создать класс)
-            {
-                Name = group.Key,         // Название блюда
-                Count = group.Count()         // Количество таких блюд
-            }).ToList();   
+            .GroupBy(food => food.Name)       // Группируем по названию блюда
+            .Select(g => {
+                var name = g.Key;
+                // найти в справочном списке блюд:
+                var dish = Dishes.FirstOrDefault(d => d.Name == name);
+                string category = dish?.Priority switch
+                {
+                    FoodCategory.Aperitif => "Аперитив",
+                    FoodCategory.Entree => "Антре",
+                    FoodCategory.MainCourse => "Основное блюдо",
+                    FoodCategory.Entremets => "Антреме",
+                    FoodCategory.Desserts => "Десерт",
+                    FoodCategory.Digestif => "Дижестив"
+                };
+                return new GroupedFood
+                {
+                    Name = name,
+                    Category = category,
+                    Count = g.Count()
+                };
+            }).ToList();
+            groupedFoods.AddRange(temp);
         }
-        /// <summary>
-        /// Сортировка списка блюд по ID
-        /// </summary>
-        /// <param name="groupedFoods">Отсортированый список</param>
-        public void Sort_By_FoodCount(List<GroupedFood> groupedFoods)
-        {
-            groupedFoods.OrderByDescending(x => x.Count);
-        }
+
         /// <summary>
         /// Сортировка списка блюд по названиям
         /// </summary>
         /// <param name="groupedFoods">Отсортированый список</param>
-        public void Sort_By_FoodName(List<GroupedFood> groupedFoods)
+        public void SortByFoodName(List<GroupedFood> groupedFoods)
         {
-            groupedFoods.OrderBy(x => x.Name);
+            if (groupedFoods == null) 
+                return;
+
+            groupedFoods.Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.Ordinal));
         }
+
+        /// <summary>
+        /// Сортировка списка блюд по названиям категорий
+        /// </summary>
+        /// <param name="groupedFoods">Отсортированый список</param>
+        public void SortByFoodType(List<GroupedFood> groupedFoods)
+        {
+            if (groupedFoods == null)
+                return;
+
+            groupedFoods.Sort((a, b) => string.Compare(a.Category, b.Category, StringComparison.CurrentCulture));
+        }
+
+        /// <summary>
+        /// Сортировка списка блюд по ID
+        /// </summary>
+        /// <param name="groupedFoods">Отсортированый список</param>
+        public void SortByFoodCount(List<GroupedFood> groupedFoods)
+        {
+            if (groupedFoods == null) 
+                return;
+
+            // По убыванию, чтобы самые популярные шли первыми
+            groupedFoods.Sort((a, b) => b.Count.CompareTo(a.Count));
+        }
+        
         /// <summary>
         /// Группировка списка клиентов
         /// </summary>
         /// <param name="clients">Группируемый список</param>
         /// <param name="grouped">Сгруппированый список</param>
-        public void Group_Clients(List<Client> clients, List<GroupedClient> grouped)
+        public void GroupClients(List<Client> clients, List<GroupedClient> groupedClients)
         {
-             grouped = clients
+            groupedClients.Clear();
+            var temp = clients
                 .Select(client => new GroupedClient()
                 {
                     Id = client.Id,
@@ -464,38 +394,64 @@ namespace Logic
                         .Where(order => client.Orders.Contains(order.Id))
                         .Sum(order => order.Cost)
                 }).ToList();
+            groupedClients.AddRange(temp);
         }
+
         /// <summary>
         /// Сортировка списка клиентов по ID
         /// </summary>
-        /// <param name="grouped">Отсортированый список</param>
-        public void Sort_By_ClientID(List<GroupedClient> grouped)
+        /// <param name="groupedClients">Отсортированый список</param>
+        public void SortByClientID(List<GroupedClient> groupedClients)
         {
-            grouped.OrderBy(x=>x.Id);
+            if (groupedClients == null) 
+                return;
+
+            groupedClients.Sort((a, b) => a.Id.CompareTo(b.Id));
         }
+
         /// <summary>
         /// Сортировка списка клиентов по именам
         /// </summary>
-        /// <param name="grouped">Отсортированый список</param>
-        public void Sort_By_ClientName(List<GroupedClient> grouped)
+        /// <param name="groupedClients">Отсортированый список</param>
+        public void SortByClientName(List<GroupedClient> groupedClients)
         {
-            grouped.OrderBy(x => x.Name);
+            if (groupedClients == null) 
+                return;
+
+            groupedClients.Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.Ordinal));
         }
+
         /// <summary>
         /// Сортировка списка клиентов по кол-ву заказов
         /// </summary>
-        /// <param name="grouped">Отсортированый список</param>
-        public void Sort_By_ClientOrders(List<GroupedClient> grouped)
+        /// <param name="groupedClients">Отсортированый список</param>
+        public void SortByClientOrders(List<GroupedClient> groupedClients)
         {
-            grouped.OrderByDescending(x => x.Orders.Count);
+            if (groupedClients == null) 
+                return;
+
+            groupedClients.Sort((a, b) => b.Orders.Count.CompareTo(a.Orders.Count));
         }
         /// <summary>
         /// Сортировка списка клиентов по потраченым средствам
         /// </summary>
-        /// <param name="grouped">Отсортированый список</param>
-        public void Sort_By_ClientSpent(List<GroupedClient> grouped)
+        /// <param name="groupedClients">Отсортированый список</param>
+        public void SortByClientSpent(List<GroupedClient> groupedClients)
         {
-            grouped.OrderByDescending(x => x.Spent);
+            if (groupedClients == null) 
+                return;
+
+            groupedClients.Sort((a, b) => b.Spent.CompareTo(a.Spent));
+        }
+
+        /// <summary>
+        /// Возвращает заказы за указанный период (включительно)
+        /// </summary>
+        public List<Order> GetOrdersByDateRange(DateTime from, DateTime to)
+        {
+            return AllOrders
+                .Where(o => o.Date.Date >= from.Date && o.Date.Date <= to.Date)
+                .ToList();
         }
         public void Cook_Food(OrderedFood food) 
         {

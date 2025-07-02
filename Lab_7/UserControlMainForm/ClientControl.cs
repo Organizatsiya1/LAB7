@@ -7,7 +7,7 @@ namespace Lab_7
     public partial class ClientControl : UserControl
     {
         private readonly Client currentClient;      // Текущий клиент
-        private readonly BusinessLogic logic = new BusinessLogic();
+        private readonly BusinessLogic Logic;
         private List<Food> allFoods = new List<Food>();   // Список всех блюд (меню)
         private List<Food> cartFoods = new List<Food>();  // Корзина клиента
 
@@ -16,19 +16,17 @@ namespace Lab_7
         /// Затем загружает меню и подписывает обработчик для кнопки "Профиль"
         /// </summary>
         /// <param name="clientFromLogin">Объект Client, соответствующий вошедшему пользователю</param>
-        public ClientControl(Client clientFromLogin)
+        public ClientControl(Client clientFromLogin, BusinessLogic logic)
         {
             InitializeComponent();
-
             currentClient = clientFromLogin;
+            Logic = logic;
+        }
 
-            // Загружаем меню из статического списка BusinessLogic.Foods
-            allFoods = BusinessLogic.Foods.ToList();
-
-            // Заполняем ListView блюдами
+        public async Task InitializeAsync()
+        {
+            allFoods = Logic.Dishes.ToList();
             PopulateMenu(allFoods);
-
-            // Счетчик «Итого» = 0
             UpdateTotalPrice();
         }
 
@@ -39,24 +37,38 @@ namespace Lab_7
         private void PopulateMenu(List<Food> foods)
         {
             listViewClientMenu.Items.Clear();
+            imageListDishes.Images.Clear(); // Очищаем предыдущие изображения
 
             foreach (var food in foods)
             {
+                // Загружаем изображение
+                Image foodImage = DataConverter.LoadFoodImage(food.PhotoFile);
+
+                // Добавляем изображение в список
+                if (foodImage != null)
+                {
+                    imageListDishes.Images.Add(food.Id.ToString(), foodImage);
+                }
+
+                // Создаем элемент списка
                 var item = new ListViewItem(new[]
                 {
                     food.Name,
-                    food.Cost.ToString(),
-                    "" // здесь можно добавить путь к картинке
-                });
-                item.Tag = food;
+                    food.Cost.ToString("C0")
+                })
+                {
+                    Tag = food,
+                    ImageKey = food.Id.ToString()
+                };
 
+                // Назначение группы по категории
                 switch (food.Priority)
                 {
                     case FoodCategory.Aperitif:
-                        item.Group = listViewClientMenu.Groups["Приветственный напиток"];
+                        item.Group = listViewClientMenu.Groups["Аперитив"];
                         break;
                     case FoodCategory.Entree:
-                        item.Group = listViewClientMenu.Groups["Закуска"];
+                        item.Group = listViewClientMenu.Groups["Антре"];
                         break;
                     case FoodCategory.MainCourse:
                         item.Group = listViewClientMenu.Groups["Основное блюдо"];
@@ -112,7 +124,6 @@ namespace Lab_7
                     RefreshCartListView();
                     UpdateTotalPrice();
                 }
-                // Если вернулся без OK — просто закрыли окно деталей
             }
         }
 
@@ -170,7 +181,7 @@ namespace Lab_7
                 if (currentClient == null)
                     return;
 
-                var order = logic.GetCurrentOrderForClient(currentClient);
+                var order = Logic.GetCurrentOrderForClient(currentClient);
                 if (order == null)
                     return;
 
@@ -191,7 +202,7 @@ namespace Lab_7
         private void buttonClientProfile_Click(object sender, EventArgs e)
         {
             // currentClient гарантированно не null, потому что мы передали его в конструкторе
-            using (var profileForm = new ProfileForm(currentClient))
+            using (var profileForm = new ProfileForm(currentClient, Logic))
             {
                 profileForm.ShowDialog();
             }
@@ -216,10 +227,10 @@ namespace Lab_7
             currentForm.Close();
         }
 
-        private void buttonFormClientOrder_Click(object sender, EventArgs e)
+        private async void buttonFormClientOrder_Click(object sender, EventArgs e)
         {
             // 1) Создаём заказ в логике. Клиент всегда самовывоз (tableID = 0), оплата — наличные (пример).
-            var newOrder = logic.CreateOrderForClient(
+            var newOrder = await Logic.CreateOrderForClientAsync(
                 currentClient,
                 cartFoods,
                 tableID: 0,

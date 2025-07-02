@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            PasswordLabe = new Label();
-            LoginLabe = new Label();
+            PasswordLabel = new Label();
+            LoginLabel = new Label();
             label5 = new Label();
             label4 = new Label();
             label3 = new Label();
@@ -43,27 +43,25 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
-            // PasswordLabe
+            // PasswordLabel
             // 
-            PasswordLabe.AutoSize = true;
-            PasswordLabe.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold);
-            PasswordLabe.ForeColor = SystemColors.ControlLightLight;
-            PasswordLabe.Location = new Point(270, 228);
-            PasswordLabe.Name = "PasswordLabe";
-            PasswordLabe.Size = new Size(96, 38);
-            PasswordLabe.TabIndex = 25;
-            PasswordLabe.Text = "label6";
+            PasswordLabel.AutoSize = true;
+            PasswordLabel.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold);
+            PasswordLabel.ForeColor = SystemColors.ControlLightLight;
+            PasswordLabel.Location = new Point(217, 231);
+            PasswordLabel.Name = "PasswordLabel";
+            PasswordLabel.Size = new Size(0, 38);
+            PasswordLabel.TabIndex = 25;
             // 
-            // LoginLabe
+            // LoginLabel
             // 
-            LoginLabe.AutoSize = true;
-            LoginLabe.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold);
-            LoginLabe.ForeColor = SystemColors.ControlLightLight;
-            LoginLabe.Location = new Point(270, 180);
-            LoginLabe.Name = "LoginLabe";
-            LoginLabe.Size = new Size(96, 38);
-            LoginLabe.TabIndex = 24;
-            LoginLabe.Text = "label6";
+            LoginLabel.AutoSize = true;
+            LoginLabel.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold);
+            LoginLabel.ForeColor = SystemColors.ControlLightLight;
+            LoginLabel.Location = new Point(217, 183);
+            LoginLabel.Name = "LoginLabel";
+            LoginLabel.Size = new Size(0, 38);
+            LoginLabel.TabIndex = 24;
             // 
             // label5
             // 
@@ -151,7 +149,7 @@
             RegistrationButton.TabIndex = 15;
             RegistrationButton.Text = "Зарегистрировать";
             RegistrationButton.UseVisualStyleBackColor = true;
-            RegistrationButton.Click += RegistrationButton_Click;
+            RegistrationButton.Click += registrationButton_Click;
             // 
             // pictureBox1
             // 
@@ -171,8 +169,8 @@
             BackColor = Color.FromArgb(99, 58, 52);
             ClientSize = new Size(615, 278);
             Controls.Add(pictureBox1);
-            Controls.Add(PasswordLabe);
-            Controls.Add(LoginLabe);
+            Controls.Add(PasswordLabel);
+            Controls.Add(LoginLabel);
             Controls.Add(label5);
             Controls.Add(label4);
             Controls.Add(label3);
@@ -193,8 +191,8 @@
 
         #endregion
 
-        private System.Windows.Forms.Label PasswordLabe;
-        private System.Windows.Forms.Label LoginLabe;
+        private System.Windows.Forms.Label PasswordLabel;
+        private System.Windows.Forms.Label LoginLabel;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;

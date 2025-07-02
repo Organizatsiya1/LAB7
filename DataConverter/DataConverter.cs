@@ -1,35 +1,47 @@
 ﻿using Model;
+using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Unicode;
+using System.Drawing;
 
 namespace Logic
 {
     public class DataConverter
     {
-        // 1. Базовая папка для всех файлов приложения
-        // %AppData%\Organization Sigma Cat\ULTIMATE SEVEN LAB
-        private static readonly string DataBase = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "Organization Sigma Cat",
-            "ULTIMATE SEVEN LAB",
-            "DataBase");
+        private const string ClientsFileName = "DataClients.json";
+        private const string DishesFileName = "DataDishes.json";
+        private const string OrdersFileName = "DataOrders.json";
+        private const string WorkersFileName = "DataWorkers.json";
+        public static string DataBase { get; }
 
-        // Убедиться, что папка существует
+        /// <summary>
+        /// 
+        /// </summary>
         static DataConverter()
         {
-            Directory.CreateDirectory(DataBase);
-        }
+            //Базовая папка для всех файлов приложения
+            // %AppData%\Organization Sigma Cat\ULTIMATE SEVEN LAB
+            DataBase = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "Organization Sigma Cat",
+                "ULTIMATE SEVEN LAB",
+                "DataBase"); Directory.CreateDirectory(DataBase);
 
+            Directory.CreateDirectory(Path.Combine(DataBase, "Images"));
+
+            string dishesPath = Path.Combine(DataBase, DishesFileName);
+            
+        }
 
         /// <summary>
         /// Асинхронно записывает упорядоченный по идентификаторам список клиентов в JSON-файл
         /// </summary>
         /// <param name="clients">Список клиентов, который нужно сохранить</param>
-        /// <param name="filename">Путь к JSON-файлу для записи (создается или перезаписывается) </param>
         /// <returns>Задача, представляющая асинхронную операцию записи</returns>
-        public async Task WriteClientsAsync(List<Client> clients, string filename)
+        public async Task WriteClientsAsync(List<Client> clients)
         {
 
-            string fullPath = Path.Combine(DataBase, filename);
+            string fullPath = Path.Combine(DataBase, ClientsFileName);
 
             // Обрабатываем ситуацию, если каталог вдруг исчез:
             Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
@@ -40,8 +52,10 @@ namespace Logic
             // Опции форматированного (отступы) JSON
             var options = new JsonSerializerOptions
             {
-                WriteIndented = true
+                WriteIndented = true,
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
             };
+
 
             // Открываем поток с асинхронной записью
             using var stream = new FileStream(
@@ -57,13 +71,12 @@ namespace Logic
         }
 
         /// <summary>
-        /// Асинхронно читает из JSON-файла список клиентов
+        /// Асинхронно читает из JSON-файла список КЛИЕНТОВ
         /// </summary>
-        /// <param name="filename">Путь к JSON-файлу для чтения</param>
         /// <returns>Задача, результатом которой является список клиентов (или пустой список если файл не найден)</returns>
-        public async Task<List<Client>> ReadClientsAsync(string filename)
+        public async Task<List<Client>> ReadClientsAsync()
         {
-            string fullPath = Path.Combine(DataBase, filename);
+            string fullPath = Path.Combine(DataBase, ClientsFileName);
 
             // Если файла нет — возвращаем пустой список
             if (!File.Exists(fullPath))
@@ -84,32 +97,134 @@ namespace Logic
             return clients ?? new List<Client>();
         }
 
-        ///// <summary>
-        ///// Асинхронно должен записывать данные о БЛЮДАХ в файл с применением фильтрации и группировки
-        ///// </summary>
-        ///// <param name="foods">Список блюд для записи</param>
-        ///// <param name="filename">Путь к файлу для сохранения</param>
-        //async void WriteFood(List<Food> foods, string filename)
-        //{
-        //    FileInfo fileinfo = new FileInfo(filename);
-        //    FileStream stream = fileinfo.Create();
-        //    //тут применяются методы на фильтрацию, и группировку блюд из условия
-        //    stream.Write(Encoding.UTF8.GetBytes($"\n"));
+        /// <summary>
+        /// Асинхронно читает из JSON-файла данные о БЛЮДЕ
+        /// </summary>
+        /// <returns>Задача, результатом которой является список клиентов (или пустой список если файл не найден)</returns>
+        public async Task<List<Food>> ReadDishesAsync()
+        {
+            string fullPath = Path.Combine(DataBase, DishesFileName);
 
-        //}
+            // Если файла нет — возвращаем пустой список
+            if (!File.Exists(fullPath))
+                return new List<Food>();
 
-        ///// <summary>
-        ///// Асинхронно должен записывать данные о ЗАКАЗАХ в файл с применением фильтрации и группировки
-        ///// </summary>
-        ///// <param name="orders">Список заказов для записи</param>
-        ///// <param name="filename">Путь к файлу для сохранения</param>
-        //async void WriteOrders(List<Order> orders, string filename)
-        //{
-        //    FileInfo fileinfo = new FileInfo(filename);
-        //    FileStream stream = fileinfo.Create();
-        //    //тут применяются методы на фильтрацию, и группировку заказов из условия
-        //    stream.Write(Encoding.UTF8.GetBytes($"\n"));
+            using var stream = new FileStream(
+                fullPath,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.Read,
+                bufferSize: 4096,
+                useAsync: true);
 
-        //}
+            // Десериализуем
+            var dishes = await JsonSerializer.DeserializeAsync<List<Food>>(stream);
+
+            // Если файл был пустой или испорченный — защитимся от null
+            return dishes ?? new List<Food>();
+        }
+
+        public static Image LoadFoodImage(string imageName)
+        {
+            if (string.IsNullOrEmpty(imageName))
+                return null;
+
+            string imagesDir = Path.Combine(DataBase, "Images");
+            string fullPath = Path.Combine(imagesDir, imageName);
+
+            if (!File.Exists(fullPath))
+                return null; // Вернем null, обработка будет в UI
+
+            try
+            {
+                // Загрузка без блокировки файла
+                using var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
+                return Image.FromStream(stream);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Асинхронно читает список заказов из JSON
+        /// </summary>
+        public async Task<List<Order>> ReadOrdersAsync()
+        {
+            string fullPath = Path.Combine(DataBase, OrdersFileName);
+            if (!File.Exists(fullPath)) return new List<Order>();
+
+            using var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true);
+            var orders = await JsonSerializer.DeserializeAsync<List<Order>>(stream);
+            return orders ?? new List<Order>();
+        }
+
+        /// <summary>
+        /// Асинхронно записывает список заказов в JSON
+        /// </summary>
+        public async Task WriteOrdersAsync(List<Order> orders)
+        {
+            string fullPath = Path.Combine(DataBase, OrdersFileName);
+            Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
+
+            var options = new JsonSerializerOptions { WriteIndented = true, Encoder = JavaScriptEncoder.Create(UnicodeRanges.All) };
+            using var stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, useAsync: true);
+            await JsonSerializer.SerializeAsync(stream, orders.OrderBy(o => o.Id).ToList(), options);
+        }
+
+        /// <summary>
+        /// Асинхронно читает из JSON-файла список сотрудников
+        /// </summary>
+        public async Task<List<Human>> ReadWorkersAsync()
+        {
+            var fullPath = Path.Combine(DataBase, WorkersFileName);
+            if (!File.Exists(fullPath))
+                return new List<Human>();
+
+            using var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true);
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            using var doc = await JsonDocument.ParseAsync(stream);
+
+            var list = new List<Human>();
+            foreach (var elem in doc.RootElement.EnumerateArray())
+            {
+                string userType = elem.GetProperty("UserType").GetString()!;
+                var dataJson = elem.GetProperty("Data").GetRawText();
+                Human? obj = userType switch
+                {
+                    nameof(Admin) => JsonSerializer.Deserialize<Admin>(dataJson),
+                    nameof(Chef) => JsonSerializer.Deserialize<Chef>(dataJson),
+                    nameof(Waiter) => JsonSerializer.Deserialize<Waiter>(dataJson),
+                    nameof(Courier) => JsonSerializer.Deserialize<Courier>(dataJson),
+                    _ => JsonSerializer.Deserialize<Human>(dataJson)
+                };
+                if (obj != null) list.Add(obj);
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// Асинхронно записывает в JSON-файл список сотрудников
+        /// </summary>
+        public async Task WriteWorkersAsync(List<Human> workers)
+        {
+            var fullPath = Path.Combine(DataBase, WorkersFileName);
+            Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
+            };
+
+            var toWrite = workers.Select(w => new {
+                UserType = w.GetType().Name,
+                Data = JsonSerializer.SerializeToElement(w, w.GetType(), options)
+            }).ToList();
+
+            using var stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true);
+            await JsonSerializer.SerializeAsync(stream, toWrite, options);
+
+        }
     }
 }
