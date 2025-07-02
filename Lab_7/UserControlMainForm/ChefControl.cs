@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Logic;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,6 +13,7 @@ namespace Lab_7
 {
     public partial class ChefControl : UserControl
     {
+        public BusinessLogic Logic { get; set; }
         public ChefControl()
         {
             InitializeComponent();
@@ -34,6 +36,11 @@ namespace Lab_7
 
             // Закрываем окно после открытия loginForm
             currentForm.Close();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Logic.
         }
     }
 }
