@@ -306,12 +306,86 @@ namespace Logic
         }
 
         /// <summary>
-        /// Пример метода, который мог бы группировать список блюд
+        /// Группировка списка блюд
         /// </summary>
         /// <param name="foods">Список Food, который нужно сгруппировать</param>
         /// <param name="groupedFoods">Сюда складываем результат</param>
         public void GroupFoods(List<Order> orders, List<GroupedFood> groupedFoods)
         {
+            groupedFoods = orders
+            .SelectMany(order => order.Foods) // "Разворачиваем" все блюда из всех заказов
+            .GroupBy(food => food.Name)       // Группируем по названию блюда
+            .Select(group => new  GroupedFood            // Преобразуем в анонимный тип (или можно создать класс)
+            {
+                Name = group.Key,         // Название блюда
+                Count = group.Count()         // Количество таких блюд
+            }).ToList();   
+        }
+        /// <summary>
+        /// Сортировка списка блюд по ID
+        /// </summary>
+        /// <param name="groupedFoods">Отсортированый список</param>
+        public void Sort_By_FoodCount(List<GroupedFood> groupedFoods)
+        {
+            groupedFoods.OrderByDescending(x => x.Count);
+        }
+        /// <summary>
+        /// Сортировка списка блюд по названиям
+        /// </summary>
+        /// <param name="groupedFoods">Отсортированый список</param>
+        public void Sort_By_FoodName(List<GroupedFood> groupedFoods)
+        {
+            groupedFoods.OrderBy(x => x.Name);
+        }
+        /// <summary>
+        /// Группировка списка клиентов
+        /// </summary>
+        /// <param name="clients">Группируемый список</param>
+        /// <param name="grouped">Сгруппированый список</param>
+        public void Group_Clients(List<Client> clients, List<GroupedClient> grouped)
+        {
+             grouped = clients
+                .Select(client => new GroupedClient()
+                {
+                    Id = client.Id,
+                    Name = client.Name,
+                    Orders = client.Orders,
+                    Spent = AllOrders
+                        .Where(order => client.Orders.Contains(order.Id))
+                        .Sum(order => order.Cost)
+                }).ToList();
+        }
+        /// <summary>
+        /// Сортировка списка клиентов по ID
+        /// </summary>
+        /// <param name="grouped">Отсортированый список</param>
+        public void Sort_By_ClientID(List<GroupedClient> grouped)
+        {
+            grouped.OrderBy(x=>x.Id);
+        }
+        /// <summary>
+        /// Сортировка списка клиентов по именам
+        /// </summary>
+        /// <param name="grouped">Отсортированый список</param>
+        public void Sort_By_ClientName(List<GroupedClient> grouped)
+        {
+            grouped.OrderBy(x => x.Name);
+        }
+        /// <summary>
+        /// Сортировка списка клиентов по кол-ву заказов
+        /// </summary>
+        /// <param name="grouped">Отсортированый список</param>
+        public void Sort_By_ClientOrders(List<GroupedClient> grouped)
+        {
+            grouped.OrderByDescending(x => x.Orders.Count);
+        }
+        /// <summary>
+        /// Сортировка списка клиентов по потраченым средствам
+        /// </summary>
+        /// <param name="grouped">Отсортированый список</param>
+        public void Sort_By_ClientSpent(List<GroupedClient> grouped)
+        {
+            grouped.OrderByDescending(x => x.Spent);
         }
     }
 }
