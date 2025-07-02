@@ -4,25 +4,16 @@ namespace Logic
 {
     public class BusinessLogic
     {
-        private Human FixedUser { get; set; }
+        public Human FixedUser { get; set; }
         private UserStatus Status { get; set; }
         private int OrdersID = 1;
-        private int WorkersID = 1;
 
         private readonly DataConverter converter = new DataConverter();
 
         public List<Client> Clients { get; private set; } = new List<Client>();
         public List<Food> Dishes { get; private set; } = new List<Food>();
         public List<Order> AllOrders { get; private set; } = new List<Order>();
-
-        /// <summary>Статический список всех сотрудников (Waiter, Chef, Admin, Courier).</summary>
-        public static List<Human> Workers = new List<Human>()
-        {
-            new Waiter  { Id = 1, Name = "Анна",  Login = "anna", Password = "1234"    },
-            new Chef    { Id = 2, Name = "Борис", Login = "boris", Password = "chefpass"},
-            new Admin   { Id = 3, Name = "Админ", Login = "admin", Password = "adminpass"},
-            new Courier { Id = 4, Name = "Пётр",  Login = "petya", Password = "cour123" }
-        };
+        public List<Human> Workers { get; private set; } = new List<Human>();
 
         /// <summary> 
         /// Загружает из файлов клиентов, блюда и заказы 
@@ -32,6 +23,7 @@ namespace Logic
             Clients = await converter.ReadClientsAsync();
             Dishes = await converter.ReadDishesAsync();
             AllOrders = await converter.ReadOrdersAsync();
+            Workers = await converter.ReadWorkersAsync();
         }
 
         /// <summary> 
@@ -41,6 +33,7 @@ namespace Logic
         {
             await converter.WriteClientsAsync(Clients);
             await converter.WriteOrdersAsync(AllOrders);
+            await converter.WriteWorkersAsync(Workers);
         }
 
         /// <summary>
@@ -268,50 +261,19 @@ namespace Logic
         /// <param name="name">Имя нового сотрудника</param>
         /// <param name="status">Роль сотрудника</param>
         /// <param name="phone">Телефон (используется для формирования логина)</param>
-        public void RegistrateWorker(string name, UserStatus status, string phone)
+        public async Task RegistrateWorkerAsync(string name, UserStatus status)
         {
-            if (status == UserStatus.Admin)
+            int newId = Workers.Any() ? Workers.Max(w => w.Id) + 1 : 1;
+            Human worker = status switch
             {
-                Workers.Add(new Admin
-                {
-                    Id = WorkersID,
-                    Login = name + phone,
-                    Password = GeneratePassword(),
-                    Name = name
-                });
-            }
-            else if (status == UserStatus.Chef)
-            {
-                Workers.Add(new Chef
-                {
-                    Id = WorkersID,
-                    Login = name + phone,
-                    Password = GeneratePassword(),
-                    Name = name
-                });
-            }
-            else if (status == UserStatus.Waiter)
-            {
-                Workers.Add(new Waiter
-                {
-                    Id = WorkersID,
-                    Login = name + phone,
-                    Password = GeneratePassword(),
-                    Name = name
-                });
-            }
-            else if (status == UserStatus.Courier)
-            {
-                Workers.Add(new Courier
-                {
-                    Id = WorkersID,
-                    Login = name + phone,
-                    Password = GeneratePassword(),
-                    Name = name
-                });
-            }
-
-            WorkersID++;
+                UserStatus.Admin => new Admin { Id = newId, Name = name, Login = $"{name}_{newId}", Password = GeneratePassword() },
+                UserStatus.Chef => new Chef { Id = newId, Name = name, Login = $"{name}_{newId}", Password = GeneratePassword() },
+                UserStatus.Waiter => new Waiter { Id = newId, Name = name, Login = $"{name}_{newId}", Password = GeneratePassword() },
+                UserStatus.Courier => new Courier { Id = newId, Name = name, Login = $"{name}_{newId}", Password = GeneratePassword() },
+                _ => throw new ArgumentException("Неверный статус")
+            };
+            Workers.Add(worker);
+            await WriteAsync();
         }
 
         /// <summary>

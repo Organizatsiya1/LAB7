@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Logic
+﻿namespace Logic
 {
-    
-        [Flags]
+
+    [Flags]
     public enum Permissions //Вот тут начинается бред: собрать для удобства полномочия? НЕЕЕЕЕЕТ! 3 класса меняют каждый свои стадии готовки заказа
     {
         None = 0,

@@ -53,11 +53,11 @@
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { IDColumn, NameColumn, OrdersNumb, SpentMoney });
-            dataGridView1.Location = new Point(474, 143);
+            dataGridView1.Location = new Point(456, 143);
             dataGridView1.Margin = new Padding(3, 4, 3, 4);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(426, 441);
+            dataGridView1.Size = new Size(444, 441);
             dataGridView1.TabIndex = 0;
             // 
             // IDColumn
@@ -142,45 +142,45 @@
             SortFoodByNumber.Name = "SortFoodByNumber";
             SortFoodByNumber.Size = new Size(153, 31);
             SortFoodByNumber.TabIndex = 4;
-            SortFoodByNumber.Text = "Чатсоте";
+            SortFoodByNumber.Text = "Частоте";
             SortFoodByNumber.UseVisualStyleBackColor = true;
             // 
             // SortClientsByID
             // 
-            SortClientsByID.Location = new Point(520, 99);
+            SortClientsByID.Location = new Point(507, 100);
             SortClientsByID.Margin = new Padding(3, 4, 3, 4);
             SortClientsByID.Name = "SortClientsByID";
-            SortClientsByID.Size = new Size(58, 31);
+            SortClientsByID.Size = new Size(50, 31);
             SortClientsByID.TabIndex = 5;
             SortClientsByID.Text = "ID";
             SortClientsByID.UseVisualStyleBackColor = true;
             // 
             // SortClientsByName
             // 
-            SortClientsByName.Location = new Point(584, 99);
+            SortClientsByName.Location = new Point(563, 99);
             SortClientsByName.Margin = new Padding(3, 4, 3, 4);
             SortClientsByName.Name = "SortClientsByName";
-            SortClientsByName.Size = new Size(111, 31);
+            SortClientsByName.Size = new Size(112, 31);
             SortClientsByName.TabIndex = 6;
             SortClientsByName.Text = "Имени";
             SortClientsByName.UseVisualStyleBackColor = true;
             // 
             // SortClientsByOrders
             // 
-            SortClientsByOrders.Location = new Point(701, 99);
+            SortClientsByOrders.Location = new Point(681, 99);
             SortClientsByOrders.Margin = new Padding(3, 4, 3, 4);
             SortClientsByOrders.Name = "SortClientsByOrders";
-            SortClientsByOrders.Size = new Size(80, 31);
+            SortClientsByOrders.Size = new Size(83, 31);
             SortClientsByOrders.TabIndex = 7;
             SortClientsByOrders.Text = "Заказам";
             SortClientsByOrders.UseVisualStyleBackColor = true;
             // 
             // SortClientsByMoney
             // 
-            SortClientsByMoney.Location = new Point(787, 99);
+            SortClientsByMoney.Location = new Point(770, 99);
             SortClientsByMoney.Margin = new Padding(3, 4, 3, 4);
             SortClientsByMoney.Name = "SortClientsByMoney";
-            SortClientsByMoney.Size = new Size(112, 31);
+            SortClientsByMoney.Size = new Size(130, 31);
             SortClientsByMoney.TabIndex = 8;
             SortClientsByMoney.Text = "Потраченным";
             SortClientsByMoney.UseVisualStyleBackColor = true;

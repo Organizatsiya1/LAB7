@@ -18,7 +18,35 @@ namespace Lab_7
         public LoginForm()
         {
             InitializeComponent();
-            Task.Run(async () => await Logic.ReadAsync());
+
+            buttonLogin.Enabled = false;
+            buttonSendCode.Enabled = false;
+
+            this.Shown += async (s, e) =>
+            {
+                // 1) Загружаем всё из JSON
+                await Logic.ReadAsync();
+
+                // 2) Если сотрудников нет — создаём первого админа
+                if (!Logic.Workers.Any())
+                {
+                    var firstAdmin = new Admin
+                    {
+                        Id = 1,
+                        Login = "admin",
+                        Password = "adminpass",
+                        Name = "Первый администратор",
+                        Permissions = Permissions.All
+                    };
+                    Logic.Workers.Add(firstAdmin);
+                    await Logic.WriteAsync();  // сохраняем в JSON
+                }
+
+                // 3) Разблокируем кнопки «Вход» и «Выслать код»
+                buttonLogin.Enabled = true;
+                buttonSendCode.Enabled = true;
+            };
+
 
             // По умолчанию выбираем «Сотрудник»
             radioEmployee.Checked = true;
@@ -27,6 +55,7 @@ namespace Lab_7
             // Подписываемся на смену режима
             radioEmployee.CheckedChanged += (s, e) => ToggleUserTypeFields();
             radioClient.CheckedChanged += (s, e) => ToggleUserTypeFields();
+
         }
 
         /// <summary>
@@ -236,14 +265,15 @@ namespace Lab_7
                 string login = textBoxLogin.Text.Trim();
                 string password = textBoxPassword.Text.Trim();
 
-                var worker = BusinessLogic.Workers
+                var worker = Logic.Workers
                     .OfType<IWorker>()
                     .FirstOrDefault(w => w.Login == login && w.Password == password);
 
                 if (worker != null)
                 {
                     // Нашли сотрудника; определяем его тип и роль
-                    var human = BusinessLogic.Workers.First(h => (h as IWorker)?.Login == login);
+                    var human = Logic.Workers.First(h => (h as IWorker)?.Login == login);
+                    Logic.FixateUser(human);
                     string roleName = human.GetType().Name;
 
                     UserStatus role = roleName switch

@@ -11,6 +11,7 @@ namespace Logic
         private const string ClientsFileName = "DataClients.json";
         private const string DishesFileName = "DataDishes.json";
         private const string OrdersFileName = "DataOrders.json";
+        private const string WorkersFileName = "DataWorkers.json";
         public static string DataBase { get; }
 
         /// <summary>
@@ -170,6 +171,60 @@ namespace Logic
             var options = new JsonSerializerOptions { WriteIndented = true, Encoder = JavaScriptEncoder.Create(UnicodeRanges.All) };
             using var stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, useAsync: true);
             await JsonSerializer.SerializeAsync(stream, orders.OrderBy(o => o.Id).ToList(), options);
+        }
+
+        /// <summary>
+        /// Асинхронно читает из JSON-файла список сотрудников
+        /// </summary>
+        public async Task<List<Human>> ReadWorkersAsync()
+        {
+            var fullPath = Path.Combine(DataBase, WorkersFileName);
+            if (!File.Exists(fullPath))
+                return new List<Human>();
+
+            using var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true);
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            using var doc = await JsonDocument.ParseAsync(stream);
+
+            var list = new List<Human>();
+            foreach (var elem in doc.RootElement.EnumerateArray())
+            {
+                string userType = elem.GetProperty("UserType").GetString()!;
+                var dataJson = elem.GetProperty("Data").GetRawText();
+                Human? obj = userType switch
+                {
+                    nameof(Admin) => JsonSerializer.Deserialize<Admin>(dataJson),
+                    nameof(Chef) => JsonSerializer.Deserialize<Chef>(dataJson),
+                    nameof(Waiter) => JsonSerializer.Deserialize<Waiter>(dataJson),
+                    nameof(Courier) => JsonSerializer.Deserialize<Courier>(dataJson),
+                    _ => JsonSerializer.Deserialize<Human>(dataJson)
+                };
+                if (obj != null) list.Add(obj);
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// Асинхронно записывает в JSON-файл список сотрудников
+        /// </summary>
+        public async Task WriteWorkersAsync(List<Human> workers)
+        {
+            var fullPath = Path.Combine(DataBase, WorkersFileName);
+            Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
+            };
+
+            var toWrite = workers.Select(w => new {
+                UserType = w.GetType().Name,
+                Data = JsonSerializer.SerializeToElement(w, w.GetType(), options)
+            }).ToList();
+
+            using var stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true);
+            await JsonSerializer.SerializeAsync(stream, toWrite, options);
+
         }
     }
 }

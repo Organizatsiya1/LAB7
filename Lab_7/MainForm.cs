@@ -68,7 +68,7 @@ namespace Lab_7
                     break;
 
                 case UserStatus.Admin:
-                    userControl = new AdminControl() { Dock = DockStyle.Fill };
+                    userControl = new AdminControl(Logic) { Dock = DockStyle.Fill };
                     break;
             }
 

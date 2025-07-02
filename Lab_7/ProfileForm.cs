@@ -6,16 +6,16 @@ namespace Lab_7
     public partial class ProfileForm : Form
     {
         private readonly BusinessLogic Logic;
-        public Client User { get; set; } // клиент, чьи данные показываются/редактируются в форме
+        public Human User { get; set; } // клиент, чьи данные показываются/редактируются в форме
 
         /// <summary>
         /// Конструктор, инициализирует поля формы значениями из объекта Client
         /// </summary>
         /// <param name="client">Экземпляр Client, чьё свойство отображается</param>
-        public ProfileForm(Client client, BusinessLogic logic)
+        public ProfileForm(Human user, BusinessLogic logic)
         {
             InitializeComponent();
-            User = client;
+            User = user;
             Logic = logic;
 
             // Заполняем текстовые поля данными клиента
@@ -23,10 +23,16 @@ namespace Lab_7
             NameBox.Text = User.Name;
             PhoneBox.Text = User.PhoneNumber;
 
-            // Адрес может быть не заполнен – тогда свойства Adress будут default
-            StreetBox.Text = User.Adress?.Street;
-            HouseBox.Text = User.Adress?.HouseNumb.ToString();
-            FlatBox.Text = User.Adress?.FlatNumb.ToString();
+            // Если это клиент — покажем адрес и заказы
+            if (User is Client client)
+            {
+                StreetBox.Text = client.Adress?.Street;
+                HouseBox.Text = client.Adress?.HouseNumb.ToString();
+                FlatBox.Text = client.Adress?.FlatNumb.ToString();
+
+                // Заполнить таблицу заказов клиента:
+                // OrdersGrid.DataSource = logic.AllOrders.Where(o => client.Orders.Contains(o.Id)).ToList();
+            }
         }
 
         /// <summary>
@@ -58,23 +64,16 @@ namespace Lab_7
             User.Name = NameBox.Text.Trim();
             User.PhoneNumber = new string(PhoneBox.Text.Where(char.IsDigit).ToArray());
 
-            if (int.TryParse(IDBox.Text, out int newId))
-                User.Id = newId;
-
-            // Если у User.Adress есть значение, записываем в него; иначе сначала создаём
-            if (User.Adress == null)
-                User.Adress = new Adress();
-
-            User.Adress.Street = StreetBox.Text;
-
-            if (int.TryParse(HouseBox.Text, out int hn))
-                User.Adress.HouseNumb = hn;
-
-            if (int.TryParse(FlatBox.Text, out int fn))
-                User.Adress.FlatNumb = fn;
+            // Только для клиента — адрес
+            if (User is Client client)
+            {
+                client.Adress ??= new Adress();
+                client.Adress.Street = StreetBox.Text;
+                if (int.TryParse(HouseBox.Text, out int hn)) client.Adress.HouseNumb = hn;
+                if (int.TryParse(FlatBox.Text, out int fn)) client.Adress.FlatNumb = fn;
+            }
 
             await Logic.WriteAsync();
-
             MessageBox.Show("Профиль сохранён!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Logic;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,9 +13,12 @@ namespace Lab_7
 {
     public partial class StatisticsForm : Form
     {
-        public StatisticsForm()
+        private readonly BusinessLogic Logic;
+
+        public StatisticsForm(BusinessLogic logic)
         {
             InitializeComponent();
+            Logic = logic;
         }
 
         private void SortFoodByName_Click(object sender, EventArgs e)
