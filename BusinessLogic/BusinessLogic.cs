@@ -168,7 +168,7 @@ namespace Logic
         /// <returns> Созданный объект заказа или доставки заказа, либо null при ошибке входных данных </returns>
         public Order CreateOrderForClient(
             Client client,
-            List<Food> cartFoods,
+            List<OrderedFood> cartFoods,
             int tableID,
             int waiterID,
             PayementType payementType,
@@ -242,7 +242,7 @@ namespace Logic
         /// <param name="waiterID">ID официанта</param>
         /// <param name="payementType">Тип оплаты</param>
         /// <returns>Новый объект заказа или null</returns>
-        public Order MakeOrder(List<Food> foods, int tableID, int waiterID, PayementType payementType)
+        public Order MakeOrder(List<OrderedFood> foods, int tableID, int waiterID, PayementType payementType)
         {
             if (FixedUser?.Permissions.HasFlag(Permissions.MakeOrder) == true)
             {
@@ -424,7 +424,7 @@ namespace Logic
         {
             groupedFoods = orders
             .SelectMany(order => order.Foods) // "Разворачиваем" все блюда из всех заказов
-            .GroupBy(food => food.Name)       // Группируем по названию блюда
+            .GroupBy(food => food.Food.Name)       // Группируем по названию блюда
             .Select(group => new  GroupedFood            // Преобразуем в анонимный тип (или можно создать класс)
             {
                 Name = group.Key,         // Название блюда
@@ -496,6 +496,10 @@ namespace Logic
         public void Sort_By_ClientSpent(List<GroupedClient> grouped)
         {
             grouped.OrderByDescending(x => x.Spent);
+        }
+        public void Cook_Food(OrderedFood food) 
+        {
+            food.IsReady = true;
         }
     }
 }
