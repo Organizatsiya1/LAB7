@@ -36,17 +36,17 @@
             textBoxChefNotReady = new TextBox();
             textBoxChefReady = new TextBox();
             button1 = new Button();
-            dataGridView1 = new DataGridView();
+            IDGrid = new DataGridView();
             ID = new DataGridViewTextBoxColumn();
-            dataGridView2 = new DataGridView();
+            NotGrid = new DataGridView();
             NCooked = new DataGridViewTextBoxColumn();
-            dataGridView3 = new DataGridView();
+            YeGrid = new DataGridView();
             Cooked = new DataGridViewTextBoxColumn();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxIcon).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridView3).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)IDGrid).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)NotGrid).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)YeGrid).BeginInit();
             SuspendLayout();
             // 
             // panel1
@@ -159,14 +159,15 @@
             button1.UseVisualStyleBackColor = false;
             button1.Click += button1_Click;
             // 
-            // dataGridView1
+            // IDGrid
             // 
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { ID });
-            dataGridView1.Location = new Point(136, 30);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(190, 496);
-            dataGridView1.TabIndex = 11;
+            IDGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            IDGrid.Columns.AddRange(new DataGridViewColumn[] { ID });
+            IDGrid.Location = new Point(136, 30);
+            IDGrid.Name = "IDGrid";
+            IDGrid.Size = new Size(190, 496);
+            IDGrid.TabIndex = 11;
+            IDGrid.CellContentClick += IDGrid_CellContentClick;
             // 
             // ID
             // 
@@ -175,14 +176,15 @@
             ID.Name = "ID";
             ID.Width = 150;
             // 
-            // dataGridView2
+            // NotGrid
             // 
-            dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView2.Columns.AddRange(new DataGridViewColumn[] { NCooked });
-            dataGridView2.Location = new Point(337, 30);
-            dataGridView2.Name = "dataGridView2";
-            dataGridView2.Size = new Size(180, 495);
-            dataGridView2.TabIndex = 12;
+            NotGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            NotGrid.Columns.AddRange(new DataGridViewColumn[] { NCooked });
+            NotGrid.Location = new Point(337, 30);
+            NotGrid.Name = "NotGrid";
+            NotGrid.Size = new Size(180, 495);
+            NotGrid.TabIndex = 12;
+            NotGrid.CellContentClick += NotGrid_CellContentClick;
             // 
             // NCooked
             // 
@@ -190,14 +192,14 @@
             NCooked.Name = "NCooked";
             NCooked.Width = 150;
             // 
-            // dataGridView3
+            // YeGrid
             // 
-            dataGridView3.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView3.Columns.AddRange(new DataGridViewColumn[] { Cooked });
-            dataGridView3.Location = new Point(742, 35);
-            dataGridView3.Name = "dataGridView3";
-            dataGridView3.Size = new Size(192, 489);
-            dataGridView3.TabIndex = 13;
+            YeGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            YeGrid.Columns.AddRange(new DataGridViewColumn[] { Cooked });
+            YeGrid.Location = new Point(742, 35);
+            YeGrid.Name = "YeGrid";
+            YeGrid.Size = new Size(192, 489);
+            YeGrid.TabIndex = 13;
             // 
             // Cooked
             // 
@@ -211,9 +213,9 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             BackColor = Color.FromArgb(99, 58, 52);
-            Controls.Add(dataGridView3);
-            Controls.Add(dataGridView2);
-            Controls.Add(dataGridView1);
+            Controls.Add(YeGrid);
+            Controls.Add(NotGrid);
+            Controls.Add(IDGrid);
             Controls.Add(button1);
             Controls.Add(textBoxChefReady);
             Controls.Add(textBoxChefNotReady);
@@ -224,9 +226,9 @@
             Size = new Size(964, 529);
             panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBoxIcon).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridView3).EndInit();
+            ((System.ComponentModel.ISupportInitialize)IDGrid).EndInit();
+            ((System.ComponentModel.ISupportInitialize)NotGrid).EndInit();
+            ((System.ComponentModel.ISupportInitialize)YeGrid).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -241,11 +243,11 @@
         private Button button1;
         private Button buttonWaiterProfile;
         private Button buttonAdminLogout;
-        private DataGridView dataGridView1;
+        private DataGridView IDGrid;
         private DataGridViewTextBoxColumn ID;
-        private DataGridView dataGridView2;
+        private DataGridView NotGrid;
         private DataGridViewTextBoxColumn NCooked;
-        private DataGridView dataGridView3;
+        private DataGridView YeGrid;
         private DataGridViewTextBoxColumn Cooked;
     }
 }

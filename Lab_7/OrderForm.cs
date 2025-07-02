@@ -32,12 +32,12 @@ namespace Lab_7
             }
 
             // Стоимость — суммируем в форме
-            var total = order.Foods.Sum(f => f.Cost);
+            var total = order.Foods.Sum(f => f.Food.Cost);
             CostLabe.Text = $"{total:F2} руб.";
 
             // Заполняем таблицу: каждый тип блюда с количеством
             var counts = order.Foods
-                .GroupBy(f => f.Name)
+                .GroupBy(f => f.Food.Name)
                 .Select(g => (Name: g.Key, Qty: g.Count()));
             foreach (var (Name, Qty) in counts)
                 FoodsGrid.Rows.Add(Name, Qty);

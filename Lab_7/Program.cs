@@ -1,3 +1,6 @@
+using Logic;
+using Model;
+
 namespace Lab_7
 {
     internal static class Program
@@ -12,6 +15,8 @@ namespace Lab_7
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new LoginForm());
+            
+            
         }
     }
 }

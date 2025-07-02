@@ -93,7 +93,7 @@ namespace Logic
         /// </summary>
         public async Task<Order> CreateOrderForClientAsync(
             Client client,
-            List<Food> cartFoods,
+            List<OrderedFood> cartFoods,
             int tableID,
             int waiterID,
             PayementType payementType,
@@ -163,7 +163,7 @@ namespace Logic
         /// <param name="waiterID">ID официанта</param>
         /// <param name="payementType">Тип оплаты</param>
         /// <returns>Новый объект заказа или null</returns>
-        public Order MakeOrder(List<Food> foods, int tableID, int waiterID, PayementType payementType)
+        public Order MakeOrder(List<OrderedFood> foods, int tableID, int waiterID, PayementType payementType)
         {
             if (FixedUser?.Permissions.HasFlag(Permissions.MakeOrder) == true)
             {
@@ -453,6 +453,9 @@ namespace Logic
                 .Where(o => o.Date.Date >= from.Date && o.Date.Date <= to.Date)
                 .ToList();
         }
-
+        public void Cook_Food(OrderedFood food) 
+        {
+            food.IsReady = true;
+        }
     }
 }
