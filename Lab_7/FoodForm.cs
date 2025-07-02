@@ -1,13 +1,5 @@
-﻿using Model;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using Logic;
+using Model;
 
 namespace Lab_7
 {
@@ -27,10 +19,28 @@ namespace Lab_7
 
             labelName.Text = food.Name;
             labelDescription.Text = food.Description;
-            textBoxDescription.Text = $"{string.Join(", ", food.Formula)}";
+            labelFormula.Text = $"{string.Join(", ", food.Formula)}";
             labelWeight.Text = $"{food.Weight} г";
             labelCost.Text = $"{food.Cost} руб.";
-            // pictureBoxFood.Image = Image.FromFile(food.PhotoPath);
+
+            // Собираем полный путь к картинке:
+            string imagesDir = Path.Combine(
+                DataConverter.DataBase,   // %AppData%/…/DataBase
+                "Images"
+            );
+            string imgPath = Path.Combine(imagesDir, food.PhotoFile ?? "");
+
+            if (File.Exists(imgPath))
+            {
+                // Избегаем блокировки файла: сначала копируем в память
+                using var fs = new FileStream(imgPath, FileMode.Open, FileAccess.Read);
+                pictureBoxFood.Image = Image.FromStream(fs);
+            }
+            else
+            {
+                // В ресурсах проекта или просто blank
+                pictureBoxFood.Image = Properties.Resources.PlaceholderMenu;
+            }
         }
 
         private void buttonAddToCart_Click(object sender, EventArgs e)

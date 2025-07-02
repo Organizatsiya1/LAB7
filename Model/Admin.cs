@@ -12,6 +12,6 @@ namespace Model
         public string Password { get; set; }
         public string Login { get; set; }
         public int Efficiency { get; set; }
-        public Permissions Permissions = Permissions.Register | Permissions.ShowInfo;
+        public Permissions Permissions { get; set; } 
     }
 }
