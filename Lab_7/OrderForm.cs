@@ -8,6 +8,8 @@ namespace Lab_7
         // Текущий заказ, отображаемый в форме.
         public Order CurrentOrder { get; set; }
 
+
+
         /// <summary>
         /// Заполняет элементы интерфейса данными заказа.
         /// </summary>

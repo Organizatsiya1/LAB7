@@ -60,7 +60,7 @@ namespace Lab_7
                 //    break;
 
                 case UserStatus.Chef:
-                    userControl = new ChefControl() { Dock = DockStyle.Fill };
+                    userControl = new ChefControl(Logic) { Dock = DockStyle.Fill };
                     break;
 
                 case UserStatus.Courier:

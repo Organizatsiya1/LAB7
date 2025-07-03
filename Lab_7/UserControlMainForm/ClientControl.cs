@@ -188,7 +188,7 @@ namespace Lab_7
                 foreach (var food in order.Foods)
                 {
                     var status = order.Behavior >= OrderBehavior.Coocked ? "Готово" : "В процессе";
-                    var item = new ListViewItem(new[] { food.Name, status });
+                    var item = new ListViewItem(new[] { food.Food.Name, status });
                     listViewClientCurrentOrder.Items.Add(item);
                 }
             }

@@ -93,16 +93,23 @@ namespace Logic
         /// </summary>
         public async Task<Order> CreateOrderForClientAsync(
             Client client,
-            List<OrderedFood> cartFoods,
+            List<Food> cartFoods,
             int tableID,
             int waiterID,
             PayementType payementType,
             bool isDelivery = false,
             Adress deliveryAdress = null,
             int courierId = 0)
+
         {
             if (client == null || cartFoods.Count == 0)
                 return null;
+
+            var orderedFoods = cartFoods.Select(f => new OrderedFood
+            {
+                Food = f,
+                IsReady = false
+            }).ToList();
 
             // Сгенерируем новый Id по текущему файлу
             int newId = AllOrders.Any() ? AllOrders.Max(o => o.Id) + 1 : 1;
@@ -111,7 +118,7 @@ namespace Logic
                 ? new DeliveredOrder
                 {
                     Id = newId,
-                    Foods = cartFoods.ToList(),
+                    Foods = orderedFoods,
                     Date = DateTime.Now,
                     IsDelivered = false,
                     IsPayed = false,
@@ -125,7 +132,7 @@ namespace Logic
                 : new Order
                 {
                     Id = newId,
-                    Foods = cartFoods.ToList(),
+                    Foods = orderedFoods,
                     Date = DateTime.Now,
                     IsDelivered = false,
                     IsPayed = false,
@@ -266,10 +273,10 @@ namespace Logic
             int newId = Workers.Any() ? Workers.Max(w => w.Id) + 1 : 1;
             Human worker = status switch
             {
-                UserStatus.Admin => new Admin { Id = newId, Name = name, Login = $"{name}_{newId}", Password = GeneratePassword() },
-                UserStatus.Chef => new Chef { Id = newId, Name = name, Login = $"{name}_{newId}", Password = GeneratePassword() },
-                UserStatus.Waiter => new Waiter { Id = newId, Name = name, Login = $"{name}_{newId}", Password = GeneratePassword() },
-                UserStatus.Courier => new Courier { Id = newId, Name = name, Login = $"{name}_{newId}", Password = GeneratePassword() },
+                UserStatus.Admin => new Admin { Id = newId, Name = name, Login = $"{status}_{newId}", Password = GeneratePassword() },
+                UserStatus.Chef => new Chef { Id = newId, Name = name, Login = $"{status}_{newId}", Password = GeneratePassword() },
+                UserStatus.Waiter => new Waiter { Id = newId, Name = name, Login = $"{status}_{newId}", Password = GeneratePassword() },
+                UserStatus.Courier => new Courier { Id = newId, Name = name, Login = $"{status}_{newId}", Password = GeneratePassword() },
                 _ => throw new ArgumentException("Неверный статус")
             };
             Workers.Add(worker);
@@ -314,21 +321,31 @@ namespace Logic
         {
             groupedFoods.Clear();
             var temp = orders
+            .Where(order => order != null && order.Foods != null)
             .SelectMany(order => order.Foods) // "Разворачиваем" все блюда из всех заказов
-            .GroupBy(food => food.Name)       // Группируем по названию блюда
+            .Where(food => food != null && food.Food != null)
+            .GroupBy(food => food.Food.Name)       // Группируем по названию блюда ключ - строка
             .Select(g => {
                 var name = g.Key;
                 // найти в справочном списке блюд:
                 var dish = Dishes.FirstOrDefault(d => d.Name == name);
-                string category = dish?.Priority switch
+
+                // Категория по умолчанию "Другое"
+                string category = "Другое";
+
+                if (dish != null)
                 {
-                    FoodCategory.Aperitif => "Аперитив",
-                    FoodCategory.Entree => "Антре",
-                    FoodCategory.MainCourse => "Основное блюдо",
-                    FoodCategory.Entremets => "Антреме",
-                    FoodCategory.Desserts => "Десерт",
-                    FoodCategory.Digestif => "Дижестив"
-                };
+                    category = dish.Priority switch
+                    {
+                        FoodCategory.Aperitif => "Аперитив",
+                        FoodCategory.Entree => "Антре",
+                        FoodCategory.MainCourse => "Основное блюдо",
+                        FoodCategory.Entremets => "Антреме",
+                        FoodCategory.Desserts => "Десерт",
+                        FoodCategory.Digestif => "Дижестив",
+                        _ => "Другое"
+                    };
+                }
                 return new GroupedFood
                 {
                     Name = name,
@@ -453,7 +470,12 @@ namespace Logic
                 .Where(o => o.Date.Date >= from.Date && o.Date.Date <= to.Date)
                 .ToList();
         }
-        public void Cook_Food(OrderedFood food) 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="food"></param>
+        public void CookFood(OrderedFood food) 
         {
             food.IsReady = true;
         }

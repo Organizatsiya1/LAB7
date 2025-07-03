@@ -74,7 +74,7 @@
             panel1.Size = new Size(150, 703);
             panel1.TabIndex = 1;
             // 
-            // buttonAdminLogout
+            // buttonChefLogout
             // 
             buttonAdminLogout.BackColor = Color.FromArgb(99, 58, 52);
             buttonAdminLogout.Cursor = Cursors.Hand;
@@ -82,7 +82,7 @@
             buttonAdminLogout.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
             buttonAdminLogout.ForeColor = SystemColors.ControlLightLight;
             buttonAdminLogout.Location = new Point(0, 633);
-            buttonAdminLogout.Name = "buttonAdminLogout";
+            buttonAdminLogout.Name = "buttonChefLogout";
             buttonAdminLogout.Size = new Size(150, 70);
             buttonAdminLogout.TabIndex = 17;
             buttonAdminLogout.Text = "Выход";
