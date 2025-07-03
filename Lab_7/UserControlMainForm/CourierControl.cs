@@ -18,10 +18,18 @@ namespace Lab_7
         public List<Order> OrdersTook { get; set; }
         public Order MarkedOrder_Taking { get; set; }
         public Order MarkedOrder_Paying { get; set; }
+        public void RefreshGrid(DataGridView grid, List<Order> orders)
+        {
+            grid.Rows.Clear();
+            foreach (Order order in orders)
+            {
+                grid.Rows.Add(order.Id);
+            }
+        }
         public CourierControl()
         {
             InitializeComponent();
-            foreach(Order order in Logic.CurrentOrders)
+            foreach (Order order in Logic.CurrentOrders)
             {
                 dataGridView1.Rows.Add(order.Id);
             }
@@ -29,12 +37,16 @@ namespace Lab_7
 
         private void buttonCourierTakeOrder_Click(object sender, EventArgs e)
         {
-
+            OrdersTook.Add(MarkedOrder_Taking);
+            Logic.CurrentOrders.Remove(MarkedOrder_Taking);
+            RefreshGrid(dataGridView1, Logic.CurrentOrders);
+            RefreshGrid(dataGridView2, OrdersTook);
         }
 
         private void buttonCourierPayOrder_Click(object sender, EventArgs e)
         {
-            Logic.MarkPayed(MarkedOrder_Taking);
+            Logic.MarkPayed(MarkedOrder_Paying);
+            RefreshGrid(dataGridView1, Logic.CurrentOrders);
         }
 
         private void buttonCourierLogout_Click(object sender, EventArgs e)
@@ -55,9 +67,22 @@ namespace Lab_7
         {
             foreach (Order order in Logic.CurrentOrders)
             {
-                if (order.Id == e.RowIndex) 
+                if (order.Id == (int)dataGridView1.Rows[e.RowIndex].Tag)
                 {
+                    MarkedOrder_Taking = order;
+                    break;
+                }
+            }
+        }
 
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            foreach (Order order in OrdersTook)
+            {
+                if (order.Id == (int)dataGridView1.Rows[e.RowIndex].Tag)
+                {
+                    MarkedOrder_Paying = order;
+                    break;
                 }
             }
         }

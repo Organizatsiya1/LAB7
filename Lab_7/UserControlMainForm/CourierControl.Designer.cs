@@ -216,6 +216,7 @@
             dataGridView2.Name = "dataGridView2";
             dataGridView2.Size = new Size(306, 225);
             dataGridView2.TabIndex = 16;
+            dataGridView2.CellContentClick += dataGridView2_CellContentClick;
             // 
             // IDT
             // 
