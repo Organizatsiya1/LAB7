@@ -35,6 +35,8 @@ namespace Logic
 
         // Список всех заказов, созданных в системе.
         public List<Order> AllOrders { get; } = new List<Order>();
+        public List<Order> CurrentOrders { get; set; } = new List<Order>();
+        public List<Order> PayedOrders { get; set; } = new List<Order>();
 
         // Статический список всех сотрудников (Waiter, Chef, Admin, Courier).
         public static List<Human> Workers = new List<Human>()
@@ -216,7 +218,7 @@ namespace Logic
 
             OrdersID++;
             AllOrders.Add(newOrder);
-
+            CurrentOrders.Add(newOrder);
             if (client.Orders == null)
                 client.Orders = new List<int>();
             client.Orders.Add(newOrder.Id);
@@ -262,6 +264,7 @@ namespace Logic
 
                 OrdersID++;
                 AllOrders.Add(made);
+                CurrentOrders.Add(made);
                 return made;
             }
             return null;
@@ -331,6 +334,8 @@ namespace Logic
             if (FixedUser?.Permissions.HasFlag(Permissions.MarkPayed) == true)
             {
                 order.IsPayed = true;
+                CurrentOrders.Remove(order);
+                PayedOrders.Add(order);
             }
         }
 

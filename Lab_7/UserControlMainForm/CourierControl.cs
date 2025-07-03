@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Logic;
+using Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,17 +14,30 @@ namespace Lab_7
 {
     public partial class CourierControl : UserControl
     {
+        public BusinessLogic Logic { get; set; }
+        public List<Order> OrdersTook { get; set; }
+        public Order MarkedOrder_Taking { get; set; }
+        public Order MarkedOrder_Paying { get; set; }
         public CourierControl()
         {
             InitializeComponent();
+            foreach(Order order in Logic.CurrentOrders)
+            {
+                dataGridView1.Rows.Add(order.Id);
+            }
         }
 
-        /// <summary>
-        /// Закрывает окно для текущего клиента после нажатия кнопки "Выход" и открывает LoginForm
-        /// </summary>
-        /// <param name="sender">Ссылка на кнопку "Выход"</param>
-        /// <param name="e">Аргументы события</param>
         private void buttonCourierTakeOrder_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonCourierPayOrder_Click(object sender, EventArgs e)
+        {
+            Logic.MarkPayed(MarkedOrder_Taking);
+        }
+
+        private void buttonCourierLogout_Click(object sender, EventArgs e)
         {
             // Скрываем текущее окно
             var currentForm = this.FindForm();
@@ -34,6 +49,17 @@ namespace Lab_7
 
             // Закрываем окно после открытия loginForm
             currentForm.Close();
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            foreach (Order order in Logic.CurrentOrders)
+            {
+                if (order.Id == e.RowIndex) 
+                {
+
+                }
+            }
         }
     }
 }
