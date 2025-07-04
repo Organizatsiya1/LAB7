@@ -4,7 +4,7 @@ namespace Logic
 {
     public class BusinessLogic
     {
-        private Human FixedUser { get; set; }
+        public Human FixedUser { get; set; }
         private UserStatus Status { get; set; }
         private int OrdersID = 1;
         private int WorkersID = 1;

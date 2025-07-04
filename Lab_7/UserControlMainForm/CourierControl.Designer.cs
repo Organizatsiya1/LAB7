@@ -93,6 +93,7 @@
             buttonCourierStartRoute.TabIndex = 13;
             buttonCourierStartRoute.Text = "Начать маршрут";
             buttonCourierStartRoute.UseVisualStyleBackColor = false;
+            buttonCourierStartRoute.Click += buttonCourierStartRoute_Click;
             // 
             // buttonWaiterProfile
             // 
@@ -108,7 +109,6 @@
             buttonWaiterProfile.TabIndex = 11;
             buttonWaiterProfile.Text = "Профиль";
             buttonWaiterProfile.UseVisualStyleBackColor = false;
-            buttonWaiterProfile.Click += buttonCourierTakeOrder_Click;
             // 
             // pictureBoxIcon
             // 
