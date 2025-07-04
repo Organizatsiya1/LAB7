@@ -18,14 +18,14 @@ namespace Lab_7
             User = user;
             Logic = logic;
 
-            // Заполняем текстовые поля данными клиента
-            IDBox.Text = User.Id.ToString();
+            // Заполняем текстовые поля общими данными
             NameBox.Text = User.Name;
             PhoneBox.Text = User.PhoneNumber;
 
             // Если это клиент — покажем адрес и заказы
             if (User is Client client)
             {
+                IDBox.Text = User.Id.ToString();
                 StreetBox.Text = client.Adress?.Street;
                 HouseBox.Text = client.Adress?.HouseNumb.ToString();
                 FlatBox.Text = client.Adress?.FlatNumb.ToString();

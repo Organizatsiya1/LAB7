@@ -6,7 +6,7 @@ namespace Lab_7
 {
     public partial class LoginForm : Form
     {
-        public BusinessLogic Logic = new BusinessLogic();
+        public BusinessLogic Logic;
         private string verificationCode;
         private bool loadingCanceled;
         
@@ -15,9 +15,10 @@ namespace Lab_7
         /// Инициализирует компоненты LoginForm, подписывается на переключение между
         /// режимами «Сотрудник» и «Клиент».
         /// </summary>
-        public LoginForm()
+        public LoginForm(BusinessLogic logic)
         {
             InitializeComponent();
+            Logic = logic;
 
             buttonLogin.Enabled = false;
             buttonSendCode.Enabled = false;
@@ -134,7 +135,6 @@ namespace Lab_7
 
         /// <summary>
         /// Проверяет, существует ли клиент с указанным номером телефона
-        /// Пока всегда возвращает false (заглушка)
         /// </summary>
         /// <param name="phoneDigits">Набор из 10 цифр без скобок и пробелов</param>
         /// <returns>True, если в базе уже есть клиент с таким телефоном; иначе false</returns>
@@ -241,9 +241,9 @@ namespace Lab_7
         /// </summary>
         /// <param name="role">Роль пользователя (Client, Waiter, Admin и т. д.)</param>
         /// <param name="existingClient">Объект Client, соответствующий вошедшему клиенту</param>
-        private void ShowMainForm(UserStatus role, Client existingClient)
+        private void ShowMainForm(UserStatus role, Human user)
         {
-            MainForm mainForm = new MainForm(role, existingClient, Logic);
+            MainForm mainForm = new MainForm(role, user, Logic);
             mainForm.Show();
             this.Hide();
         }
@@ -269,49 +269,36 @@ namespace Lab_7
                     .OfType<IWorker>()
                     .FirstOrDefault(w => w.Login == login && w.Password == password);
 
-                if (worker != null)
-                {
-                    // Нашли сотрудника; определяем его тип и роль
-                    var human = Logic.Workers.First(h => (h as IWorker)?.Login == login);
-                    Logic.FixateUser(human);
-                    string roleName = human.GetType().Name;
-
-                    UserStatus role = roleName switch
-                    {
-                        nameof(Admin) => UserStatus.Admin,
-                        nameof(Chef) => UserStatus.Chef,
-                        nameof(Waiter) => UserStatus.Waiter,
-                        nameof(Courier) => UserStatus.Courier,
-                        _ => UserStatus.Client
-                    };
-
-                    // Начинаем симуляцию загрузки
-                    progressBar.Visible = true;
-                    buttonCancel.Visible = true;
-                    loadingCanceled = false;
-
-                    await LoadDataAsync();
-
-                    if (!loadingCanceled)
-                    {
-                        //await Logic.LoadDishesAsync();
-                        // Передаём сотрудника (приведём к Client?)
-                        // Здесь для «сотрудников» MainForm умеет принимать Human,
-                        // но сигнатура ShowMainForm сейчас настроена только на Client.
-                        // Для простоты, если это официант, приведём его к Client (неуместно),
-                        // но оптимально — предусмотреть перегрузку, например:
-                        // ShowMainForm(role, human as Client), но это плохо.
-                        // В реальности лучше сделать перегрузку:
-                        // ShowMainForm(UserStatus role, Human existingHuman).
-                        // Ниже временная заглушка:
-                        ShowMainForm(role, existingClient: null);
-                    }
-                }
-                else
+                if (worker == null)
                 {
                     MessageBox.Show("Неверный логин или пароль.", "Ошибка",
                                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
+
+                // приводим IWorker к Human
+                var human = Logic.Workers.First(h => (h as IWorker)?.Login == login);
+                Logic.FixateUser(human);
+
+                // определяем роль
+                UserStatus role = human switch
+                {
+                    Admin _ => UserStatus.Admin,
+                    Chef _ => UserStatus.Chef,
+                    Courier _ => UserStatus.Courier,
+                    Waiter _ => UserStatus.Waiter,
+                    _ => UserStatus.Client
+                };
+
+                // симуляция загрузки
+                progressBar.Visible = true;
+                buttonCancel.Visible = true;
+                loadingCanceled = false;
+                await LoadDataAsync();
+                if (loadingCanceled) return;
+
+                // передаём и роль, и объект пользователя
+                ShowMainForm(role, human);
             }
             else if (radioClient.Checked)
             {
@@ -325,31 +312,49 @@ namespace Lab_7
 
                 // 2) Достаём цифры из маски и ищем клиента
                 string phoneDigits = new string(maskedTextBoxPhone.Text.Where(char.IsDigit).ToArray());
-                var existingClient = Logic.Clients.FirstOrDefault(c => c.PhoneNumber == phoneDigits);
 
+                // 3) Сначала проверяем — нет ли сотрудника с таким же номером?
                 Client clientToShow;
-                if (existingClient == null)
+                var existingWorker = Logic.Workers.FirstOrDefault(w => w.PhoneNumber == phoneDigits);
+                if (existingWorker != null && !Logic.Clients.Any(c => c.Id == existingWorker.Id))
                 {
-                    // 3) Если клиента нет — создаём нового
-                    clientToShow = new Client
+                    var newClientFromWorker = new Client
                     {
-                        Id = Logic.Clients.Any() ? Logic.Clients.Max(c => c.Id) + 1 : 1,
-                        Name = "Новый клиент",
-                        PhoneNumber = phoneDigits,
+                        Id = existingWorker.Id,
+                        Name = existingWorker.Name,
+                        PhoneNumber = existingWorker.PhoneNumber,
                         Adress = new Adress(),
                         Orders = new List<int>()
                     };
-
-                    Logic.Clients.Add(clientToShow);
-                    // 4) Сохраняем сразу же в JSON
+                    Logic.Clients.Add(newClientFromWorker);
+                    clientToShow = newClientFromWorker;
                     await Logic.WriteAsync();
                 }
                 else
                 {
-                    clientToShow = existingClient;
+                    // 4) если не сотрудник‑клиент, ищем обычного клиента
+                    var existingClient = Logic.Clients.FirstOrDefault(c => c.PhoneNumber == phoneDigits);
+                    if (existingClient != null)
+                    {
+                        clientToShow = existingClient;
+                    }
+                    else
+                    {
+                        // 5) если и его нет — создаём
+                        clientToShow = new Client
+                        {
+                            Id = Logic.Clients.Any() ? Logic.Clients.Max(c => c.Id) + 1 : 1,
+                            Name = "Новый клиент",
+                            PhoneNumber = phoneDigits,
+                            Adress = new Adress(),
+                            Orders = new List<int>()
+                        };
+                        Logic.Clients.Add(clientToShow);
+                        await Logic.WriteAsync();
+                    }
                 }
 
-                // 5) Фиксируем и уходим в MainForm
+                // 6) Фиксируем и уходим в MainForm
                 Logic.FixateUser(clientToShow);
                 ShowMainForm(UserStatus.Client, clientToShow);
             }

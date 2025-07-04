@@ -49,7 +49,7 @@ namespace Lab_7
 
             try
             {
-                await Logic.RegistrateWorkerAsync(NameBox.Text.Trim(), status);
+                await Logic.RegistrateWorkerAsync(NameBox.Text.Trim(), status, phnumber);
 
                 // получаем последнего зарегистрированного сотрудника
                 var lastWorker = Logic.Workers.Last() as IWorker;

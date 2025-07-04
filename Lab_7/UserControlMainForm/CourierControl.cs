@@ -1,10 +1,15 @@
-﻿namespace Lab_7
+﻿using Logic;
+
+namespace Lab_7
 {
     public partial class CourierControl : UserControl
     {
-        public CourierControl()
+        private readonly BusinessLogic Logic;
+
+        public CourierControl(BusinessLogic logic)
         {
             InitializeComponent();
+            Logic = logic;
         }
 
         /// <summary>
@@ -19,7 +24,7 @@
             currentForm.Hide();
 
             // Открываем форму входа
-            var loginForm = new LoginForm();
+            var loginForm = new LoginForm(Logic);
             loginForm.Show();
 
             // Закрываем окно после открытия loginForm

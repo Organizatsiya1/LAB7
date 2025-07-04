@@ -88,6 +88,11 @@ namespace Lab_7
                 LoadEmployees();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonAdminProfile_Click(object sender, EventArgs e)
         {
             if (Logic.FixedUser != null)
@@ -109,7 +114,7 @@ namespace Lab_7
             currentForm.Hide();
 
             // Открываем форму входа
-            var loginForm = new LoginForm();
+            var loginForm = new LoginForm(Logic);
             loginForm.Show();
 
             // Закрываем окно после открытия loginForm

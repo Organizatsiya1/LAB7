@@ -151,6 +151,63 @@ namespace Logic
             return newOrder;
         }
 
+        public async Task<Order> CreateOrderForWaiterAsync(
+            Waiter waiter,
+            List<Food> cartFoods,
+            int tableID,
+            bool isDelivery,
+            int clientId)
+        {
+            if (waiter == null || cartFoods == null || cartFoods.Count == 0)
+                return null;
+
+            // Конвертируем Food → OrderedFood
+            var orderedFoods = cartFoods
+                .Select(f => new OrderedFood { Food = f, IsReady = false })
+                .ToList();
+
+            // Генерируем новый ID
+            int newId = AllOrders.Any() ? AllOrders.Max(o => o.Id) + 1 : 1;
+
+            // Создаём заказ
+            Order newOrder = isDelivery
+                ? new DeliveredOrder
+                {
+                    Id = newId,
+                    Foods = orderedFoods,
+                    Date = DateTime.Now,
+                    IsDelivered = false,
+                    IsPayed = false,
+                    TableID = 0,
+                    WaiterID = waiter.Id,
+                    PayementType = PayementType.Cash,
+                    Behavior = OrderBehavior.IsCoocking,
+                    CourierId = 0,
+                    DeliveryAdress = null
+                }
+                : new Order
+                {
+                    Id = newId,
+                    Foods = orderedFoods,
+                    Date = DateTime.Now,
+                    IsDelivered = false,
+                    IsPayed = false,
+                    TableID = tableID,
+                    WaiterID = waiter.Id,
+                    PayementType = PayementType.Cash,
+                    Behavior = OrderBehavior.IsCoocking
+                };
+
+            // Считаем стоимость сразу
+            newOrder.Cost = newOrder.Foods.Sum(of => of.Food.Cost);
+
+            // Добавляем в общие и сохраняем
+            AllOrders.Add(newOrder);
+            await WriteAsync();
+
+            return newOrder;
+        }
+
         /// <summary>
         /// Генерация случайного четырёхзначного кода (строка из цифр)
         /// </summary>
@@ -268,15 +325,15 @@ namespace Logic
         /// <param name="name">Имя нового сотрудника</param>
         /// <param name="status">Роль сотрудника</param>
         /// <param name="phone">Телефон (используется для формирования логина)</param>
-        public async Task RegistrateWorkerAsync(string name, UserStatus status)
+        public async Task RegistrateWorkerAsync(string name, UserStatus status, string phone)
         {
             int newId = Workers.Any() ? Workers.Max(w => w.Id) + 1 : 1;
             Human worker = status switch
             {
-                UserStatus.Admin => new Admin { Id = newId, Name = name, Login = $"{status}_{newId}", Password = GeneratePassword() },
-                UserStatus.Chef => new Chef { Id = newId, Name = name, Login = $"{status}_{newId}", Password = GeneratePassword() },
-                UserStatus.Waiter => new Waiter { Id = newId, Name = name, Login = $"{status}_{newId}", Password = GeneratePassword() },
-                UserStatus.Courier => new Courier { Id = newId, Name = name, Login = $"{status}_{newId}", Password = GeneratePassword() },
+                UserStatus.Admin => new Admin { Id = newId, Name = name, PhoneNumber = phone, Login = $"{status}_{newId}", Password = GeneratePassword() },
+                UserStatus.Chef => new Chef { Id = newId, Name = name, PhoneNumber = phone, Login = $"{status}_{newId}", Password = GeneratePassword() },
+                UserStatus.Waiter => new Waiter { Id = newId, Name = name, PhoneNumber = phone, Login = $"{status}_{newId}", Password = GeneratePassword() },
+                UserStatus.Courier => new Courier { Id = newId, Name = name, PhoneNumber = phone, Login = $"{status}_{newId}", Password = GeneratePassword() },
                 _ => throw new ArgumentException("Неверный статус")
             };
             Workers.Add(worker);
