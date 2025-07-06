@@ -229,28 +229,14 @@ namespace Lab_7
 
         private async void buttonFormClientOrder_Click(object sender, EventArgs e)
         {
-            // 1) Создаём заказ в логике. Клиент всегда самовывоз (tableID = 0), оплата — наличные (пример).
-            var newOrder = await Logic.CreateOrderForClientAsync(
-                currentClient,
-                cartFoods,
-                tableID: 0,
-                waiterID: 0,
-                payementType: PayementType.Cash,
-                isDelivery: false);
-
-            if (newOrder == null)
+            // 1) Открываем форму оформитель заказа
+            using (var dlg = new OrderForClientForm(currentClient, Logic, cartFoods))
             {
-                MessageBox.Show("Не удалось оформить заказ. Проверьте корзину.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                if (dlg.ShowDialog() != DialogResult.OK)
+                    return;
             }
 
-            // 2) Открываем форму просмотра/оформления заказа
-            using (var orderForm = new OrderForm(newOrder))
-            {
-                orderForm.ShowDialog();
-            }
-
-            // 3) Сбрасываем корзину и обновляем интерфейс
+            // 2) просто сбрасываем корзину
             cartFoods.Clear();
             RefreshCartListView();
             UpdateTotalPrice();
