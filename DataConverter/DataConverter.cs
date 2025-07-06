@@ -156,8 +156,40 @@ namespace Logic
             if (!File.Exists(fullPath)) return new List<Order>();
 
             using var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true);
-            var orders = await JsonSerializer.DeserializeAsync<List<Order>>(stream);
-            return orders ?? new List<Order>();
+            using var doc = await JsonDocument.ParseAsync(stream);
+
+            var list = new List<Order>();
+            foreach (var elem in doc.RootElement.EnumerateArray())
+            {
+                string rawJson;
+                string typeName;
+
+                // если есть обёртка — читаем её
+                if (elem.TryGetProperty("OrderType", out var tProp) &&
+                    elem.TryGetProperty("Data", out var dProp))
+                {
+                    typeName = tProp.GetString()!;
+                    rawJson = dProp.GetRawText();
+                }
+                else
+                {
+                    // иначе весь элемент — это сам Order/DeliveredOrder
+                    typeName = nameof(Order);
+                    rawJson = elem.GetRawText();
+                }
+
+                Order? order = typeName switch
+                {
+                    nameof(DeliveredOrder) => JsonSerializer.Deserialize<DeliveredOrder>(rawJson),
+                    nameof(Order) => JsonSerializer.Deserialize<Order>(rawJson),
+                    _ => null
+                };
+
+                if (order != null)
+                    list.Add(order);
+            }
+
+            return list;
         }
 
         /// <summary>
@@ -169,8 +201,16 @@ namespace Logic
             Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
 
             var options = new JsonSerializerOptions { WriteIndented = true, Encoder = JavaScriptEncoder.Create(UnicodeRanges.All) };
+
+            var wrapper = orders
+                .Select(o => new {
+                    OrderType = o.GetType().Name,
+                    Data = o
+                })
+                .ToList();
+
             using var stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, useAsync: true);
-            await JsonSerializer.SerializeAsync(stream, orders.OrderBy(o => o.Id).ToList(), options);
+            await JsonSerializer.SerializeAsync(stream, wrapper, options);
         }
 
         /// <summary>

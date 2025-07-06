@@ -58,9 +58,8 @@
             panelMap.Controls.Add(pictureBoxIcon);
             panelMap.Dock = DockStyle.Left;
             panelMap.Location = new Point(0, 0);
-            panelMap.Margin = new Padding(3, 2, 3, 2);
             panelMap.Name = "panelMap";
-            panelMap.Size = new Size(131, 525);
+            panelMap.Size = new Size(150, 700);
             panelMap.TabIndex = 0;
             // 
             // buttonCourierLogout
@@ -70,10 +69,9 @@
             buttonCourierLogout.Dock = DockStyle.Bottom;
             buttonCourierLogout.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
             buttonCourierLogout.ForeColor = SystemColors.ControlLightLight;
-            buttonCourierLogout.Location = new Point(0, 473);
-            buttonCourierLogout.Margin = new Padding(3, 2, 3, 2);
+            buttonCourierLogout.Location = new Point(0, 631);
             buttonCourierLogout.Name = "buttonCourierLogout";
-            buttonCourierLogout.Size = new Size(131, 52);
+            buttonCourierLogout.Size = new Size(150, 69);
             buttonCourierLogout.TabIndex = 18;
             buttonCourierLogout.Text = "Выход";
             buttonCourierLogout.UseVisualStyleBackColor = false;
@@ -83,13 +81,11 @@
             // 
             buttonCourierStartRoute.BackColor = Color.FromArgb(99, 58, 52);
             buttonCourierStartRoute.Cursor = Cursors.Hand;
-            buttonCourierStartRoute.Enabled = false;
             buttonCourierStartRoute.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
             buttonCourierStartRoute.ForeColor = SystemColors.ControlLightLight;
-            buttonCourierStartRoute.Location = new Point(0, 200);
-            buttonCourierStartRoute.Margin = new Padding(3, 2, 3, 2);
+            buttonCourierStartRoute.Location = new Point(0, 267);
             buttonCourierStartRoute.Name = "buttonCourierStartRoute";
-            buttonCourierStartRoute.Size = new Size(131, 56);
+            buttonCourierStartRoute.Size = new Size(150, 75);
             buttonCourierStartRoute.TabIndex = 13;
             buttonCourierStartRoute.Text = "Начать маршрут";
             buttonCourierStartRoute.UseVisualStyleBackColor = false;
@@ -99,25 +95,23 @@
             // 
             buttonWaiterProfile.BackColor = Color.FromArgb(99, 58, 52);
             buttonWaiterProfile.Cursor = Cursors.Hand;
-            buttonWaiterProfile.Enabled = false;
             buttonWaiterProfile.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
             buttonWaiterProfile.ForeColor = SystemColors.ControlLightLight;
-            buttonWaiterProfile.Location = new Point(0, 117);
-            buttonWaiterProfile.Margin = new Padding(3, 2, 3, 2);
+            buttonWaiterProfile.Location = new Point(0, 156);
             buttonWaiterProfile.Name = "buttonWaiterProfile";
-            buttonWaiterProfile.Size = new Size(131, 56);
+            buttonWaiterProfile.Size = new Size(150, 75);
             buttonWaiterProfile.TabIndex = 11;
             buttonWaiterProfile.Text = "Профиль";
             buttonWaiterProfile.UseVisualStyleBackColor = false;
+            buttonWaiterProfile.Click += buttonWaiterProfile_Click;
             // 
             // pictureBoxIcon
             // 
             pictureBoxIcon.Dock = DockStyle.Top;
             pictureBoxIcon.Image = Properties.Resources.menu_restaurant_coffee_icon_210208;
             pictureBoxIcon.Location = new Point(0, 0);
-            pictureBoxIcon.Margin = new Padding(3, 2, 3, 2);
             pictureBoxIcon.Name = "pictureBoxIcon";
-            pictureBoxIcon.Size = new Size(131, 112);
+            pictureBoxIcon.Size = new Size(150, 149);
             pictureBoxIcon.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBoxIcon.TabIndex = 10;
             pictureBoxIcon.TabStop = false;
@@ -125,27 +119,24 @@
             // Map
             // 
             Map.BackColor = Color.White;
-            Map.Location = new Point(136, 4);
-            Map.Margin = new Padding(3, 2, 3, 2);
+            Map.Location = new Point(155, 5);
             Map.Name = "Map";
-            Map.Size = new Size(823, 253);
+            Map.Size = new Size(941, 337);
             Map.TabIndex = 1;
             // 
             // textBoxCourierTakenOrders
             // 
-            textBoxCourierTakenOrders.Location = new Point(654, 266);
-            textBoxCourierTakenOrders.Margin = new Padding(3, 2, 3, 2);
+            textBoxCourierTakenOrders.Location = new Point(747, 355);
             textBoxCourierTakenOrders.Name = "textBoxCourierTakenOrders";
-            textBoxCourierTakenOrders.Size = new Size(307, 23);
+            textBoxCourierTakenOrders.Size = new Size(350, 27);
             textBoxCourierTakenOrders.TabIndex = 4;
             textBoxCourierTakenOrders.Text = "Список взятых заказов";
             // 
             // textBoxCourierActiveOrders
             // 
-            textBoxCourierActiveOrders.Location = new Point(136, 266);
-            textBoxCourierActiveOrders.Margin = new Padding(3, 2, 3, 2);
+            textBoxCourierActiveOrders.Location = new Point(155, 355);
             textBoxCourierActiveOrders.Name = "textBoxCourierActiveOrders";
-            textBoxCourierActiveOrders.Size = new Size(307, 23);
+            textBoxCourierActiveOrders.Size = new Size(350, 27);
             textBoxCourierActiveOrders.TabIndex = 5;
             textBoxCourierActiveOrders.Text = "Список активных заказов";
             // 
@@ -156,10 +147,9 @@
             buttonCourierTakeOrder.Enabled = false;
             buttonCourierTakeOrder.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
             buttonCourierTakeOrder.ForeColor = SystemColors.ControlLightLight;
-            buttonCourierTakeOrder.Location = new Point(448, 266);
-            buttonCourierTakeOrder.Margin = new Padding(3, 2, 3, 2);
+            buttonCourierTakeOrder.Location = new Point(512, 355);
             buttonCourierTakeOrder.Name = "buttonCourierTakeOrder";
-            buttonCourierTakeOrder.Size = new Size(200, 56);
+            buttonCourierTakeOrder.Size = new Size(229, 75);
             buttonCourierTakeOrder.TabIndex = 12;
             buttonCourierTakeOrder.Text = "Взять заказ";
             buttonCourierTakeOrder.UseVisualStyleBackColor = false;
@@ -172,10 +162,9 @@
             buttonCourierPayOrder.Enabled = false;
             buttonCourierPayOrder.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
             buttonCourierPayOrder.ForeColor = SystemColors.ControlLightLight;
-            buttonCourierPayOrder.Location = new Point(448, 463);
-            buttonCourierPayOrder.Margin = new Padding(3, 2, 3, 2);
+            buttonCourierPayOrder.Location = new Point(512, 617);
             buttonCourierPayOrder.Name = "buttonCourierPayOrder";
-            buttonCourierPayOrder.Size = new Size(200, 56);
+            buttonCourierPayOrder.Size = new Size(229, 75);
             buttonCourierPayOrder.TabIndex = 14;
             buttonCourierPayOrder.Text = "Оплатить заказ";
             buttonCourierPayOrder.UseVisualStyleBackColor = false;
@@ -186,9 +175,9 @@
             labelCourierRouteTime.AutoSize = true;
             labelCourierRouteTime.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 204);
             labelCourierRouteTime.ForeColor = SystemColors.ControlLightLight;
-            labelCourierRouteTime.Location = new Point(448, 434);
+            labelCourierRouteTime.Location = new Point(512, 579);
             labelCourierRouteTime.Name = "labelCourierRouteTime";
-            labelCourierRouteTime.Size = new Size(139, 20);
+            labelCourierRouteTime.Size = new Size(169, 25);
             labelCourierRouteTime.TabIndex = 14;
             labelCourierRouteTime.Text = "Время маршрута:";
             // 
@@ -196,15 +185,18 @@
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { ID });
-            dataGridView1.Location = new Point(136, 294);
+            dataGridView1.Location = new Point(155, 392);
+            dataGridView1.Margin = new Padding(3, 4, 3, 4);
             dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(306, 225);
+            dataGridView1.RowHeadersWidth = 51;
+            dataGridView1.Size = new Size(350, 300);
             dataGridView1.TabIndex = 15;
-            dataGridView1.CellContentClick += dataGridView1_CellContentClick;
+            dataGridView1.SelectionChanged += dataGridView1_SelectionChanged;
             // 
             // ID
             // 
             ID.HeaderText = "ID Заказа";
+            ID.MinimumWidth = 6;
             ID.Name = "ID";
             ID.Width = 265;
             // 
@@ -212,21 +204,24 @@
             // 
             dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView2.Columns.AddRange(new DataGridViewColumn[] { IDT });
-            dataGridView2.Location = new Point(654, 294);
+            dataGridView2.Location = new Point(747, 392);
+            dataGridView2.Margin = new Padding(3, 4, 3, 4);
             dataGridView2.Name = "dataGridView2";
-            dataGridView2.Size = new Size(306, 225);
+            dataGridView2.RowHeadersWidth = 51;
+            dataGridView2.Size = new Size(350, 300);
             dataGridView2.TabIndex = 16;
-            dataGridView2.CellContentClick += dataGridView2_CellContentClick;
+            dataGridView2.SelectionChanged += dataGridView2_SelectionChanged;
             // 
             // IDT
             // 
             IDT.HeaderText = "ID Заказа";
+            IDT.MinimumWidth = 6;
             IDT.Name = "IDT";
             IDT.Width = 265;
             // 
             // CourierControl
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             BackColor = Color.FromArgb(99, 58, 52);
@@ -239,9 +234,8 @@
             Controls.Add(textBoxCourierTakenOrders);
             Controls.Add(Map);
             Controls.Add(panelMap);
-            Margin = new Padding(3, 2, 3, 2);
             Name = "CourierControl";
-            Size = new Size(966, 525);
+            Size = new Size(1104, 700);
             panelMap.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBoxIcon).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();

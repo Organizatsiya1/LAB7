@@ -1,153 +1,81 @@
 using Logic;
 using Model;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using Timer = System.Windows.Forms.Timer;
 
 namespace Lab_7
 {
     public partial class CourierControl : UserControl
     {
-        public BusinessLogic Logic { get; set; }
+        public BusinessLogic Logic;
         public List<DeliveredOrder> OrdersTook { get; set; }
         public DeliveredOrder MarkedOrder_Taking { get; set; }
         public DeliveredOrder MarkedOrder_Paying { get; set; }
         private List<Point> routePoints = new List<Point>();
         private Point currentCourierPosition;
-        private System.Windows.Forms.Timer routeTimer;
+        private Timer routeTimer;
         private int currentTargetIndex = 0;
         private int courierVelocity;
-        public void RefreshGrid(DataGridView grid, List<Order> orders)
+
+        public CourierControl(BusinessLogic logic)
+        {
+            InitializeComponent();
+            Logic = logic;
+            OrdersTook = new List<DeliveredOrder>();
+
+            routeTimer = new Timer();
+            routeTimer.Interval = 50;
+            routeTimer.Tick += RouteTimer_Tick;
+        }
+
+        public async Task InitializeAsync()
+        {
+            // 2) гарантированно «чистим–добавляем» колонку
+            dataGridView1.Columns.Clear();
+            dataGridView1.Columns.Add("ID", "ID Заказа");
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.MultiSelect = false;
+            dataGridView1.ReadOnly = true;
+
+            dataGridView2.Columns.Clear();
+            dataGridView2.Columns.Add("ID", "ID Заказа");
+            dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView2.MultiSelect = false;
+            dataGridView2.ReadOnly = true;
+
+            // 2) заполнение «активных» и «взятых» заказов
+            RefreshGrid(dataGridView1, Logic.AllOrders
+                                       .OfType<DeliveredOrder>()
+                                       .Where(o => !o.IsDelivered)
+                                       .ToList());
+            RefreshGrid(dataGridView2, OrdersTook);
+
+
+        }
+
+        public void RefreshGrid(DataGridView grid, List<DeliveredOrder> orders)
         {
             grid.Rows.Clear();
             foreach (Order order in orders)
             {
                 if (order is DeliveredOrder)
                 {
-                    grid.Rows.Add(order.Id);
-                }
-            }
-        }
-        public void RefreshGrid(DataGridView grid, List<DeliveredOrder> orders)
-        {
-            grid.Rows.Clear();
-            foreach (Order order in orders)
-            {
-                
-                    grid.Rows.Add(order.Id);
-               
-            }
-        }
-        public CourierControl()
-        {
-            InitializeComponent();
-            routeTimer = new System.Windows.Forms.Timer();
-            routeTimer.Interval = 50; 
-            routeTimer.Tick += RouteTimer_Tick;
-            foreach (Order order in Logic.CurrentOrders)
-            {
-                dataGridView1.Rows.Add(order.Id);
-            }
-        }
-
-        private void buttonCourierTakeOrder_Click(object sender, EventArgs e)
-        {
-            OrdersTook.Add(MarkedOrder_Taking);
-            Logic.CurrentOrders.Remove(MarkedOrder_Taking);
-            RefreshGrid(dataGridView1, Logic.CurrentOrders);
-            RefreshGrid(dataGridView2, OrdersTook);
-        }
-
-        private void buttonCourierPayOrder_Click(object sender, EventArgs e)
-        {
-            Logic.MarkPayed(MarkedOrder_Paying);
-            RefreshGrid(dataGridView1, Logic.CurrentOrders);
-        }
-
-        private void buttonCourierLogout_Click(object sender, EventArgs e)
-        {
-            // Скрываем текущее окно
-            var currentForm = this.FindForm();
-            currentForm.Hide();
-
-            // Открываем форму входа
-            var loginForm = new LoginForm(Logic);
-            loginForm.Show();
-
-            // Закрываем окно после открытия loginForm
-            currentForm.Close();
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            foreach (DeliveredOrder order in Logic.CurrentOrders)
-            {
-                if ((order.Id == (int)dataGridView1.Rows[e.RowIndex].Tag)&& order is DeliveredOrder)
-                {
-                    MarkedOrder_Taking = order;
-                    break;
+                    var idx = grid.Rows.Add(order.Id);
+                    grid.Rows[idx].Tag = order;
                 }
             }
         }
 
-        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            foreach (DeliveredOrder order in OrdersTook)
-            {
-                if (order.Id == (int)dataGridView1.Rows[e.RowIndex].Tag)
-                {
-                    MarkedOrder_Paying = order;
-                    break;
-                }
-            }
-        }
-        public double CountLength(double x1, double y1, double x2, double y2) 
+
+        public double CountLength(double x1, double y1, double x2, double y2)
         {
             double dist_x = x2 - x1;
             double dist_y = y2 - y1;
             double way = Math.Sqrt(Math.Pow(dist_x, 2) + Math.Pow(dist_y, 2));
             return way;
         }
-        private void buttonCourierStartRoute_Click(object sender, EventArgs e)
-        {
-            Courier courier = (Courier)Logic.FixedUser;
-            int velocity;
-            Pen PenCourier = new Pen(Color.Green, 5);
-            Pen PenPlaces = new Pen(Color.Blue, 5);
-            switch (courier.TransportType)
-            {
-                case(TransportType.Car):
-                    velocity = 60;
-                    break;
-                case (TransportType.Motorbike):
-                    velocity = 90;
-                    break;
-                case (TransportType.Bicycle):
-                    velocity = 30;
-                    break;
-            }
-            routePoints = OrdersTook.Select(order => new Point(order.DeliveryAdress.X, order.DeliveryAdress.Y)).ToList();
+        
 
-            if (routePoints.Count == 0)
-            {
-                MessageBox.Show("Нет заказов для доставки!");
-                return;
-            }
-
-            // Начальная позиция курьера (например, точка ресторана)
-            currentCourierPosition = new Point(10, 10);
-
-            // Запуск анимации
-            currentTargetIndex = 0;
-            routeTimer.Start();
-        }
         private void RouteTimer_Tick(object sender, EventArgs e)
         {
             if (currentTargetIndex >= routePoints.Count)
@@ -169,6 +97,11 @@ namespace Lab_7
             {
                 currentCourierPosition = target;
                 currentTargetIndex++;
+                // заказ доставлен
+                var delivered = OrdersTook[0];
+                delivered.IsDelivered = true;
+                delivered.Behavior = OrderBehavior.IsDone;
+                delivered.IsPayed = false;
                 OrdersTook.RemoveAt(0); // Удаляем доставленный заказ
                 RefreshGrid(dataGridView2, OrdersTook);
             }
@@ -213,6 +146,115 @@ namespace Lab_7
             }
         }
 
+        private void buttonWaiterProfile_Click(object sender, EventArgs e)
+        {
 
+        }
+
+
+        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+                MarkedOrder_Taking = dataGridView1.SelectedRows[0].Tag as DeliveredOrder;
+            }
+            buttonCourierTakeOrder.Enabled = MarkedOrder_Taking != null;
+        }
+
+        private void dataGridView2_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dataGridView2.SelectedRows.Count > 0)
+            {
+                MarkedOrder_Paying = dataGridView2.SelectedRows[0].Tag as DeliveredOrder;
+            }
+            buttonCourierPayOrder.Enabled = MarkedOrder_Paying != null
+                                           && MarkedOrder_Paying.Behavior == OrderBehavior.Coocked;
+        }
+
+        private void buttonCourierStartRoute_Click(object sender, EventArgs e)
+        {
+            Courier courier = (Courier)Logic.FixedUser;
+            int velocity;
+            Pen PenCourier = new Pen(Color.Green, 5);
+            Pen PenPlaces = new Pen(Color.Blue, 5);
+            switch (courier.TransportType)
+            {
+                case (TransportType.Car):
+                    velocity = 60;
+                    break;
+                case (TransportType.Motorbike):
+                    velocity = 90;
+                    break;
+                case (TransportType.Bicycle):
+                    velocity = 30;
+                    break;
+            }
+            routePoints = OrdersTook.Select(o =>
+            {
+                int x = Convert.ToInt32(Math.Round(o.DeliveryAdress.X));
+                int y = Convert.ToInt32(Math.Round(o.DeliveryAdress.Y));
+                return new Point(x, y);
+            }).ToList();
+
+            if (routePoints.Count == 0)
+            {
+                MessageBox.Show("Нет заказов для доставки!");
+                return;
+            }
+
+            // Начальная позиция курьера (например, точка ресторана)
+            currentCourierPosition = new Point(10, 10);
+
+            // Запуск анимации
+            currentTargetIndex = 0;
+            routeTimer.Start();
+        }
+
+        private void buttonCourierTakeOrder_Click(object sender, EventArgs e)
+        {
+            if (MarkedOrder_Taking == null) return;
+
+            // фиксируем курьера
+            MarkedOrder_Taking.CourierId = (Logic.FixedUser as Courier).Id;
+            // оставляем IsDelivered = false до фактической доставки
+
+            Logic.WriteAsync();    // сохраняем изм.
+
+            Logic.AllOrders.Remove(MarkedOrder_Taking);
+            RefreshGrid(dataGridView1, Logic.AllOrders.OfType<DeliveredOrder>().Where(o => !o.IsDelivered).ToList());
+
+            OrdersTook.Add(MarkedOrder_Taking);
+            RefreshGrid(dataGridView2, OrdersTook);
+
+            // кнопка «Начать маршрут» активна, если есть хотя бы один взятый заказ
+            buttonCourierStartRoute.Enabled = OrdersTook.Any();
+        }
+
+        private async void buttonCourierPayOrder_Click(object sender, EventArgs e)
+        {
+            if (MarkedOrder_Paying == null)
+                return;
+
+            Logic.MarkPayed(MarkedOrder_Paying);
+            MarkedOrder_Paying.Behavior = OrderBehavior.IsDone;
+            await Logic.WriteAsync();
+
+            OrdersTook.Remove(MarkedOrder_Paying);
+            RefreshGrid(dataGridView1, OrdersTook);
+        }
+
+        private void buttonCourierLogout_Click(object sender, EventArgs e)
+        {
+            // Скрываем текущее окно
+            var currentForm = this.FindForm();
+            currentForm.Hide();
+
+            // Открываем форму входа
+            var loginForm = new LoginForm(Logic);
+            loginForm.Show();
+
+            // Закрываем окно после открытия loginForm
+            currentForm.Close();
+        }
     }
 }

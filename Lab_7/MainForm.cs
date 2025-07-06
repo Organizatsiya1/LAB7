@@ -39,10 +39,7 @@ namespace Lab_7
                 case UserStatus.Client:
                     {
                         // Для клиента передаём объект client в конструктор контролла
-                        var clientControl = new ClientControl(CurrentUser as Client, Logic)
-                        {
-                            Dock = DockStyle.Fill
-                        };
+                        var clientControl = new ClientControl(CurrentUser as Client, Logic) { Dock = DockStyle.Fill };
                         Controls.Clear();
                         Controls.Add(clientControl);
                         await clientControl.InitializeAsync();
@@ -51,12 +48,9 @@ namespace Lab_7
 
                 case UserStatus.Waiter:
                     {
-                        var waiterControl = new WaiterControl(CurrentUser as Waiter, Logic)
-                        {
-                            Dock = DockStyle.Fill
-                        };
-                        this.Controls.Clear();
-                        this.Controls.Add(waiterControl);
+                        var waiterControl = new WaiterControl(CurrentUser as Waiter, Logic) { Dock = DockStyle.Fill };
+                        Controls.Clear();
+                        Controls.Add(waiterControl);
                         await waiterControl.InitializeAsync();
                     }
                     break;
@@ -66,7 +60,12 @@ namespace Lab_7
                     break;
 
                 case UserStatus.Courier:
-                    userControl = new CourierControl(Logic) { Dock = DockStyle.Fill };
+                    {
+                        var courierControl = new CourierControl(Logic) { Dock = DockStyle.Fill };
+                        Controls.Clear();
+                        Controls.Add(courierControl);
+                        await courierControl.InitializeAsync();
+                    }
                     break;
 
                 case UserStatus.Admin:
