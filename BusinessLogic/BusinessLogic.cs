@@ -143,7 +143,10 @@ namespace Logic
                 };
 
             AllOrders.Add(newOrder);
-            client.Orders ??= new List<int>();
+
+            CurrentOrders.Add(newOrder);
+            if (client.Orders == null)
+                client.Orders = new List<int>();
             client.Orders.Add(newId);
 
             // Сохраняем сразу и клиентов (т.к. мы добавили новый order.Id в client.Orders)
@@ -246,6 +249,7 @@ namespace Logic
 
                 OrdersID++;
                 AllOrders.Add(made);
+                CurrentOrders.Add(made);
                 return made;
             }
             return null;
@@ -315,6 +319,8 @@ namespace Logic
             if (FixedUser?.Permissions.HasFlag(Permissions.MarkPayed) == true)
             {
                 order.IsPayed = true;
+                CurrentOrders.Remove(order);
+                PayedOrders.Add(order);
             }
         }
 
