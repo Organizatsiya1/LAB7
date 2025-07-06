@@ -28,12 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ListViewGroup listViewGroup1 = new ListViewGroup("Аперитив", HorizontalAlignment.Left);
-            ListViewGroup listViewGroup2 = new ListViewGroup("Антре", HorizontalAlignment.Left);
-            ListViewGroup listViewGroup3 = new ListViewGroup("Основное блюдо", HorizontalAlignment.Left);
-            ListViewGroup listViewGroup4 = new ListViewGroup("Антреме", HorizontalAlignment.Left);
-            ListViewGroup listViewGroup5 = new ListViewGroup("Десерт", HorizontalAlignment.Left);
-            ListViewGroup listViewGroup6 = new ListViewGroup("Дижестив", HorizontalAlignment.Left);
+            components = new System.ComponentModel.Container();
+            ListViewGroup listViewGroup7 = new ListViewGroup("Аперитив", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup8 = new ListViewGroup("Антре", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup9 = new ListViewGroup("Основное блюдо", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup10 = new ListViewGroup("Антреме", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup11 = new ListViewGroup("Десерт", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup12 = new ListViewGroup("Дижестив", HorizontalAlignment.Left);
             tabControlClient = new TabControl();
             tabPageClientMenu = new TabPage();
             textBoxClientCart = new TextBox();
@@ -49,6 +50,7 @@
             columnNameDishMenu = new ColumnHeader();
             columnPriceDish = new ColumnHeader();
             columnPictureDish = new ColumnHeader();
+            imageListDishes = new ImageList(components);
             tabPageClientCurrentOrder = new TabPage();
             textBoxWaiterOrderItems = new TextBox();
             listViewClientCurrentOrder = new ListView();
@@ -181,25 +183,27 @@
             // 
             listViewClientMenu.BackColor = Color.FromArgb(234, 215, 209);
             listViewClientMenu.Columns.AddRange(new ColumnHeader[] { columnNameDishMenu, columnPriceDish, columnPictureDish });
-            listViewGroup1.Header = "Аперитив";
-            listViewGroup1.Name = "Аперитив";
-            listViewGroup2.Header = "Антре";
-            listViewGroup2.Name = "Антре";
-            listViewGroup3.Header = "Основное блюдо";
-            listViewGroup3.Name = "Основное блюдо";
-            listViewGroup4.Header = "Антреме";
-            listViewGroup4.Name = "Антреме";
-            listViewGroup5.Header = "Десерт";
-            listViewGroup5.Name = "Десерт";
-            listViewGroup6.Header = "Дижестив";
-            listViewGroup6.Name = "Дижестив";
-            listViewClientMenu.Groups.AddRange(new ListViewGroup[] { listViewGroup1, listViewGroup2, listViewGroup3, listViewGroup4, listViewGroup5, listViewGroup6 });
+            listViewGroup7.Header = "Аперитив";
+            listViewGroup7.Name = "Аперитив";
+            listViewGroup8.Header = "Антре";
+            listViewGroup8.Name = "Антре";
+            listViewGroup9.Header = "Основное блюдо";
+            listViewGroup9.Name = "Основное блюдо";
+            listViewGroup10.Header = "Антреме";
+            listViewGroup10.Name = "Антреме";
+            listViewGroup11.Header = "Десерт";
+            listViewGroup11.Name = "Десерт";
+            listViewGroup12.Header = "Дижестив";
+            listViewGroup12.Name = "Дижестив";
+            listViewClientMenu.Groups.AddRange(new ListViewGroup[] { listViewGroup7, listViewGroup8, listViewGroup9, listViewGroup10, listViewGroup11, listViewGroup12 });
+            listViewClientMenu.LargeImageList = imageListDishes;
             listViewClientMenu.Location = new Point(6, 42);
             listViewClientMenu.Name = "listViewClientMenu";
             listViewClientMenu.Size = new Size(503, 619);
             listViewClientMenu.TabIndex = 0;
+            listViewClientMenu.TileSize = new Size(300, 80);
             listViewClientMenu.UseCompatibleStateImageBehavior = false;
-            listViewClientMenu.View = View.Details;
+            listViewClientMenu.View = View.Tile;
             listViewClientMenu.DoubleClick += listViewClientMenu_DoubleClick;
             // 
             // columnNameDishMenu
@@ -216,6 +220,12 @@
             // 
             columnPictureDish.Text = "Изображение";
             columnPictureDish.Width = 200;
+            // 
+            // imageListDishes
+            // 
+            imageListDishes.ColorDepth = ColorDepth.Depth32Bit;
+            imageListDishes.ImageSize = new Size(77, 77);
+            imageListDishes.TransparentColor = Color.Transparent;
             // 
             // tabPageClientCurrentOrder
             // 
@@ -362,5 +372,6 @@
         private ColumnHeader columnSum;
         private TextBox textBoxWaiterOrderItems;
         private Button buttonClientLogout;
+        private ImageList imageListDishes;
     }
 }

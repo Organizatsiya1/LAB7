@@ -1,40 +1,38 @@
-﻿using Model;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using Logic;
+using Model;
 
 namespace Lab_7
 {
     public partial class ProfileForm : Form
     {
-        
-        public Client User { get; set; } // клиент, чьи данные показываются/редактируются в форме
+        private readonly BusinessLogic Logic;
+        public Human User { get; set; } // клиент, чьи данные показываются/редактируются в форме
 
         /// <summary>
         /// Конструктор, инициализирует поля формы значениями из объекта Client
         /// </summary>
         /// <param name="client">Экземпляр Client, чьё свойство отображается</param>
-        public ProfileForm(Client client)
+        public ProfileForm(Human user, BusinessLogic logic)
         {
             InitializeComponent();
+            User = user;
+            Logic = logic;
 
-            User = client;
-
-            // Заполняем текстовые поля данными клиента
-            IDBox.Text = User.Id.ToString();
+            // Заполняем текстовые поля общими данными
             NameBox.Text = User.Name;
             PhoneBox.Text = User.PhoneNumber;
 
-            // Адрес может быть не заполнен – тогда свойства Adress будут default
-            StreetBox.Text = User.Adress?.Street;
-            HouseBox.Text = User.Adress?.HouseNumb.ToString();
-            FlatBox.Text = User.Adress?.FlatNumb.ToString();
+            // Если это клиент — покажем адрес и заказы
+            if (User is Client client)
+            {
+                IDBox.Text = User.Id.ToString();
+                StreetBox.Text = client.Adress?.Street;
+                HouseBox.Text = client.Adress?.HouseNumb.ToString();
+                FlatBox.Text = client.Adress?.FlatNumb.ToString();
+
+                // Заполнить таблицу заказов клиента:
+                // OrdersGrid.DataSource = logic.AllOrders.Where(o => client.Orders.Contains(o.Id)).ToList();
+            }
         }
 
         /// <summary>
@@ -61,26 +59,21 @@ namespace Lab_7
         /// </summary>
         /// <param name="sender">Ссылка на кнопку "«Сохранить»"</param>
         /// <param name="e">Аргументы события</param>
-        private void SaveProfile_Click(object sender, EventArgs e)
+        private async void SaveProfile_Click(object sender, EventArgs e)
         {
-            User.Name = NameBox.Text;
-            User.PhoneNumber = PhoneBox.Text;
+            User.Name = NameBox.Text.Trim();
+            User.PhoneNumber = new string(PhoneBox.Text.Where(char.IsDigit).ToArray());
 
-            if (int.TryParse(IDBox.Text, out int newId))
-                User.Id = newId;
+            // Только для клиента — адрес
+            if (User is Client client)
+            {
+                client.Adress ??= new Adress();
+                client.Adress.Street = StreetBox.Text;
+                if (int.TryParse(HouseBox.Text, out int hn)) client.Adress.HouseNumb = hn;
+                if (int.TryParse(FlatBox.Text, out int fn)) client.Adress.FlatNumb = fn;
+            }
 
-            // Если у User.Adress есть значение, записываем в него; иначе сначала создаём
-            if (User.Adress == null)
-                User.Adress = new Adress();
-
-            User.Adress.Street = StreetBox.Text;
-
-            if (int.TryParse(HouseBox.Text, out int hn))
-                User.Adress.HouseNumb = hn;
-
-            if (int.TryParse(FlatBox.Text, out int fn))
-                User.Adress.FlatNumb = fn;
-
+            await Logic.WriteAsync();
             MessageBox.Show("Профиль сохранён!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }

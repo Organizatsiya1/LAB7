@@ -10,8 +10,13 @@
     <ProjectReference Include="..\Model\Model.csproj" />
   </ItemGroup>
 
+	
+	<ItemGroup>
+      <PackageReference Include="System.Drawing.Common" Version="5.0.3" />
+    </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.7.25104.5739" />
+    <PackageReference Include="System.Drawing.Common" Version="9.0.6" />
   </ItemGroup>
 
 </Project>

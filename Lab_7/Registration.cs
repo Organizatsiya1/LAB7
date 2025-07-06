@@ -1,21 +1,12 @@
 ﻿using Logic;
 using Model;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Lab_7
 {
     public partial class Registration : Form
     {
 
-        public BusinessLogic Logic { set; get; }
+        private readonly BusinessLogic Logic;
 
         /// <summary>
         /// Устанавливает источник данных для выбора статуса пользователя
@@ -34,45 +25,45 @@ namespace Lab_7
         /// </summary>
         /// <param name="sender">Источник события: кнопка регистрации</param>
         /// <param name="e">Объект, содержащий данные события.</param>
-        private void RegistrationButton_Click(object sender, EventArgs e)
+        private async void registrationButton_Click(object sender, EventArgs e)
         {
             string name = NameBox.Text;
-            string phnumber = PhoneBox.Text;
 
             // Проверка правильности ввода
-            if (string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrEmpty(name))
             {
-                MessageBox.Show("Введите имя сотрудника");
+                MessageBox.Show("Введите имя сотрудника", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (phnumber.Replace(" ", "").Replace("(", "").Replace(")", "").Replace("-", "").Length != 10)
+            // Оставляем только цифры
+            string phnumber = new string(PhoneBox.Text.Where(char.IsDigit).ToArray());
+            if (phnumber.Length != 10)
             {
                 MessageBox.Show("Введите корректный номер телефона");
                 return;
             }
 
-            UserStatus status = (UserStatus)StatusBox.SelectedValue;
+            UserStatus status = (UserStatus)StatusBox.SelectedItem;
 
 
             try
             {
-                Logic.RegistrateWorker(name, status, phnumber);
+                await Logic.RegistrateWorkerAsync(NameBox.Text.Trim(), status, phnumber);
 
                 // получаем последнего зарегистрированного сотрудника
-                var lastWorker = BusinessLogic.Workers[^1] as IWorker;
+                var lastWorker = Logic.Workers.Last() as IWorker;
 
-                if (lastWorker != null)
-                {
-                    LoginLabe.Text = lastWorker.Login;
-                    PasswordLabe.Text = lastWorker.Password;
+                LoginLabel.Text = lastWorker!.Login;
+                PasswordLabel.Text = lastWorker.Password;
 
-                    MessageBox.Show("Регистрация успешно завершена!");
-                }
+                MessageBox.Show("Сотрудник успешно зарегистрирован!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.DialogResult = DialogResult.OK;
+                this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка регистрации: {ex.Message}");
+                MessageBox.Show($"Ошибка регистрации: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

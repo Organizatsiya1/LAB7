@@ -33,7 +33,7 @@
             buttonAdminLogout = new Button();
             buttonAdminRegisterEmployee = new Button();
             buttonStatsAdmin = new Button();
-            buttonWaiterProfile = new Button();
+            buttonAdminProfile = new Button();
             pictureBoxIcon = new PictureBox();
             listViewAdminEmployees = new ListView();
             columnEmployeeID = new ColumnHeader();
@@ -43,6 +43,7 @@
             columnLogin = new ColumnHeader();
             columnEffectiveness = new ColumnHeader();
             textBoxAdminEmployeeType = new TextBox();
+            labelAdminMetric = new Label();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxIcon).BeginInit();
             SuspendLayout();
@@ -52,11 +53,12 @@
             comboBoxAdminEmployeeType.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxAdminEmployeeType.Font = new Font("Segoe UI", 10.2F, FontStyle.Italic, GraphicsUnit.Point, 204);
             comboBoxAdminEmployeeType.FormattingEnabled = true;
-            comboBoxAdminEmployeeType.Items.AddRange(new object[] { "Все", "Официант", "Повар", "Курьер", "Администратор" });
+            comboBoxAdminEmployeeType.Items.AddRange(new object[] { "Все", "Администратор", "Официант", "Повар", "Курьер" });
             comboBoxAdminEmployeeType.Location = new Point(408, 7);
             comboBoxAdminEmployeeType.Name = "comboBoxAdminEmployeeType";
             comboBoxAdminEmployeeType.Size = new Size(678, 31);
             comboBoxAdminEmployeeType.TabIndex = 0;
+            comboBoxAdminEmployeeType.SelectedIndexChanged += comboBoxAdminEmployeeType_SelectedIndexChanged;
             // 
             // panel1
             // 
@@ -64,7 +66,7 @@
             panel1.Controls.Add(buttonAdminLogout);
             panel1.Controls.Add(buttonAdminRegisterEmployee);
             panel1.Controls.Add(buttonStatsAdmin);
-            panel1.Controls.Add(buttonWaiterProfile);
+            panel1.Controls.Add(buttonAdminProfile);
             panel1.Controls.Add(pictureBoxIcon);
             panel1.Dock = DockStyle.Left;
             panel1.Location = new Point(0, 0);
@@ -72,7 +74,7 @@
             panel1.Size = new Size(150, 703);
             panel1.TabIndex = 1;
             // 
-            // buttonAdminLogout
+            // buttonChefLogout
             // 
             buttonAdminLogout.BackColor = Color.FromArgb(99, 58, 52);
             buttonAdminLogout.Cursor = Cursors.Hand;
@@ -80,7 +82,7 @@
             buttonAdminLogout.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
             buttonAdminLogout.ForeColor = SystemColors.ControlLightLight;
             buttonAdminLogout.Location = new Point(0, 633);
-            buttonAdminLogout.Name = "buttonAdminLogout";
+            buttonAdminLogout.Name = "buttonChefLogout";
             buttonAdminLogout.Size = new Size(150, 70);
             buttonAdminLogout.TabIndex = 17;
             buttonAdminLogout.Text = "Выход";
@@ -91,7 +93,6 @@
             // 
             buttonAdminRegisterEmployee.BackColor = Color.FromArgb(99, 58, 52);
             buttonAdminRegisterEmployee.Cursor = Cursors.Hand;
-            buttonAdminRegisterEmployee.Enabled = false;
             buttonAdminRegisterEmployee.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
             buttonAdminRegisterEmployee.ForeColor = SystemColors.ControlLightLight;
             buttonAdminRegisterEmployee.Location = new Point(0, 366);
@@ -100,12 +101,12 @@
             buttonAdminRegisterEmployee.TabIndex = 16;
             buttonAdminRegisterEmployee.Text = "Регистрация нового сотрудника";
             buttonAdminRegisterEmployee.UseVisualStyleBackColor = false;
+            buttonAdminRegisterEmployee.Click += buttonAdminRegisterEmployee_Click;
             // 
             // buttonStatsAdmin
             // 
             buttonStatsAdmin.BackColor = Color.FromArgb(99, 58, 52);
             buttonStatsAdmin.Cursor = Cursors.Hand;
-            buttonStatsAdmin.Enabled = false;
             buttonStatsAdmin.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
             buttonStatsAdmin.ForeColor = SystemColors.ControlLightLight;
             buttonStatsAdmin.Location = new Point(0, 261);
@@ -114,20 +115,21 @@
             buttonStatsAdmin.TabIndex = 16;
             buttonStatsAdmin.Text = "Общая статистика клиентов";
             buttonStatsAdmin.UseVisualStyleBackColor = false;
+            buttonStatsAdmin.Click += buttonStatsAdmin_Click;
             // 
-            // buttonWaiterProfile
+            // buttonAdminProfile
             // 
-            buttonWaiterProfile.BackColor = Color.FromArgb(99, 58, 52);
-            buttonWaiterProfile.Cursor = Cursors.Hand;
-            buttonWaiterProfile.Enabled = false;
-            buttonWaiterProfile.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            buttonWaiterProfile.ForeColor = SystemColors.ControlLightLight;
-            buttonWaiterProfile.Location = new Point(0, 156);
-            buttonWaiterProfile.Name = "buttonWaiterProfile";
-            buttonWaiterProfile.Size = new Size(150, 75);
-            buttonWaiterProfile.TabIndex = 15;
-            buttonWaiterProfile.Text = "Профиль";
-            buttonWaiterProfile.UseVisualStyleBackColor = false;
+            buttonAdminProfile.BackColor = Color.FromArgb(99, 58, 52);
+            buttonAdminProfile.Cursor = Cursors.Hand;
+            buttonAdminProfile.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            buttonAdminProfile.ForeColor = SystemColors.ControlLightLight;
+            buttonAdminProfile.Location = new Point(0, 156);
+            buttonAdminProfile.Name = "buttonAdminProfile";
+            buttonAdminProfile.Size = new Size(150, 75);
+            buttonAdminProfile.TabIndex = 15;
+            buttonAdminProfile.Text = "Профиль";
+            buttonAdminProfile.UseVisualStyleBackColor = false;
+            buttonAdminProfile.Click += buttonAdminProfile_Click;
             // 
             // pictureBoxIcon
             // 
@@ -146,8 +148,8 @@
             listViewAdminEmployees.Columns.AddRange(new ColumnHeader[] { columnEmployeeID, columnNameEmployee, columnTypeEmployee, columnPhoneEmployee, columnLogin, columnEffectiveness });
             listViewAdminEmployees.Location = new Point(156, 44);
             listViewAdminEmployees.Name = "listViewAdminEmployees";
-            listViewAdminEmployees.Size = new Size(930, 656);
-            listViewAdminEmployees.TabIndex = 2;
+            listViewAdminEmployees.Size = new Size(930, 592);
+            listViewAdminEmployees.TabIndex = 0;
             listViewAdminEmployees.UseCompatibleStateImageBehavior = false;
             listViewAdminEmployees.View = View.Details;
             // 
@@ -193,12 +195,23 @@
             textBoxAdminEmployeeType.TabIndex = 3;
             textBoxAdminEmployeeType.Text = "Выбор типа сотрудника:";
             // 
+            // labelAdminMetric
+            // 
+            labelAdminMetric.AutoSize = true;
+            labelAdminMetric.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            labelAdminMetric.ForeColor = Color.White;
+            labelAdminMetric.Location = new Point(156, 639);
+            labelAdminMetric.Name = "labelAdminMetric";
+            labelAdminMetric.Size = new Size(208, 28);
+            labelAdminMetric.TabIndex = 5;
+            labelAdminMetric.Text = "labelAdminMetricText";
+            // 
             // AdminControl
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            AutoSize = true;
             BackColor = Color.FromArgb(99, 58, 52);
+            Controls.Add(labelAdminMetric);
             Controls.Add(textBoxAdminEmployeeType);
             Controls.Add(listViewAdminEmployees);
             Controls.Add(panel1);
@@ -216,7 +229,7 @@
         private ComboBox comboBoxAdminEmployeeType;
         private Panel panel1;
         private Button buttonStatsAdmin;
-        private Button buttonWaiterProfile;
+        private Button buttonAdminProfile;
         private PictureBox pictureBoxIcon;
         private ListView listViewAdminEmployees;
         private TextBox textBoxAdminEmployeeType;
@@ -228,5 +241,6 @@
         private ColumnHeader columnEffectiveness;
         private Button buttonAdminRegisterEmployee;
         private Button buttonAdminLogout;
+        private Label labelAdminMetric;
     }
 }

@@ -28,19 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ListViewGroup listViewGroup1 = new ListViewGroup("GroupSnacks", HorizontalAlignment.Left);
-            ListViewGroup listViewGroup2 = new ListViewGroup("GroupSoups", HorizontalAlignment.Left);
-            ListViewGroup listViewGroup3 = new ListViewGroup("GroupSecondCourses", HorizontalAlignment.Left);
-            ListViewGroup listViewGroup4 = new ListViewGroup("GroupDesserts", HorizontalAlignment.Left);
-            ListViewGroup listViewGroup5 = new ListViewGroup("GroupDrinks", HorizontalAlignment.Left);
-            ListViewItem listViewItem1 = new ListViewItem("Закуски");
-            ListViewItem listViewItem2 = new ListViewItem("Супы");
+            components = new System.ComponentModel.Container();
+            ListViewGroup listViewGroup7 = new ListViewGroup("Аперитив", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup8 = new ListViewGroup("Антре", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup9 = new ListViewGroup("Основное блюдо", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup10 = new ListViewGroup("Антреме", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup11 = new ListViewGroup("Десерт", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup12 = new ListViewGroup("Дижестив", HorizontalAlignment.Left);
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
             tabPage2 = new TabPage();
             panelWaiter = new Panel();
             buttonWaiterLogout = new Button();
-            buttonWaiterProfile = new Button();
             pictureBoxIcon = new PictureBox();
             tabControlWaiter = new TabControl();
             tabPageMenuWaiter = new TabPage();
@@ -56,6 +55,7 @@
             columnNameDishMenu = new ColumnHeader();
             columnPriceDish = new ColumnHeader();
             columnPictureDish = new ColumnHeader();
+            imageListDishes = new ImageList(components);
             tabPageOrdersWaiter = new TabPage();
             textBoxWaiterOrderItems = new TextBox();
             textBoxWaiterOrders = new TextBox();
@@ -66,6 +66,7 @@
             listViewWaiterOrders = new ListView();
             columnOrderID = new ColumnHeader();
             columnStatus = new ColumnHeader();
+            buttonWaiterProfile = new Button();
             tabControl1.SuspendLayout();
             panelWaiter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxIcon).BeginInit();
@@ -132,19 +133,6 @@
             buttonWaiterLogout.UseVisualStyleBackColor = false;
             buttonWaiterLogout.Click += buttonWaiterLogout_Click;
             // 
-            // buttonWaiterProfile
-            // 
-            buttonWaiterProfile.BackColor = Color.FromArgb(99, 58, 52);
-            buttonWaiterProfile.Cursor = Cursors.Hand;
-            buttonWaiterProfile.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            buttonWaiterProfile.ForeColor = SystemColors.ControlLightLight;
-            buttonWaiterProfile.Location = new Point(0, 156);
-            buttonWaiterProfile.Name = "buttonWaiterProfile";
-            buttonWaiterProfile.Size = new Size(150, 75);
-            buttonWaiterProfile.TabIndex = 7;
-            buttonWaiterProfile.Text = "Профиль";
-            buttonWaiterProfile.UseVisualStyleBackColor = false;
-            // 
             // pictureBoxIcon
             // 
             pictureBoxIcon.Dock = DockStyle.Top;
@@ -205,6 +193,7 @@
             buttonFormWaiterOrder.TabIndex = 9;
             buttonFormWaiterOrder.Text = "Сделать заказ";
             buttonFormWaiterOrder.UseVisualStyleBackColor = false;
+            buttonFormWaiterOrder.Click += buttonFormWaiterOrder_Click;
             // 
             // labelWaiterTotalPrice
             // 
@@ -251,31 +240,33 @@
             textBoxWaiterSearch.Size = new Size(924, 30);
             textBoxWaiterSearch.TabIndex = 6;
             textBoxWaiterSearch.Text = "Поиск по названию...";
+            textBoxWaiterSearch.TextChanged += textBoxWaiterSearch_TextChanged;
             // 
             // listViewWaiterMenu
             // 
             listViewWaiterMenu.BackColor = Color.FromArgb(234, 215, 209);
             listViewWaiterMenu.Columns.AddRange(new ColumnHeader[] { columnNameDishMenu, columnPriceDish, columnPictureDish });
-            listViewGroup1.Header = "GroupSnacks";
-            listViewGroup1.Name = "Закуски";
-            listViewGroup2.Header = "GroupSoups";
-            listViewGroup2.Name = "Супы";
-            listViewGroup3.Header = "GroupSecondCourses";
-            listViewGroup3.Name = "Вторые блюда";
-            listViewGroup4.Header = "GroupDesserts";
-            listViewGroup4.Name = "Десерты";
-            listViewGroup5.Header = "GroupDrinks";
-            listViewGroup5.Name = "Напитки";
-            listViewWaiterMenu.Groups.AddRange(new ListViewGroup[] { listViewGroup1, listViewGroup2, listViewGroup3, listViewGroup4, listViewGroup5 });
-            listViewItem1.Group = listViewGroup1;
-            listViewItem2.Group = listViewGroup2;
-            listViewWaiterMenu.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2 });
+            listViewGroup7.Header = "Аперитив";
+            listViewGroup7.Name = "Аперитив";
+            listViewGroup8.Header = "Антре";
+            listViewGroup8.Name = "Антре";
+            listViewGroup9.Header = "Основное блюдо";
+            listViewGroup9.Name = "Основное блюдо";
+            listViewGroup10.Header = "Антреме";
+            listViewGroup10.Name = "Антреме";
+            listViewGroup11.Header = "Десерт";
+            listViewGroup11.Name = "Десерт";
+            listViewGroup12.Header = "Дижестив";
+            listViewGroup12.Name = "Дижестив";
+            listViewWaiterMenu.Groups.AddRange(new ListViewGroup[] { listViewGroup7, listViewGroup8, listViewGroup9, listViewGroup10, listViewGroup11, listViewGroup12 });
+            listViewWaiterMenu.LargeImageList = imageListDishes;
             listViewWaiterMenu.Location = new Point(6, 42);
             listViewWaiterMenu.Name = "listViewWaiterMenu";
             listViewWaiterMenu.Size = new Size(503, 619);
             listViewWaiterMenu.TabIndex = 5;
             listViewWaiterMenu.UseCompatibleStateImageBehavior = false;
-            listViewWaiterMenu.View = View.Details;
+            listViewWaiterMenu.View = View.Tile;
+            listViewWaiterMenu.DoubleClick += listViewWaiterMenu_DoubleClick;
             // 
             // columnNameDishMenu
             // 
@@ -291,6 +282,12 @@
             // 
             columnPictureDish.Text = "Изображение";
             columnPictureDish.Width = 200;
+            // 
+            // imageListDishes
+            // 
+            imageListDishes.ColorDepth = ColorDepth.Depth32Bit;
+            imageListDishes.ImageSize = new Size(77, 77);
+            imageListDishes.TransparentColor = Color.Transparent;
             // 
             // tabPageOrdersWaiter
             // 
@@ -344,6 +341,7 @@
             buttonWaiterPayOrder.TabIndex = 8;
             buttonWaiterPayOrder.Text = "Оплатить заказ";
             buttonWaiterPayOrder.UseVisualStyleBackColor = false;
+            buttonWaiterPayOrder.Click += buttonWaiterPayOrder_Click;
             // 
             // listViewWaiterOrderItems
             // 
@@ -376,6 +374,7 @@
             listViewWaiterOrders.TabIndex = 0;
             listViewWaiterOrders.UseCompatibleStateImageBehavior = false;
             listViewWaiterOrders.View = View.Details;
+            listViewWaiterOrders.SelectedIndexChanged += listViewWaiterOrders_SelectedIndexChanged;
             // 
             // columnOrderID
             // 
@@ -386,6 +385,20 @@
             // 
             columnStatus.Text = "Состояние заказа";
             columnStatus.Width = 225;
+            // 
+            // buttonWaiterProfile
+            // 
+            buttonWaiterProfile.BackColor = Color.FromArgb(99, 58, 52);
+            buttonWaiterProfile.Cursor = Cursors.Hand;
+            buttonWaiterProfile.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            buttonWaiterProfile.ForeColor = SystemColors.ControlLightLight;
+            buttonWaiterProfile.Location = new Point(0, 156);
+            buttonWaiterProfile.Name = "buttonWaiterProfile";
+            buttonWaiterProfile.Size = new Size(150, 75);
+            buttonWaiterProfile.TabIndex = 7;
+            buttonWaiterProfile.Text = "Профиль";
+            buttonWaiterProfile.UseVisualStyleBackColor = false;
+            buttonWaiterProfile.Click += buttonWaiterProfile_Click;
             // 
             // WaiterControl
             // 
@@ -414,7 +427,6 @@
         private TabPage tabPage1;
         private TabPage tabPage2;
         private Panel panelWaiter;
-        private Button buttonWaiterProfile;
         private PictureBox pictureBoxIcon;
         private TabControl tabControlWaiter;
         private TabPage tabPageMenuWaiter;
@@ -441,5 +453,7 @@
         private TextBox textBoxWaiterOrderItems;
         private TextBox textBoxWaiterOrders;
         private Button buttonWaiterLogout;
+        private ImageList imageListDishes;
+        private Button buttonWaiterProfile;
     }
 }

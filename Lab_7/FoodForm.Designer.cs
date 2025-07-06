@@ -32,7 +32,6 @@ namespace Lab_7
         {
             pictureBoxFood = new PictureBox();
             labelName = new Label();
-            textBoxDescription = new TextBox();
             labelDescription = new Label();
             labelWeight = new Label();
             labelCost = new Label();
@@ -43,13 +42,15 @@ namespace Lab_7
             textBox5 = new TextBox();
             textBox3 = new TextBox();
             textBox4 = new TextBox();
+            labelFormula = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBoxFood).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // pictureBoxFood
             // 
-            pictureBoxFood.Location = new Point(12, 95);
+            pictureBoxFood.Image = Properties.Resources.PlaceholderMenu;
+            pictureBoxFood.Location = new Point(12, 104);
             pictureBoxFood.Name = "pictureBoxFood";
             pictureBoxFood.Size = new Size(200, 200);
             pictureBoxFood.SizeMode = PictureBoxSizeMode.Zoom;
@@ -60,28 +61,19 @@ namespace Lab_7
             // 
             labelName.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 204);
             labelName.ForeColor = Color.White;
-            labelName.Location = new Point(237, 15);
+            labelName.Location = new Point(227, 15);
             labelName.Name = "labelName";
-            labelName.Size = new Size(324, 24);
+            labelName.Size = new Size(367, 24);
             labelName.TabIndex = 1;
             labelName.Text = "labelName";
-            // 
-            // textBoxDescription
-            // 
-            textBoxDescription.Location = new Point(322, 118);
-            textBoxDescription.Multiline = true;
-            textBoxDescription.Name = "textBoxDescription";
-            textBoxDescription.ReadOnly = true;
-            textBoxDescription.Size = new Size(239, 101);
-            textBoxDescription.TabIndex = 3;
             // 
             // labelDescription
             // 
             labelDescription.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 204);
             labelDescription.ForeColor = Color.White;
-            labelDescription.Location = new Point(237, 48);
+            labelDescription.Location = new Point(228, 45);
             labelDescription.Name = "labelDescription";
-            labelDescription.Size = new Size(324, 53);
+            labelDescription.Size = new Size(366, 53);
             labelDescription.TabIndex = 2;
             labelDescription.Text = "labelDescription";
             // 
@@ -89,9 +81,9 @@ namespace Lab_7
             // 
             labelWeight.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 204);
             labelWeight.ForeColor = Color.White;
-            labelWeight.Location = new Point(322, 238);
+            labelWeight.Location = new Point(303, 281);
             labelWeight.Name = "labelWeight";
-            labelWeight.Size = new Size(164, 23);
+            labelWeight.Size = new Size(291, 23);
             labelWeight.TabIndex = 4;
             labelWeight.Text = "labelWeight";
             // 
@@ -99,9 +91,9 @@ namespace Lab_7
             // 
             labelCost.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 204);
             labelCost.ForeColor = Color.White;
-            labelCost.Location = new Point(322, 271);
+            labelCost.Location = new Point(303, 314);
             labelCost.Name = "labelCost";
-            labelCost.Size = new Size(164, 23);
+            labelCost.Size = new Size(291, 23);
             labelCost.TabIndex = 5;
             labelCost.Text = "labelCost";
             // 
@@ -109,7 +101,7 @@ namespace Lab_7
             // 
             buttonAddToCart.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 204);
             buttonAddToCart.ForeColor = Color.White;
-            buttonAddToCart.Location = new Point(12, 312);
+            buttonAddToCart.Location = new Point(11, 313);
             buttonAddToCart.Name = "buttonAddToCart";
             buttonAddToCart.Size = new Size(200, 52);
             buttonAddToCart.TabIndex = 6;
@@ -119,9 +111,9 @@ namespace Lab_7
             // pictureBox1
             // 
             pictureBox1.Image = Properties.Resources.menu_restaurant_coffee_icon_210208;
-            pictureBox1.Location = new Point(12, 12);
+            pictureBox1.Location = new Point(12, 15);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(72, 64);
+            pictureBox1.Size = new Size(93, 83);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 8;
             pictureBox1.TabStop = false;
@@ -132,7 +124,7 @@ namespace Lab_7
             textBox1.BorderStyle = BorderStyle.None;
             textBox1.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             textBox1.ForeColor = Color.White;
-            textBox1.Location = new Point(237, 268);
+            textBox1.Location = new Point(227, 310);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(79, 27);
             textBox1.TabIndex = 9;
@@ -144,7 +136,7 @@ namespace Lab_7
             textBox2.BorderStyle = BorderStyle.None;
             textBox2.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             textBox2.ForeColor = Color.White;
-            textBox2.Location = new Point(237, 235);
+            textBox2.Location = new Point(227, 277);
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(79, 27);
             textBox2.TabIndex = 12;
@@ -156,7 +148,7 @@ namespace Lab_7
             textBox5.BorderStyle = BorderStyle.None;
             textBox5.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             textBox5.ForeColor = Color.White;
-            textBox5.Location = new Point(97, 12);
+            textBox5.Location = new Point(111, 12);
             textBox5.Name = "textBox5";
             textBox5.Size = new Size(100, 27);
             textBox5.TabIndex = 15;
@@ -168,7 +160,7 @@ namespace Lab_7
             textBox3.BorderStyle = BorderStyle.None;
             textBox3.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             textBox3.ForeColor = Color.White;
-            textBox3.Location = new Point(237, 104);
+            textBox3.Location = new Point(227, 101);
             textBox3.Name = "textBox3";
             textBox3.Size = new Size(79, 27);
             textBox3.TabIndex = 16;
@@ -180,18 +172,29 @@ namespace Lab_7
             textBox4.BorderStyle = BorderStyle.None;
             textBox4.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             textBox4.ForeColor = Color.White;
-            textBox4.Location = new Point(97, 45);
+            textBox4.Location = new Point(111, 42);
             textBox4.Name = "textBox4";
             textBox4.Size = new Size(107, 27);
             textBox4.TabIndex = 17;
             textBox4.Text = "Описание:";
+            // 
+            // labelFormula
+            // 
+            labelFormula.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            labelFormula.ForeColor = Color.White;
+            labelFormula.Location = new Point(303, 104);
+            labelFormula.Name = "labelFormula";
+            labelFormula.Size = new Size(291, 164);
+            labelFormula.TabIndex = 18;
+            labelFormula.Text = "labelFormula";
             // 
             // FoodForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(99, 58, 52);
-            ClientSize = new Size(588, 377);
+            ClientSize = new Size(606, 375);
+            Controls.Add(labelFormula);
             Controls.Add(textBox4);
             Controls.Add(textBox3);
             Controls.Add(textBox5);
@@ -201,7 +204,6 @@ namespace Lab_7
             Controls.Add(pictureBoxFood);
             Controls.Add(labelName);
             Controls.Add(labelDescription);
-            Controls.Add(textBoxDescription);
             Controls.Add(labelWeight);
             Controls.Add(labelCost);
             Controls.Add(buttonAddToCart);
@@ -219,7 +221,6 @@ namespace Lab_7
 
         private PictureBox pictureBoxFood;
         private Label labelName, labelDescription, labelWeight, labelCost;
-        private TextBox textBoxDescription;
         private PictureBox pictureBox1;
         private Button buttonAddToCart;
         private TextBox textBox1;
@@ -227,5 +228,6 @@ namespace Lab_7
         private TextBox textBox5;
         private TextBox textBox3;
         private TextBox textBox4;
+        private Label labelFormula;
     }
 }

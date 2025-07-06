@@ -1,4 +1,4 @@
-﻿using Logic;
+using Logic;
 using Model;
 using System;
 using System.Collections.Generic;
@@ -78,7 +78,7 @@ namespace Lab_7
             currentForm.Hide();
 
             // Открываем форму входа
-            var loginForm = new LoginForm();
+            var loginForm = new LoginForm(Logic);
             loginForm.Show();
 
             // Закрываем окно после открытия loginForm

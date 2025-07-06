@@ -7,7 +7,7 @@ namespace Lab_7
     public partial class ClientControl : UserControl
     {
         private readonly Client currentClient;      // Текущий клиент
-        private readonly BusinessLogic logic = new BusinessLogic();
+        private readonly BusinessLogic Logic;
         private List<Food> allFoods = new List<Food>();   // Список всех блюд (меню)
         private List<Food> cartFoods = new List<Food>();  // Корзина клиента
 
@@ -16,19 +16,17 @@ namespace Lab_7
         /// Затем загружает меню и подписывает обработчик для кнопки "Профиль"
         /// </summary>
         /// <param name="clientFromLogin">Объект Client, соответствующий вошедшему пользователю</param>
-        public ClientControl(Client clientFromLogin)
+        public ClientControl(Client clientFromLogin, BusinessLogic logic)
         {
             InitializeComponent();
-
             currentClient = clientFromLogin;
+            Logic = logic;
+        }
 
-            // Загружаем меню из статического списка BusinessLogic.Foods
-            allFoods = BusinessLogic.Foods.ToList();
-
-            // Заполняем ListView блюдами
+        public async Task InitializeAsync()
+        {
+            allFoods = Logic.Dishes.ToList();
             PopulateMenu(allFoods);
-
-            // Счетчик «Итого» = 0
             UpdateTotalPrice();
         }
 
@@ -39,24 +37,38 @@ namespace Lab_7
         private void PopulateMenu(List<Food> foods)
         {
             listViewClientMenu.Items.Clear();
+            imageListDishes.Images.Clear(); // Очищаем предыдущие изображения
 
             foreach (var food in foods)
             {
+                // Загружаем изображение
+                Image foodImage = DataConverter.LoadFoodImage(food.PhotoFile);
+
+                // Добавляем изображение в список
+                if (foodImage != null)
+                {
+                    imageListDishes.Images.Add(food.Id.ToString(), foodImage);
+                }
+
+                // Создаем элемент списка
                 var item = new ListViewItem(new[]
                 {
                     food.Name,
-                    food.Cost.ToString(),
-                    "" // здесь можно добавить путь к картинке
-                });
-                item.Tag = food;
+                    food.Cost.ToString("C0")
+                })
+                {
+                    Tag = food,
+                    ImageKey = food.Id.ToString()
+                };
 
+                // Назначение группы по категории
                 switch (food.Priority)
                 {
                     case FoodCategory.Aperitif:
-                        item.Group = listViewClientMenu.Groups["Приветственный напиток"];
+                        item.Group = listViewClientMenu.Groups["Аперитив"];
                         break;
                     case FoodCategory.Entree:
-                        item.Group = listViewClientMenu.Groups["Закуска"];
+                        item.Group = listViewClientMenu.Groups["Антре"];
                         break;
                     case FoodCategory.MainCourse:
                         item.Group = listViewClientMenu.Groups["Основное блюдо"];
@@ -112,7 +124,6 @@ namespace Lab_7
                     RefreshCartListView();
                     UpdateTotalPrice();
                 }
-                // Если вернулся без OK — просто закрыли окно деталей
             }
         }
 
@@ -170,14 +181,14 @@ namespace Lab_7
                 if (currentClient == null)
                     return;
 
-                var order = logic.GetCurrentOrderForClient(currentClient);
+                var order = Logic.GetCurrentOrderForClient(currentClient);
                 if (order == null)
                     return;
 
                 foreach (var food in order.Foods)
                 {
                     var status = order.Behavior >= OrderBehavior.Coocked ? "Готово" : "В процессе";
-                    var item = new ListViewItem(new[] { food.Name, status });
+                    var item = new ListViewItem(new[] { food.Food.Name, status });
                     listViewClientCurrentOrder.Items.Add(item);
                 }
             }
@@ -191,7 +202,7 @@ namespace Lab_7
         private void buttonClientProfile_Click(object sender, EventArgs e)
         {
             // currentClient гарантированно не null, потому что мы передали его в конструкторе
-            using (var profileForm = new ProfileForm(currentClient))
+            using (var profileForm = new ProfileForm(currentClient, Logic))
             {
                 profileForm.ShowDialog();
             }
@@ -209,37 +220,23 @@ namespace Lab_7
             currentForm.Hide();
 
             // Открываем форму входа
-            var loginForm = new LoginForm();
+            var loginForm = new LoginForm(Logic);
             loginForm.Show();
 
             // Закрываем окно после открытия loginForm
             currentForm.Close();
         }
 
-        private void buttonFormClientOrder_Click(object sender, EventArgs e)
+        private async void buttonFormClientOrder_Click(object sender, EventArgs e)
         {
-            // 1) Создаём заказ в логике. Клиент всегда самовывоз (tableID = 0), оплата — наличные (пример).
-            var newOrder = logic.CreateOrderForClient(
-                currentClient,
-                cartFoods,
-                tableID: 0,
-                waiterID: 0,
-                payementType: PayementType.Cash,
-                isDelivery: false);
-
-            if (newOrder == null)
+            // 1) Открываем форму оформитель заказа
+            using (var dlg = new OrderForClientForm(currentClient, Logic, cartFoods))
             {
-                MessageBox.Show("Не удалось оформить заказ. Проверьте корзину.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                if (dlg.ShowDialog() != DialogResult.OK)
+                    return;
             }
 
-            // 2) Открываем форму просмотра/оформления заказа
-            using (var orderForm = new OrderForm(newOrder))
-            {
-                orderForm.ShowDialog();
-            }
-
-            // 3) Сбрасываем корзину и обновляем интерфейс
+            // 2) просто сбрасываем корзину
             cartFoods.Clear();
             RefreshCartListView();
             UpdateTotalPrice();
