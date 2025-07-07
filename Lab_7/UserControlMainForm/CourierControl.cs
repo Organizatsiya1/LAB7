@@ -1,6 +1,7 @@
 using Logic;
 using Model;
 using System.Data;
+using System.Diagnostics;
 using Timer = System.Windows.Forms.Timer;
 
 namespace Lab_7
@@ -43,6 +44,7 @@ namespace Lab_7
             dataGridView2.MultiSelect = false;
             dataGridView2.ReadOnly = true;
 
+
             // 2) заполнение «активных» и «взятых» заказов
             RefreshGrid(dataGridView1, Logic.AllOrders
                                        .OfType<DeliveredOrder>()
@@ -50,19 +52,37 @@ namespace Lab_7
                                        .ToList());
             RefreshGrid(dataGridView2, OrdersTook);
 
+            // Статистика
+            int total = Logic.AllOrders.Count;
+            int deliveries = Logic.AllOrders.OfType<DeliveredOrder>().Count();
+            int notDelivered = Logic.AllOrders.OfType<DeliveredOrder>().Count(o => !o.IsDelivered);
+            MessageBox.Show(
+                $"Всего заказов: {total}\n" +
+                $"Доставок: {deliveries}\n" +
+                $"Не доставлено: {notDelivered}",
+                "DEBUG CourierControl");
 
         }
 
+
+
         public void RefreshGrid(DataGridView grid, List<DeliveredOrder> orders)
         {
+            if (grid == null)
+                throw new ArgumentNullException(nameof(grid));
+            // Если вдруг колонок нет — создаём их автоматически
+            if (grid.Columns.Count == 0)
+                grid.Columns.Add("ID", "ID Заказа");
+
             grid.Rows.Clear();
-            foreach (Order order in orders)
+            if (orders == null) return;
+
+            foreach (var order in orders)
             {
-                if (order is DeliveredOrder)
-                {
-                    var idx = grid.Rows.Add(order.Id);
-                    grid.Rows[idx].Tag = order;
-                }
+                int idx = grid.Rows.Add();
+                // теперь Cells[0] точно существует
+                grid.Rows[idx].Cells[0].Value = order.Id.ToString();
+                grid.Rows[idx].Tag = order;
             }
         }
 
@@ -74,7 +94,7 @@ namespace Lab_7
             double way = Math.Sqrt(Math.Pow(dist_x, 2) + Math.Pow(dist_y, 2));
             return way;
         }
-        
+
 
         private void RouteTimer_Tick(object sender, EventArgs e)
         {
@@ -174,27 +194,27 @@ namespace Lab_7
         private void buttonCourierStartRoute_Click(object sender, EventArgs e)
         {
             Courier courier = (Courier)Logic.FixedUser;
-            int velocity;
-            Pen PenCourier = new Pen(Color.Green, 5);
-            Pen PenPlaces = new Pen(Color.Blue, 5);
             switch (courier.TransportType)
             {
-                case (TransportType.Car):
-                    velocity = 60;
+                case TransportType.Car:
+                    courierVelocity = 60;
                     break;
-                case (TransportType.Motorbike):
-                    velocity = 90;
+                case TransportType.Motorbike:
+                    courierVelocity = 90;
                     break;
-                case (TransportType.Bicycle):
-                    velocity = 30;
+                case TransportType.Bicycle:
+                    courierVelocity = 30;
                     break;
             }
-            routePoints = OrdersTook.Select(o =>
+            routePoints = OrdersTook
+                .Where(o => o.DeliveryAdress != null)   // <- пропускаем пустые адреса
+                .Select(o =>
             {
                 int x = Convert.ToInt32(Math.Round(o.DeliveryAdress.X));
                 int y = Convert.ToInt32(Math.Round(o.DeliveryAdress.Y));
                 return new Point(x, y);
-            }).ToList();
+            })
+            .ToList();
 
             if (routePoints.Count == 0)
             {
@@ -212,7 +232,20 @@ namespace Lab_7
 
         private void buttonCourierTakeOrder_Click(object sender, EventArgs e)
         {
-            if (MarkedOrder_Taking == null) return;
+            if (MarkedOrder_Taking?.DeliveryAdress == null)
+            {
+                MessageBox.Show("У этого заказа не задан адрес доставки!", "Ошибка",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Добавьте дополнительную проверку координат
+            if (MarkedOrder_Taking.DeliveryAdress.X == 0 && MarkedOrder_Taking.DeliveryAdress.Y == 0)
+            {
+                MessageBox.Show("Координаты доставки не заданы!\nЗаказ не может быть обработан.",
+                                "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
             // фиксируем курьера
             MarkedOrder_Taking.CourierId = (Logic.FixedUser as Courier).Id;
@@ -230,6 +263,21 @@ namespace Lab_7
             buttonCourierStartRoute.Enabled = OrdersTook.Any();
         }
 
+        private void dataGridView1_CellFormatting_1(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dataGridView1.Columns[e.ColumnIndex].Name == "Address")
+            {
+                if (dataGridView1.Rows[e.RowIndex].Tag is DeliveredOrder order)
+                {
+                    if (order.DeliveryAdress != null)
+                    {
+                        e.Value = $"{order.DeliveryAdress.Street} {order.DeliveryAdress.HouseNumb}-{order.DeliveryAdress.FlatNumb}";
+                        e.FormattingApplied = true;
+                    }
+                }
+            }
+        }
+
         private async void buttonCourierPayOrder_Click(object sender, EventArgs e)
         {
             if (MarkedOrder_Paying == null)
@@ -240,7 +288,13 @@ namespace Lab_7
             await Logic.WriteAsync();
 
             OrdersTook.Remove(MarkedOrder_Paying);
-            RefreshGrid(dataGridView1, OrdersTook);
+            RefreshGrid(dataGridView2, OrdersTook);
+
+            // и отдельно обновить dataGridView1
+            RefreshGrid(dataGridView1, Logic.AllOrders
+                .OfType<DeliveredOrder>()
+                .Where(o => !o.IsDelivered)
+                .ToList());
         }
 
         private void buttonCourierLogout_Click(object sender, EventArgs e)
@@ -256,5 +310,7 @@ namespace Lab_7
             // Закрываем окно после открытия loginForm
             currentForm.Close();
         }
+
+        
     }
 }

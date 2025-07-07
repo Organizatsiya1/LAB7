@@ -229,6 +229,25 @@ namespace Lab_7
 
         private async void buttonFormClientOrder_Click(object sender, EventArgs e)
         {
+            // Если у клиента нет сохранённого адреса — просим его заполнить
+            if (string.IsNullOrWhiteSpace(currentClient.Adress?.Street))
+            {
+                MessageBox.Show(
+                    "Пожалуйста, укажите свой адрес в профиле для оформления доставки.",
+                    "Необходима информация",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                // Открываем форму профиля модально
+                using (var profileForm = new ProfileForm(currentClient, Logic))
+                {
+                    profileForm.ShowDialog();
+                }
+
+                // После закрытия профиля — сохраняем изменения
+                await Logic.WriteAsync();
+            }
+
             // 1) Открываем форму оформитель заказа
             using (var dlg = new OrderForClientForm(currentClient, Logic, cartFoods))
             {

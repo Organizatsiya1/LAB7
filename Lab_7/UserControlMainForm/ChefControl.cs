@@ -148,7 +148,7 @@ namespace Lab_7
             orderedFood = NotGrid.Rows[e.RowIndex].Tag as OrderedFood;
         }
 
-        private void button_Click(object sender, EventArgs e)
+        private async void button_Click(object sender, EventArgs e)
         {
             if (orderedFood == null)
             {
@@ -156,11 +156,17 @@ namespace Lab_7
                 return;
             }
 
+            // 1) Помечаем конкретное блюдо готовым
             Logic.CookFood(orderedFood);
+
+            // 2) Если все блюда в заказе готовы — меняем статус заказа
             if (FixatedOrder.Foods.All(f => f.IsReady))
                 FixatedOrder.Behavior = OrderBehavior.Coocked;
 
-            // Обновляем интерфейс
+            // 3) Сохраняем изменения сразу же в JSON
+            await Logic.WriteAsync();
+
+            // 4) Обновляем интерфейс
             RefreshOrdersList();
             RefreshFoodLists();
         }

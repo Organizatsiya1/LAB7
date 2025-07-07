@@ -9,7 +9,6 @@ namespace Model
 {
     public class Courier: Waiter
     {
-        
         public TransportType TransportType { get; set; }
         public Permissions Permissions = Permissions.MarkGiven|Permissions.MarkDelivered|Permissions.MarkPayed;
     }

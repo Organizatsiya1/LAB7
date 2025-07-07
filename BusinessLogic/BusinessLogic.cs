@@ -34,6 +34,8 @@ namespace Logic
             await converter.WriteClientsAsync(Clients);
             await converter.WriteOrdersAsync(AllOrders);
             await converter.WriteWorkersAsync(Workers);
+
+
         }
 
         /// <summary>
@@ -51,6 +53,8 @@ namespace Logic
                 .Where(f => f.Name.ToLower().Contains(filter))
                 .ToList();
         }
+
+
 
         /// <summary>
         /// Ищет в в списке всех заказов заказы этого клиента, сортирует по убыванию Id

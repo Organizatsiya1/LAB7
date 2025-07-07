@@ -200,16 +200,27 @@ namespace Logic
             string fullPath = Path.Combine(DataBase, OrdersFileName);
             Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
 
-            var options = new JsonSerializerOptions { WriteIndented = true, Encoder = JavaScriptEncoder.Create(UnicodeRanges.All) };
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
+            };
 
             var wrapper = orders
                 .Select(o => new {
                     OrderType = o.GetType().Name,
-                    Data = o
+                    Data = JsonSerializer.SerializeToElement(o, o.GetType(), options)
                 })
                 .ToList();
 
-            using var stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, useAsync: true);
+            using var stream = new FileStream(
+                fullPath,
+                FileMode.Create,
+                FileAccess.Write,
+                FileShare.None,
+                bufferSize: 4096,
+                useAsync: true);
+
             await JsonSerializer.SerializeAsync(stream, wrapper, options);
         }
 

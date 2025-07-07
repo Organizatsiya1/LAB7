@@ -103,7 +103,6 @@
             buttonWaiterProfile.TabIndex = 11;
             buttonWaiterProfile.Text = "Профиль";
             buttonWaiterProfile.UseVisualStyleBackColor = false;
-            buttonWaiterProfile.Click += buttonWaiterProfile_Click;
             // 
             // pictureBoxIcon
             // 
@@ -128,6 +127,7 @@
             // 
             textBoxCourierTakenOrders.Location = new Point(747, 355);
             textBoxCourierTakenOrders.Name = "textBoxCourierTakenOrders";
+            textBoxCourierTakenOrders.ReadOnly = true;
             textBoxCourierTakenOrders.Size = new Size(350, 27);
             textBoxCourierTakenOrders.TabIndex = 4;
             textBoxCourierTakenOrders.Text = "Список взятых заказов";
@@ -136,6 +136,7 @@
             // 
             textBoxCourierActiveOrders.Location = new Point(155, 355);
             textBoxCourierActiveOrders.Name = "textBoxCourierActiveOrders";
+            textBoxCourierActiveOrders.ReadOnly = true;
             textBoxCourierActiveOrders.Size = new Size(350, 27);
             textBoxCourierActiveOrders.TabIndex = 5;
             textBoxCourierActiveOrders.Text = "Список активных заказов";
@@ -144,7 +145,6 @@
             // 
             buttonCourierTakeOrder.BackColor = Color.FromArgb(99, 58, 52);
             buttonCourierTakeOrder.Cursor = Cursors.Hand;
-            buttonCourierTakeOrder.Enabled = false;
             buttonCourierTakeOrder.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
             buttonCourierTakeOrder.ForeColor = SystemColors.ControlLightLight;
             buttonCourierTakeOrder.Location = new Point(512, 355);
@@ -191,13 +191,14 @@
             dataGridView1.RowHeadersWidth = 51;
             dataGridView1.Size = new Size(350, 300);
             dataGridView1.TabIndex = 15;
-            dataGridView1.SelectionChanged += dataGridView1_SelectionChanged;
+            dataGridView1.CellFormatting += dataGridView1_CellFormatting_1;
             // 
             // ID
             // 
             ID.HeaderText = "ID Заказа";
             ID.MinimumWidth = 6;
             ID.Name = "ID";
+            ID.ReadOnly = true;
             ID.Width = 265;
             // 
             // dataGridView2
@@ -210,7 +211,6 @@
             dataGridView2.RowHeadersWidth = 51;
             dataGridView2.Size = new Size(350, 300);
             dataGridView2.TabIndex = 16;
-            dataGridView2.SelectionChanged += dataGridView2_SelectionChanged;
             // 
             // IDT
             // 

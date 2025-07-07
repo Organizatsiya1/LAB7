@@ -58,13 +58,26 @@ namespace Lab_7
                 Adress addr = null;
                 if (cbDeliveryType.SelectedIndex == 1)
                 {
-                    addr = new Adress
+                    if (rbOther.Checked)
                     {
-                        Street = tbStreet.Text.Trim(),
-                        HouseNumb = int.Parse(tbHouse.Text),
-                        FlatNumb = int.Parse(tbApartment.Text),
-                        // координаты присваиваются внутри DataConverter/Logic
-                    };
+                        // Когда доставка "другому", все поля точно заполнены (мы это проверили выше)
+                        addr = new Adress
+                        {
+                            Street = tbStreet.Text.Trim(),
+                            HouseNumb = int.Parse(tbHouse.Text),
+                            FlatNumb = int.Parse(tbApartment.Text),
+                            X = GenerateRandomCoordinate(),
+                            Y = GenerateRandomCoordinate(),
+                        };
+                    }
+                    else
+                    {
+                        // Доставка "себе" — используем уже сохранённый адрес клиента
+                        // (Чтобы он был непустой, позаботьтесь при регистрации/авторизации клиента, 
+                        //  что у него есть Adress с заполненными полями.)
+                        addr = currentClient.Adress;
+
+                    }
                 }
 
                 // создаём заказ
@@ -92,6 +105,13 @@ namespace Lab_7
             };
 
             btnBack.Click += (s, e) => DialogResult = DialogResult.Cancel;
+        }
+
+        // Добавьте этот метод в класс
+        private int GenerateRandomCoordinate()
+        {
+            Random rnd = new Random();
+            return rnd.Next(50, 500); // Генерация координат в пределах карты
         }
 
         private void PopulateCart()
