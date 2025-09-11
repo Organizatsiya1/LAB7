@@ -1,0 +1,48 @@
+﻿using Model;
+using System.Data;
+
+namespace Lab_7
+{
+    public partial class OrderForm : Form
+    {
+        // Текущий заказ, отображаемый в форме.
+        public Order CurrentOrder { get; set; }
+
+
+
+        /// <summary>
+        /// Заполняет элементы интерфейса данными заказа.
+        /// </summary>
+        /// <param name="order">Объект заказа, который будет отображён в форме</param>
+        public OrderForm(Order order)
+        {
+            InitializeComponent();
+            CurrentOrder = order;
+
+            OrderIDLabe.Text = $"ID: {CurrentOrder.Id}";
+            DateLabe.Text = order.Date.ToString("dd.MM.yyyy HH:mm");
+            if (CurrentOrder is DeliveredOrder)
+            {
+                TypeLabe.Text = "Доставка";
+            }
+            CostLabe.Text = CurrentOrder.Cost.ToString();
+            BehaviourLabe.Text = CurrentOrder.Behavior.ToString();
+            PayementLabe.Text = "Не оплачено";
+            if (CurrentOrder.IsPayed == true)
+            {
+                PayementLabe.Text = "Оплачено";
+            }
+
+            // Стоимость — суммируем в форме
+            var total = order.Foods.Sum(f => f.Food.Cost);
+            CostLabe.Text = $"{total:F2} руб.";
+
+            // Заполняем таблицу: каждый тип блюда с количеством
+            var counts = order.Foods
+                .GroupBy(f => f.Food.Name)
+                .Select(g => (Name: g.Key, Qty: g.Count()));
+            foreach (var (Name, Qty) in counts)
+                FoodsGrid.Rows.Add(Name, Qty);
+        }
+    }
+}

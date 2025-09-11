@@ -1,0 +1,363 @@
+﻿using Logic;
+using Model;
+using System.Data;
+
+namespace Lab_7
+{
+    public partial class LoginForm : Form
+    {
+        public BusinessLogic Logic;
+        private string verificationCode;
+        private bool loadingCanceled;
+        
+
+        /// <summary>
+        /// Инициализирует компоненты LoginForm, подписывается на переключение между
+        /// режимами «Сотрудник» и «Клиент».
+        /// </summary>
+        public LoginForm(BusinessLogic logic)
+        {
+            InitializeComponent();
+            Logic = logic;
+
+            buttonLogin.Enabled = false;
+            buttonSendCode.Enabled = false;
+
+            this.Shown += async (s, e) =>
+            {
+                // 1) Загружаем всё из JSON
+                await Logic.ReadAsync();
+
+                // 2) Если сотрудников нет — создаём первого админа
+                if (!Logic.Workers.Any())
+                {
+                    var firstAdmin = new Admin
+                    {
+                        Id = 1,
+                        Login = "admin",
+                        Password = "adminpass",
+                        Name = "Первый администратор",
+                        Permissions = Permissions.All
+                    };
+                    Logic.Workers.Add(firstAdmin);
+                    await Logic.WriteAsync();  // сохраняем в JSON
+                }
+
+                // 3) Разблокируем кнопки «Вход» и «Выслать код»
+                buttonLogin.Enabled = true;
+                buttonSendCode.Enabled = true;
+            };
+
+
+            // По умолчанию выбираем «Сотрудник»
+            radioEmployee.Checked = true;
+            ToggleUserTypeFields();
+
+            // Подписываемся на смену режима
+            radioEmployee.CheckedChanged += (s, e) => ToggleUserTypeFields();
+            radioClient.CheckedChanged += (s, e) => ToggleUserTypeFields();
+
+        }
+
+        /// <summary>
+        /// Переключает видимость полей ввода в зависимости от того,
+        /// вошёл ли пользователь как сотрудник (логин/пароль) или клиент (телефон/код).
+        /// </summary>
+        private void ToggleUserTypeFields()
+        {
+            bool isEmployee = radioEmployee.Checked;
+
+            // Элементы для сотрудника
+            labelLogin.Visible = isEmployee;
+            textBoxLogin.Visible = isEmployee;
+            labelPassword.Visible = isEmployee;
+            textBoxPassword.Visible = isEmployee;
+
+            // Элементы для клиента
+            labelPhone.Visible = !isEmployee;
+            maskedTextBoxPhone.Visible = !isEmployee;
+            buttonSendCode.Visible = !isEmployee;
+            labelCode.Visible = !isEmployee;
+            maskedTextBoxCode.Visible = !isEmployee;
+
+            // Очищаем неактивные поля
+            if (isEmployee)
+            {
+                maskedTextBoxPhone.Clear();
+                maskedTextBoxCode.Clear();
+            }
+            else
+            {
+                textBoxLogin.Clear();
+                textBoxPassword.Clear();
+                maskedTextBoxPhone.Focus();
+            }
+        }
+
+        /// <summary>
+        /// Обработчик клика по кнопке «Отправить код» для клиента.
+        /// Проверяет корректность телефона, при необходимости спрашивает,
+        /// создавать ли нового клиента, и генерирует проверочный код.
+        /// </summary>
+        /// <param name="sender">Ссылка на саму кнопку</param>
+        /// <param name="e">Аргументы события</param>
+        private void ButtonSendCode_Click(object sender, EventArgs e)
+        {
+            // Вынимаем из маскированного поля только цифры
+            string phoneDigits = new string(maskedTextBoxPhone.Text.Where(char.IsDigit).ToArray());
+
+            // Проверка длины номера
+            if (phoneDigits.Length != 10)
+            {
+                MessageBox.Show("Номер должен содержать 10 цифр!", "Ошибка",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Проверка, есть ли уже клиент с таким телефоном
+            bool phoneExists = CheckPhoneExists(phoneDigits);
+
+            if (!phoneExists)
+            {
+                var result = MessageBox.Show(
+                    "Номер не найден в базе. Продолжить?",
+                    "Внимание",
+                    MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.Question);
+
+                if (result == DialogResult.Cancel)
+                    return;
+            }
+
+            // Генерируем код и показываем уведомление
+            GenerateAndShowCode();
+        }
+
+        /// <summary>
+        /// Проверяет, существует ли клиент с указанным номером телефона
+        /// </summary>
+        /// <param name="phoneDigits">Набор из 10 цифр без скобок и пробелов</param>
+        /// <returns>True, если в базе уже есть клиент с таким телефоном; иначе false</returns>
+        private bool CheckPhoneExists(string phoneDigits)
+            => Logic.Clients.Any(c => c.PhoneNumber == phoneDigits);
+
+        /// <summary>
+        /// Генерирует четырёхзначный проверочный код и открывает форму уведомления.
+        /// </summary>
+        private void GenerateAndShowCode()
+        {
+            verificationCode = Logic.GenerateNumber();
+
+            using (CodeNotification codeForm = new CodeNotification(verificationCode))
+            {
+                codeForm.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// Проверяет корректность введённых данных: 
+        /// если выбран «Сотрудник», проверяет логин/пароль;
+        /// если «Клиент», проверяет формат телефона и введённый код.
+        /// </summary>
+        /// <returns>True, если всё введено корректно; иначе false.</returns>
+        private bool ValidateInput()
+        {
+            if (radioEmployee.Checked)
+            {
+                if (string.IsNullOrWhiteSpace(textBoxLogin.Text))
+                {
+                    MessageBox.Show("Введите логин", "Ошибка",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return false;
+                }
+
+                if (string.IsNullOrWhiteSpace(textBoxPassword.Text))
+                {
+                    MessageBox.Show("Введите пароль", "Ошибка",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return false;
+                }
+            }
+            else
+            {
+                string phoneDigits = new string(maskedTextBoxPhone.Text.Where(char.IsDigit).ToArray());
+
+                if (phoneDigits.Length != 10)
+                {
+                    MessageBox.Show("Номер должен содержать 10 цифр", "Ошибка",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return false;
+                }
+
+                if (maskedTextBoxCode.Text != verificationCode)
+                {
+                    MessageBox.Show("Неверный код подтверждения", "Ошибка",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Асинхронная имитация загрузки данных с прогресс-баром.
+        /// Позволяет отменять процесс через поле loadingCanceled.
+        /// </summary>
+        /// <returns>Task, завершающийся после симуляции загрузки.</returns>
+        private async Task LoadDataAsync()
+        {
+            progressBar.Value = 0;
+            progressBar.ForeColor = Color.LimeGreen;
+
+            for (int i = 0; i <= 10; i++)
+            {
+                if (loadingCanceled)
+                {
+                    progressBar.ForeColor = Color.Red;
+                    MessageBox.Show("Загрузка отменена", "Прерывание",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                progressBar.Value = i * 10;
+                await Task.Delay(200);
+            }
+        }
+
+        /// <summary>
+        /// Обработчик кнопки «Отмена» во время загрузки.
+        /// Устанавливает флаг loadingCanceled = true, чтобы прервать LoadDataAsync.
+        /// </summary>
+        /// <param name="sender">Ссылка на кнопку «Отмена»</param>
+        /// <param name="e">Аргументы события</param>
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            loadingCanceled = true;
+        }
+
+        /// <summary>
+        /// Открывает главное окно MainForm, передаёт в него роль и объект клиента,
+        /// затем скрывает текущую форму LoginForm.
+        /// </summary>
+        /// <param name="role">Роль пользователя (Client, Waiter, Admin и т. д.)</param>
+        /// <param name="existingClient">Объект Client, соответствующий вошедшему клиенту</param>
+        private void ShowMainForm(UserStatus role, Human user)
+        {
+            MainForm mainForm = new MainForm(role, user, Logic);
+            mainForm.Show();
+            this.Hide();
+        }
+
+        /// <summary>
+        /// Обработчик кнопки «Вход» (login). Проверяет введённые данные и, если всё верно,
+        /// запускает симуляцию загрузки, затем открывает главное окно MainForm для нужной роли.
+        /// </summary>
+        /// <param name="sender">Ссылка на кнопку «Вход»</param>
+        /// <param name="e">Аргументы события</param>
+        private async void buttonLogin_Click(object sender, EventArgs e)
+        {
+            if (!ValidateInput())
+                return;
+
+            if (radioEmployee.Checked)
+            {
+                // Проверяем логин/пароль среди сотрудников
+                string login = textBoxLogin.Text.Trim();
+                string password = textBoxPassword.Text.Trim();
+
+                var worker = Logic.Workers
+                    .OfType<IWorker>()
+                    .FirstOrDefault(w => w.Login == login && w.Password == password);
+
+                if (worker == null)
+                {
+                    MessageBox.Show("Неверный логин или пароль.", "Ошибка",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // приводим IWorker к Human
+                var human = Logic.Workers.First(h => (h as IWorker)?.Login == login);
+                Logic.FixateUser(human);
+
+                // определяем роль
+                UserStatus role = human switch
+                {
+                    Admin _ => UserStatus.Admin,
+                    Chef _ => UserStatus.Chef,
+                    Courier _ => UserStatus.Courier,
+                    Waiter _ => UserStatus.Waiter,
+                    _ => UserStatus.Client
+                };
+
+                // симуляция загрузки
+                progressBar.Visible = true;
+                buttonCancel.Visible = true;
+                loadingCanceled = false;
+                await LoadDataAsync();
+                if (loadingCanceled) return;
+
+                // передаём и роль, и объект пользователя
+                ShowMainForm(role, human);
+            }
+            else if (radioClient.Checked)
+            {
+                // Показ прогресса
+                progressBar.Visible = true;
+                buttonCancel.Visible = true;
+                loadingCanceled = false;
+
+                await LoadDataAsync();
+                if (loadingCanceled) return;
+
+                // 2) Достаём цифры из маски и ищем клиента
+                string phoneDigits = new string(maskedTextBoxPhone.Text.Where(char.IsDigit).ToArray());
+
+                // 3) Сначала проверяем — нет ли сотрудника с таким же номером?
+                Client clientToShow;
+                var existingWorker = Logic.Workers.FirstOrDefault(w => w.PhoneNumber == phoneDigits);
+                if (existingWorker != null && !Logic.Clients.Any(c => c.Id == existingWorker.Id))
+                {
+                    var newClientFromWorker = new Client
+                    {
+                        Id = existingWorker.Id,
+                        Name = existingWorker.Name,
+                        PhoneNumber = existingWorker.PhoneNumber,
+                        Adress = new Adress(),
+                        Orders = new List<int>()
+                    };
+                    Logic.Clients.Add(newClientFromWorker);
+                    clientToShow = newClientFromWorker;
+                    await Logic.WriteAsync();
+                }
+                else
+                {
+                    // 4) если не сотрудник‑клиент, ищем обычного клиента
+                    var existingClient = Logic.Clients.FirstOrDefault(c => c.PhoneNumber == phoneDigits);
+                    if (existingClient != null)
+                    {
+                        clientToShow = existingClient;
+                    }
+                    else
+                    {
+                        // 5) если и его нет — создаём
+                        clientToShow = new Client
+                        {
+                            Id = Logic.Clients.Any() ? Logic.Clients.Max(c => c.Id) + 1 : 1,
+                            Name = "Новый клиент",
+                            PhoneNumber = phoneDigits,
+                            Adress = new Adress(),
+                            Orders = new List<int>()
+                        };
+                        Logic.Clients.Add(clientToShow);
+                        await Logic.WriteAsync();
+                    }
+                }
+
+                // 6) Фиксируем и уходим в MainForm
+                Logic.FixateUser(clientToShow);
+                ShowMainForm(UserStatus.Client, clientToShow);
+            }
+        }
+    }
+}

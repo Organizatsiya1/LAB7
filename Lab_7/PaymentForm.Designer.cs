@@ -1,6 +1,6 @@
 ﻿namespace Lab_7
 {
-    partial class Form1
+    partial class PaymentForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,10 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            SuspendLayout();
+            // 
+            // PaymentForm
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(99, 58, 52);
+            ClientSize = new Size(800, 450);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            Name = "PaymentForm";
+            Text = "PaymentForm";
+            ResumeLayout(false);
         }
 
         #endregion
